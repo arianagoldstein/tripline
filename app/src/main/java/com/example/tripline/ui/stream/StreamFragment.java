@@ -1,4 +1,4 @@
-package com.example.tripline.ui.home;
+package com.example.tripline.ui.stream;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,21 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.tripline.databinding.FragmentHomeBinding;
+import com.example.tripline.databinding.FragmentStreamBinding;
 
-public class HomeFragment extends Fragment {
+// this fragment will display a stream of trips created by the logged-in user and other users
+public class StreamFragment extends Fragment {
 
-    private FragmentHomeBinding binding;
+    private FragmentStreamBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+        StreamViewModel homeViewModel =
+                new ViewModelProvider(this).get(StreamViewModel.class);
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding = FragmentStreamBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textHome;
+        final TextView textView = binding.textStream;
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }

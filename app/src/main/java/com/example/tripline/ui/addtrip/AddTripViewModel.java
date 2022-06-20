@@ -1,16 +1,16 @@
-package com.example.tripline.ui.notifications;
+package com.example.tripline.ui.addtrip;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class NotificationsViewModel extends ViewModel {
+public class AddTripViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public NotificationsViewModel() {
+    public AddTripViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is notifications fragment");
+        mText.setValue("This is addtrip fragment");
     }
 
     public LiveData<String> getText() {

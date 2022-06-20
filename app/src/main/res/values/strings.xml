@@ -1,6 +1,14 @@
 <resources>
     <string name="app_name">Tripline</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_stream">Stream</string>
+    <string name="title_addtrip">Add Trip</string>
+    <string name="title_profile">Profile</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_trip">ADD TRIP</string>
+    <string name="email_address">EMAIL ADDRESS</string>
+    <string name="password">PASSWORD</string>
+    <string name="login">LOG IN</string>
+    <string name="register_prompt">No account yet?</string>
+    <string name="register">REGISTER</string>
 </resources>

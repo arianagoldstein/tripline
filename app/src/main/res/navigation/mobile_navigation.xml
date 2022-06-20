@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_stream">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.tripline.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_stream"
+        android:name="com.example.tripline.ui.stream.StreamFragment"
+        android:label="@string/title_stream"
+        tools:layout="@layout/fragment_stream" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.tripline.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_addtrip"
+        android:name="com.example.tripline.ui.addtrip.AddTripFragment"
+        android:label="@string/title_addtrip"
+        tools:layout="@layout/fragment_addtrip" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.tripline.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_profile"
+        android:name="com.example.tripline.ui.profile.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>
