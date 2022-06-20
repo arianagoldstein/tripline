@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.example.tripline.databinding.ActivityLoginBinding;
 import com.example.tripline.databinding.ActivityRegisterBinding;
+import com.example.tripline.models.User;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -29,21 +30,26 @@ public class RegisterActivity extends AppCompatActivity {
                 Log.i(TAG, "onClick register button");
 
                 // get user input
-                String name = binding.etName.getText().toString();
+                String firstName = binding.etFirstName.getText().toString();
+                String lastName = binding.etLastName.getText().toString();
                 String email = binding.etEmailAddressRegister.getText().toString();
                 String password = binding.etPasswordRegister.getText().toString();
                 String confPassword = binding.etConfirmPassword.getText().toString();
 
-                registerUser(name, email, password, confPassword);
+                registerUser(firstName, lastName, email, password, confPassword);
             }
         });
     }
 
     // registers the user with the information they've entered
-    private void registerUser(String name, String email, String password, String confPassword) {
+    private void registerUser(String fName, String lName, String email, String password, String confPassword) {
         Log.i(TAG, "Attempting to register user with email " + email);
 
         // connect to Parse to register the user
+
+        // for now, just construct a User object to be the current logged-in User
+        User newUser = new User(fName, lName, email, password);
+        MainActivity.currentUser = newUser;
 
         goMainActivity();
     }

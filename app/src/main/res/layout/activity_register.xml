@@ -10,37 +10,39 @@
         android:id="@+id/tvRegisterTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="16dp"
         android:text="@string/register"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvName"
+        android:id="@+id/tvFirstName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/name"
+        android:layout_marginTop="12dp"
+        android:text="FIRST NAME"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.129"
+        app:layout_constraintHorizontal_bias="0.145"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvRegisterTitle" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tiText"
+        android:id="@+id/tiFirstNameText"
         android:layout_width="316dp"
         android:layout_height="wrap_content"
+        app:boxBackgroundColor="@android:color/transparent"
+        app:counterEnabled="true"
+        app:counterMaxLength="50"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvName"
-        app:counterMaxLength="50"
-        app:counterEnabled="true">
+        app:layout_constraintTop_toBottomOf="@+id/tvFirstName">
 
         <EditText
-            android:id="@+id/etName"
+            android:id="@+id/etFirstName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="12dp"
@@ -50,51 +52,48 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-    <EditText
-        android:id="@+id/etEmailAddressRegister"
-        android:layout_width="316dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="12dp"
-        android:ems="10"
-        android:inputType="textEmailAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvEmailAddressRegister" />
-
-    <EditText
-        android:id="@+id/etPasswordRegister"
-        android:layout_width="316dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="12dp"
-        android:ems="10"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPasswordRegister" />
-
-    <EditText
-        android:id="@+id/etConfirmPassword"
-        android:layout_width="316dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="12dp"
-        android:ems="10"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvConfirmPassword" />
-
     <TextView
-        android:id="@+id/tvEmailAddressRegister"
+        android:id="@+id/tvLastName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/email_address"
+        android:layout_marginTop="20dp"
+        android:text="LAST NAME"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.157"
+        app:layout_constraintHorizontal_bias="0.145"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tiText" />
+        app:layout_constraintTop_toBottomOf="@+id/tiFirstNameText" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tiLastNameText"
+        android:layout_width="316dp"
+        android:layout_height="wrap_content"
+        app:boxBackgroundColor="@android:color/transparent"
+        app:counterEnabled="true"
+        app:counterMaxLength="50"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvLastName">
+
+        <EditText
+            android:id="@+id/etLastName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="12dp"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <ImageView
+        android:id="@+id/ivProfilePicUpload"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toEndOf="@+id/tvProfilePic"
+        app:layout_constraintTop_toBottomOf="@+id/etConfirmPassword"
+        app:srcCompat="@drawable/profilepicupload" />
 
     <TextView
         android:id="@+id/tvPasswordRegister"
@@ -103,47 +102,84 @@
         android:layout_marginTop="20dp"
         android:text="@string/password"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.142"
+        app:layout_constraintHorizontal_bias="0.145"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etEmailAddressRegister" />
 
+    <EditText
+        android:id="@+id/etEmailAddressRegister"
+        android:layout_width="316dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.515"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvEmailAddressRegister" />
+
     <TextView
-        android:id="@+id/tvConfirmPassword"
+        android:id="@+id/tvEmailAddressRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/confirm_password"
+        android:layout_marginTop="20dp"
+        android:text="@string/email_address"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.175"
+        app:layout_constraintHorizontal_bias="0.16"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etPasswordRegister" />
+        app:layout_constraintTop_toBottomOf="@+id/tiLastNameText" />
 
     <TextView
         android:id="@+id/tvProfilePic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="12dp"
         android:text="@string/profile_picture"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.161"
+        app:layout_constraintHorizontal_bias="0.164"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etConfirmPassword" />
 
-    <ImageView
-        android:id="@+id/ivProfilePicUpload"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintStart_toEndOf="@+id/tvProfilePic"
-        app:layout_constraintTop_toBottomOf="@+id/etConfirmPassword"
-        app:srcCompat="@drawable/profilepicupload" />
+    <EditText
+        android:id="@+id/etPasswordRegister"
+        android:layout_width="316dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.515"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPasswordRegister" />
+
+    <TextView
+        android:id="@+id/tvConfirmPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/confirm_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.179"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etPasswordRegister" />
+
+    <EditText
+        android:id="@+id/etConfirmPassword"
+        android:layout_width="316dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.515"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvConfirmPassword" />
 
     <Button
         android:id="@+id/btnRegisterRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="4dp"
         android:text="@string/register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
