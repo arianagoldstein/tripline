@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.example.tripline.databinding.ActivityLoginBinding;
 import com.example.tripline.databinding.ActivityMainBinding;
+import com.example.tripline.models.User;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -52,6 +53,9 @@ public class LoginActivity extends AppCompatActivity {
         Log.i(TAG, "Attempting to log in user with email " + email);
 
         // connect to Parse to log in the user
+        // for now, just construct a User object to be the current logged-in User
+        User newUser = new User("", "", email, password);
+        MainActivity.currentUser = newUser;
 
         goMainActivity();
     }
