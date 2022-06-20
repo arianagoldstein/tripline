@@ -11,4 +11,7 @@
     <string name="login">LOG IN</string>
     <string name="register_prompt">No account yet?</string>
     <string name="register">REGISTER</string>
+    <string name="confirm_password">CONFIRM PASSWORD</string>
+    <string name="profile_picture">PROFILE PICTURE</string>
+    <string name="name">NAME</string>
 </resources>

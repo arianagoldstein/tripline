@@ -8,14 +8,13 @@
 
     <ImageView
         android:id="@+id/ivLogo"
-        android:layout_width="275dp"
-        android:layout_height="127dp"
+        android:layout_width="303dp"
+        android:layout_height="126dp"
         android:layout_marginTop="132dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo"
-        tools:src="@tools:sample/avatars" />
+        android:src="@drawable/logo"/>
 
     <TextView
         android:id="@+id/tvEmailAddressLogin"
@@ -58,8 +57,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/password"
-        app:layout_constraintTop_toBottomOf="@+id/etEmailAddressLogin"
-        tools:layout_editor_absoluteX="51dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.151"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etEmailAddressLogin" />
 
     <Button
         android:id="@+id/btnLogin"
