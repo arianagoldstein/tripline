@@ -25,8 +25,6 @@ public class StreamFragment extends Fragment {
         binding = FragmentStreamBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textStream;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
