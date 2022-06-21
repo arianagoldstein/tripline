@@ -1,49 +1,42 @@
 package com.example.tripline.models;
 
+import com.parse.ParseClassName;
+import com.parse.ParseFile;
+import com.parse.ParseUser;
+
 // a User represents a user of the app who can log in and add/view trips
-public class User {
+@ParseClassName("_User")
+public class User extends ParseUser {
 
-    private String firstName;
-    private String lastName;
-    private String emailAddress;
-    private String password;
+    // only keep track of keys/getters/setters for custom fields (the ones not default with Parse like username and password)
+    public static final String KEY_FIRST_NAME = "firstName";
+    public static final String KEY_LAST_NAME = "lastName";
+    public static final String KEY_PROFILE_PIC = "profilePic";
 
-    public User(String fName, String lName, String emailAddress, String password) {
-        this.firstName = fName;
-        this.lastName = lName;
-        this.emailAddress = emailAddress;
-        this.password = password;
+    public User() {
     }
 
     public String getFirstName() {
-        return firstName;
+        return getString(KEY_FIRST_NAME);
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        put(KEY_FIRST_NAME, firstName);
     }
 
     public String getLastName() {
-        return lastName;
+        return getString(KEY_LAST_NAME);
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        put(KEY_LAST_NAME, lastName);
     }
 
-    public String getEmailAddress() {
-        return emailAddress;
+    public ParseFile getProfilePic() {
+        return getParseFile(KEY_PROFILE_PIC);
     }
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setProfilePic(ParseFile profilePic) {
+        put(KEY_PROFILE_PIC, profilePic);
     }
 }

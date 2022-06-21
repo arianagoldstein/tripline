@@ -1,5 +1,6 @@
 package com.example.tripline.ui.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,9 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.tripline.LoginActivity;
 import com.example.tripline.MainActivity;
 import com.example.tripline.databinding.FragmentProfileBinding;
 import com.example.tripline.models.User;
+import com.parse.ParseUser;
 
 // this fragment will display the profile of the user who is currently logged in
 public class ProfileFragment extends Fragment {
@@ -32,6 +35,18 @@ public class ProfileFragment extends Fragment {
         User userToDisplay = MainActivity.currentUser;
         Log.i(TAG, "Displaying profile for user " + userToDisplay.getFirstName() + " " + userToDisplay.getLastName());
         binding.tvNameProfile.setText(userToDisplay.getFirstName() + " " + userToDisplay.getLastName());
+
+        // clicking the logout button logs the user out and brings them to the login page
+        binding.btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onClick logout button");
+                ParseUser.logOut();
+                Intent i = new Intent(getContext(), LoginActivity.class);
+                startActivity(i);
+                getActivity().finish();
+            }
+        });
 
         return root;
     }
