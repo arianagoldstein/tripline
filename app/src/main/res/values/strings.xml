@@ -14,4 +14,6 @@
     <string name="confirm_password">CONFIRM PASSWORD</string>
     <string name="profile_picture">PROFILE PICTURE</string>
     <string name="name">NAME</string>
+    <string name="add_a_trip">ADD A TRIP</string>
+    <string name="title">TITLE</string>
 </resources>
