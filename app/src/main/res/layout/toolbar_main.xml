@@ -2,6 +2,23 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    app:logo="@drawable/logo_small"
-    xmlns:app="http://schemas.android.com/apk/res-auto" />
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/logo_small"/>
+        <View
+            android:id="@+id/divider"
+            android:layout_width="370dp"
+            android:layout_height="2dp"
+            android:background="#00c7d1" />
+    </LinearLayout>
+
+
+</androidx.appcompat.widget.Toolbar>
