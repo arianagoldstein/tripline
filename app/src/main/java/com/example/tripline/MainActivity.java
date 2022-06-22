@@ -13,6 +13,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.tripline.databinding.ActivityMainBinding;
+import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,6 +27,10 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // setting the currentUser to whoever is logged in
+        currentUser = (User) ParseUser.getCurrentUser();
+
+        // setting the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);

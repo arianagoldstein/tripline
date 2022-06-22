@@ -51,10 +51,10 @@ public class StreamFragment extends Fragment {
 
         allTrips = new ArrayList<>();
         adapter = new TripAdapter(getContext(), allTrips);
-        binding.rvTrips.setAdapter(adapter);
+        // binding.rvTrips.setAdapter(adapter);
 
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        rvTrips.setLayoutManager(llm);
+        // rvTrips.setLayoutManager(llm);
     }
 
     @Override
