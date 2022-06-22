@@ -16,7 +16,7 @@
         app:srcCompat="@drawable/locationicon" />
 
     <TextView
-        android:id="@+id/tvTripTitle"
+        android:id="@+id/tvTripTitleStream"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/tvTripTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvTripTitleStream"
         tools:text="HAWAII, USA" />
 
     <TextView
@@ -42,12 +42,12 @@
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/tvTripTitle"
+        app:layout_constraintStart_toEndOf="@+id/tvTripTitleStream"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="6/11/22 -" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/tvEndDateStream"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -60,7 +60,7 @@
         android:id="@+id/ivCoverPhotoStream"
         android:layout_width="366dp"
         android:layout_height="166dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.488"
@@ -70,11 +70,53 @@
 
     <TextView
         android:id="@+id/tvDescriptionStream"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_width="366dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.13"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivCoverPhotoStream"
-        tools:text="asdfghjkl" />
+        tools:text="a week-long exploration of 3 of the beautiful islands of Hawaii complete with adventures and relaxation" />
+
+    <ImageButton
+        android:id="@+id/ibLikeStream"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/heart_empty"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescriptionStream" />
+
+    <ImageButton
+        android:id="@+id/ibCommentStream"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/comment"
+        app:layout_constraintStart_toEndOf="@+id/ibLikeStream"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescriptionStream" />
+
+    <TextView
+        android:id="@+id/tvAuthorNameStream"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescriptionStream"
+        tools:text="Ariana Goldstein" />
+
+    <View
+        android:id="@+id/divStream"
+        android:layout_width="361dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="22dp"
+        android:background="#00c7d1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAuthorNameStream" />
 </androidx.constraintlayout.widget.ConstraintLayout>
