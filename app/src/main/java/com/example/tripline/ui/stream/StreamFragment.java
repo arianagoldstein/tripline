@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.tripline.TripAdapter;
 import com.example.tripline.databinding.FragmentStreamBinding;
@@ -34,6 +35,17 @@ public class StreamFragment extends Fragment {
 
     public StreamFragment() {
 
+    }
+
+    // gets triggered every time we come back to the stream fragment
+    @Override
+    public void onResume() {
+        super.onResume();
+        // query trips from the database
+        Log.i(TAG, "onResume");
+        allTrips.clear();
+        adapter.notifyDataSetChanged();
+        queryTrips();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -60,7 +72,17 @@ public class StreamFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         rvTrips.setLayoutManager(llm);
 
-        queryTrips();
+        binding.swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                queryTrips();
+            }
+        });
+
+        // configuring the refreshing colors
+        binding.swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_blue_light,
+                android.R.color.holo_green_light);
     }
 
     @Override
@@ -81,6 +103,8 @@ public class StreamFragment extends Fragment {
         query.findInBackground(new FindCallback<Trip>() {
             @Override
             public void done(List<Trip> trips, ParseException e) {
+                binding.swipeContainer.setRefreshing(false);
+
                 // if there is an exception, e will not be null
                 if (e != null) {
                     Log.e(TAG, "Issue getting trips: ", e);
