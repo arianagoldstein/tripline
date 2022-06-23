@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="54dp"
-        android:layout_height="60dp"
+        android:layout_width="45dp"
+        android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -17,7 +17,7 @@
 
     <TextView
         android:id="@+id/tvTripTitleStream"
-        android:layout_width="wrap_content"
+        android:layout_width="201dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:textStyle="bold"
@@ -27,7 +27,7 @@
 
     <TextView
         android:id="@+id/tvLocationStream"
-        android:layout_width="wrap_content"
+        android:layout_width="201dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         app:layout_constraintStart_toEndOf="@+id/imageView"
@@ -36,22 +36,20 @@
 
     <TextView
         android:id="@+id/tvStartDateStream"
-        android:layout_width="wrap_content"
+        android:layout_width="82dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="144dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.656"
         app:layout_constraintStart_toEndOf="@+id/tvTripTitleStream"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="6/11/22 -" />
 
     <TextView
         android:id="@+id/tvEndDateStream"
-        android:layout_width="wrap_content"
+        android:layout_width="82dp"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.784"
+        android:layout_marginStart="44dp"
         app:layout_constraintStart_toEndOf="@+id/tvLocationStream"
         app:layout_constraintTop_toBottomOf="@+id/tvStartDateStream"
         tools:text="6/22/22" />

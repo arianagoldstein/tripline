@@ -74,8 +74,8 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
             // populating the XML elements with the details of this trip
             tvTripTitle.setText(trip.getTitle());
             tvLocation.setText(trip.getLocation().toString());
-            tvStartDate.setText(trip.getStartDate().toString());
-            tvEndDate.setText(trip.getEndDate().toString());
+            tvStartDate.setText(trip.getFormattedDate(trip.getStartDate()) + " - ");
+            tvEndDate.setText(trip.getFormattedDate(trip.getEndDate()));
             Glide.with(context).load(trip.getCoverPhoto().getUrl()).into(ivCoverPhoto);
             tvDescription.setText(trip.getDescription());
             tvAuthorName.setText(trip.getAuthor().getFirstName() + " " + trip.getAuthor().getLastName());
