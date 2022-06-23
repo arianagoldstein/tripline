@@ -5,13 +5,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.tripline.databinding.ItemTripStreamBinding;
 import com.example.tripline.models.Trip;
 
 import java.util.List;
@@ -29,8 +28,8 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
     @NonNull
     @Override
     public TripAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_trip_stream, parent, false);
-        return new ViewHolder(view);
+        ItemTripStreamBinding binding = ItemTripStreamBinding.inflate(LayoutInflater.from(context));
+        return new ViewHolder(binding);
     }
 
     @Override
@@ -46,39 +45,22 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        // declaring XML elements
-        private final TextView tvTripTitle;
-        private final TextView tvLocation;
-        private final TextView tvStartDate;
-        private final TextView tvEndDate;
-        private final ImageView ivCoverPhoto;
-        private final TextView tvDescription;
-        private final TextView tvAuthorName;
+        private ItemTripStreamBinding binding;
 
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            // locating the XML elements in the layout
-            tvTripTitle = itemView.findViewById(R.id.tvTripTitleStream);
-            tvLocation = itemView.findViewById(R.id.tvLocationStream);
-            tvStartDate = itemView.findViewById(R.id.tvStartDateStream);
-            tvEndDate = itemView.findViewById(R.id.tvEndDateStream);
-            ivCoverPhoto = itemView.findViewById(R.id.ivCoverPhotoStream);
-            tvDescription = itemView.findViewById(R.id.tvDescriptionStream);
-            tvAuthorName = itemView.findViewById(R.id.tvAuthorNameStream);
-
-            itemView.setOnClickListener(this);
+        public ViewHolder(ItemTripStreamBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
         public void bind(Trip trip) {
             // populating the XML elements with the details of this trip
-            tvTripTitle.setText(trip.getTitle());
-            tvLocation.setText(trip.getLocation().toString());
-            tvStartDate.setText(trip.getFormattedDate(trip.getStartDate()) + " - ");
-            tvEndDate.setText(trip.getFormattedDate(trip.getEndDate()));
-            Glide.with(context).load(trip.getCoverPhoto().getUrl()).into(ivCoverPhoto);
-            tvDescription.setText(trip.getDescription());
-            tvAuthorName.setText(trip.getAuthor().getFirstName() + " " + trip.getAuthor().getLastName());
+            binding.tvTripTitleStream.setText(trip.getTitle());
+            binding.tvLocationStream.setText(trip.getLocation().toString());
+            binding.tvStartDateStream.setText(trip.getFormattedDate(trip.getStartDate()) + " - ");
+            binding.tvEndDateStream.setText(trip.getFormattedDate(trip.getEndDate()));
+            Glide.with(context).load(trip.getCoverPhoto().getUrl()).into(binding.ivCoverPhotoStream);
+            binding.tvDescriptionStream.setText(trip.getDescription());
+            binding.tvAuthorNameStream.setText(trip.getAuthor().getFirstName() + " " + trip.getAuthor().getLastName());
         }
 
         @Override
