@@ -39,6 +39,7 @@ public class ProfileFragment extends Fragment {
     private RecyclerView rvTripsProfile;
     protected TripAdapterProfile adapter;
     protected List<Trip> userTrips;
+    private int numTripsByThisUser;
 
     // gets triggered every time we come back to the profile fragment
     @Override
@@ -123,6 +124,10 @@ public class ProfileFragment extends Fragment {
                 for (Trip trip : trips) {
                     Log.i(TAG, "Trip title: " + trip.getTitle());
                 }
+
+                // displaying the number of tripscreated by this user
+                numTripsByThisUser = trips.size();
+                binding.tvTripsCount.setText(String.valueOf(numTripsByThisUser));
 
                 // adding the trips from Parse into our trips list
                 userTrips.clear();

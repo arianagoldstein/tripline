@@ -53,7 +53,7 @@
         android:id="@+id/tvFollowers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="9dp"
+        android:layout_marginTop="6dp"
         android:text="@string/followers"
         app:layout_constraintEnd_toStartOf="@+id/tvFollowing"
         app:layout_constraintHorizontal_bias="0.555"
@@ -71,8 +71,8 @@
 
     <TextView
         android:id="@+id/tvTripsCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="43dp"
+        android:layout_height="22dp"
         android:layout_marginStart="24dp"
         android:textAlignment="center"
         android:textSize="16sp"
@@ -83,8 +83,8 @@
 
     <TextView
         android:id="@+id/tvFollowersCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="56dp"
+        android:layout_height="22dp"
         android:layout_marginTop="40dp"
         android:textAlignment="center"
         android:textSize="16sp"
@@ -97,9 +97,9 @@
 
     <TextView
         android:id="@+id/tvFollowingCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
+        android:layout_width="61dp"
+        android:layout_height="22dp"
+        android:layout_marginEnd="24dp"
         android:textAlignment="center"
         android:textSize="16sp"
         android:textStyle="bold"
