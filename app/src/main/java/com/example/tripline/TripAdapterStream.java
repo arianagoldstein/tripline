@@ -15,25 +15,25 @@ import com.example.tripline.models.Trip;
 
 import java.util.List;
 
-public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
+public class TripAdapterStream extends RecyclerView.Adapter<TripAdapterStream.ViewHolder> {
 
     private Context context;
     private List<Trip> trips;
 
-    public TripAdapter(Context context, List<Trip> trips) {
+    public TripAdapterStream(Context context, List<Trip> trips) {
         this.context = context;
         this.trips = trips;
     }
 
     @NonNull
     @Override
-    public TripAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TripAdapterStream.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ItemTripStreamBinding binding = ItemTripStreamBinding.inflate(LayoutInflater.from(context));
         return new ViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TripAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TripAdapterStream.ViewHolder holder, int position) {
         Trip trip = trips.get(position);
         holder.bind(trip);
     }
