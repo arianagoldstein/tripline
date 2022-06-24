@@ -70,7 +70,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/etTitle" />
 
             <EditText
-                android:id="@+id/editTextTextPersonName2"
+                android:id="@+id/etLocation"
                 android:layout_width="365dp"
                 android:layout_height="35dp"
                 android:layout_marginStart="16dp"
@@ -89,10 +89,10 @@
                 android:layout_marginTop="16dp"
                 android:text="DESCRIPTION"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
+                app:layout_constraintTop_toBottomOf="@+id/etLocation" />
 
             <EditText
-                android:id="@+id/editTextTextPersonName3"
+                android:id="@+id/etDescription"
                 android:layout_width="365dp"
                 android:layout_height="35dp"
                 android:layout_marginStart="16dp"
@@ -123,7 +123,7 @@
                 android:layout_marginTop="16dp"
                 android:text="START DATE"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName3" />
+                app:layout_constraintTop_toBottomOf="@+id/etDescription" />
 
             <TextView
                 android:id="@+id/tvEndDate"
@@ -133,7 +133,7 @@
                 android:layout_marginTop="16dp"
                 android:text="END DATE"
                 app:layout_constraintStart_toEndOf="@+id/tvStartDate"
-                app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName3" />
+                app:layout_constraintTop_toBottomOf="@+id/etDescription" />
 
             <EditText
                 android:id="@+id/etEndDate"
