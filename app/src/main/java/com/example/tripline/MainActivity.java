@@ -30,11 +30,6 @@ public class MainActivity extends AppCompatActivity {
         // setting the currentUser to whoever is logged in
         currentUser = (User) ParseUser.getCurrentUser();
 
-        // setting the toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
