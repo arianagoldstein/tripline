@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/ivLocationIconStream"
         android:layout_width="45dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@+id/ivLocationIconStream"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Hawaii Getaway" />
 
@@ -30,7 +30,7 @@
         android:layout_width="201dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@+id/ivLocationIconStream"
         app:layout_constraintTop_toBottomOf="@+id/tvTripTitleStream"
         tools:text="HAWAII, USA" />
 
@@ -60,7 +60,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/ivLocationIconStream"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView

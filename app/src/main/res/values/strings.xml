@@ -16,4 +16,8 @@
     <string name="name">NAME</string>
     <string name="add_a_trip">ADD A TRIP</string>
     <string name="title">TITLE</string>
+    <string name="log_out">LOG OUT</string>
+    <string name="trips">TRIPS</string>
+    <string name="followers">FOLLOWERS</string>
+    <string name="following">FOLLOWING</string>
 </resources>
