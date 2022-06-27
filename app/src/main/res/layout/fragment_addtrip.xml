@@ -20,11 +20,12 @@
                 android:id="@+id/btnAddTrip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:text="@string/add_trip"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.947"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnAddEvent" />
+                app:layout_constraintTop_toBottomOf="@+id/ivCoverPhotoAddEvent" />
 
             <TextView
                 android:id="@+id/tvAddTrip"
@@ -65,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="LOCATION"
+                android:text="@string/location"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etTitle" />
 
@@ -87,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="DESCRIPTION"
+                android:text="@string/description"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etLocation" />
 
@@ -121,7 +122,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="START DATE"
+                android:text="@string/start_date"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etDescription" />
 
@@ -131,7 +132,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="100dp"
                 android:layout_marginTop="16dp"
-                android:text="END DATE"
+                android:text="@string/end_date"
                 app:layout_constraintStart_toEndOf="@+id/tvStartDate"
                 app:layout_constraintTop_toBottomOf="@+id/etDescription" />
 
@@ -148,17 +149,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvEndDate" />
 
             <TextView
-                android:id="@+id/tvCoverPhoto"
+                android:id="@+id/tvPhotosEvent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="COVER PHOTO"
+                android:text="@string/cover_photo"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etStartDate" />
 
             <ImageView
-                android:id="@+id/ivCoverPhotoAdd"
+                android:id="@+id/ivCoverPhotoAddEvent"
                 android:layout_width="376dp"
                 android:layout_height="144dp"
                 android:layout_marginTop="8dp"
@@ -166,28 +167,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.485"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvCoverPhoto"
+                app:layout_constraintTop_toBottomOf="@+id/tvPhotosEvent"
                 app:srcCompat="@drawable/border" />
-
-            <TextView
-                android:id="@+id/tvEvents"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                android:text="EVENTS"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivCoverPhotoAdd" />
-
-            <Button
-                android:id="@+id/btnAddEvent"
-                android:layout_width="40dp"
-                android:layout_height="38dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:text="+"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvEvents" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -20,4 +20,21 @@
     <string name="trips">TRIPS</string>
     <string name="followers">FOLLOWERS</string>
     <string name="following">FOLLOWING</string>
+    <string name="add_event">ADD EVENT</string>
+    <string name="add_an_event">ADD AN EVENT</string>
+    <string name="description">DESCRIPTION</string>
+    <string name="activity_type">ACTIVITY TYPE</string>
+    <string name="photo_s">PHOTO(S)</string>
+    <string name="location">LOCATION</string>
+    <string name="cover_photo">COVER PHOTO</string>
+    <string name="end_date">END DATE</string>
+    <string name="start_date">START DATE</string>
+
+    <string-array name="activityTypes">
+        <item>restaurant</item>
+        <item>hotel</item>
+        <item>activity</item>
+        <item>tour</item>
+        <item>event</item>
+    </string-array>
 </resources>

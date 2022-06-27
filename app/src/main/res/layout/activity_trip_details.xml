@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/ivLocationIconDetails"
+        android:layout_width="45dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/locationicon" />
+
+    <TextView
+        android:id="@+id/tvTripTitleDetails"
+        android:layout_width="201dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/ivLocationIconDetails"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Hawaii Getaway" />
+
+    <TextView
+        android:id="@+id/tvLocationDetails"
+        android:layout_width="201dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toEndOf="@+id/ivLocationIconDetails"
+        app:layout_constraintTop_toBottomOf="@+id/tvTripTitleDetails"
+        tools:text="HAWAII, USA" />
+
+    <TextView
+        android:id="@+id/tvStartDateDetails"
+        android:layout_width="82dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="6/11/22 -" />
+
+    <TextView
+        android:id="@+id/tvEndDateDetails"
+        android:layout_width="82dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvStartDateDetails"
+        tools:text="6/22/22" />
+
+    <ImageView
+        android:id="@+id/ivCoverPhotoDetails"
+        android:layout_width="366dp"
+        android:layout_height="166dp"
+        android:layout_marginTop="16dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivLocationIconDetails"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tvDescriptionDetails"
+        android:layout_width="366dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.13"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivCoverPhotoDetails"
+        tools:text="a week-long exploration of 3 of the beautiful islands of Hawaii complete with adventures and relaxation" />
+
+    <View
+        android:id="@+id/divDetails"
+        android:layout_width="361dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="15dp"
+        android:background="#00c7d1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescriptionDetails" />
+
+    <Button
+        android:id="@+id/btnAddEvent"
+        android:layout_width="40dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:text="+"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divDetails"
+        android:visibility="gone"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

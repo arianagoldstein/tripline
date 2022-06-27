@@ -2,6 +2,8 @@ package com.example.tripline;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import java.util.List;
 
 public class TripAdapterProfile extends RecyclerView.Adapter<TripAdapterProfile.ViewHolder> {
 
+    public static final String TAG = "TripAdapterProfile";
     private Context context;
     private List<Trip> trips;
 
@@ -51,6 +54,7 @@ public class TripAdapterProfile extends RecyclerView.Adapter<TripAdapterProfile.
         public ViewHolder(ItemTripProfileBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            binding.getRoot().setOnClickListener(this);
         }
 
         public void bind(Trip trip) {
@@ -64,7 +68,16 @@ public class TripAdapterProfile extends RecyclerView.Adapter<TripAdapterProfile.
 
         @Override
         public void onClick(View v) {
+            Log.i(TAG, "trip clicked!");
+            int position = getAdapterPosition();
 
+            // getting the trip that the user clicked on and passing it to the details page to display it
+            if (position != RecyclerView.NO_POSITION) {
+                Trip trip = trips.get(position);
+                Intent i = new Intent(context, TripDetailsActivity.class);
+                i.putExtra("trip", trip);
+                context.startActivity(i);
+            }
         }
 
     }
