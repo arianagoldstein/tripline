@@ -2,42 +2,42 @@ package com.example.tripline;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tripline.databinding.ItemTripProfileBinding;
-import com.example.tripline.databinding.ItemTripStreamBinding;
 import com.example.tripline.models.Trip;
 
 import java.util.List;
 
-public class TripAdapterProfile extends RecyclerView.Adapter<TripAdapterProfile.ViewHolder> {
+public class TripProfileAdapter extends RecyclerView.Adapter<TripProfileAdapter.ViewHolder> {
 
-    public static final String TAG = "TripAdapterProfile";
+    public static final String TAG = "TripProfileAdapter";
     private Context context;
     private List<Trip> trips;
 
-    public TripAdapterProfile(Context context, List<Trip> trips) {
+    public TripProfileAdapter(Context context, List<Trip> trips) {
         this.context = context;
         this.trips = trips;
     }
 
     @NonNull
     @Override
-    public TripAdapterProfile.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TripProfileAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ItemTripProfileBinding binding = ItemTripProfileBinding.inflate(LayoutInflater.from(context));
         return new ViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TripAdapterProfile.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TripProfileAdapter.ViewHolder holder, int position) {
         Trip trip = trips.get(position);
         holder.bind(trip);
     }
@@ -74,9 +74,14 @@ public class TripAdapterProfile extends RecyclerView.Adapter<TripAdapterProfile.
             // getting the trip that the user clicked on and passing it to the details page to display it
             if (position != RecyclerView.NO_POSITION) {
                 Trip trip = trips.get(position);
-                Intent i = new Intent(context, TripDetailsActivity.class);
-                i.putExtra("trip", trip);
-                context.startActivity(i);
+
+                // TODO: use a ViewModel here instead, this is a placeholder
+                ((MainActivity) context).selectedTrip = trip;
+
+                // now we have an instance of the navbar, so we can go anywhere
+                NavController navController = Navigation.findNavController(itemView);
+                navController.navigate(R.id.action_navigation_profile_to_navigation_tripdetails);
+
             }
         }
 
