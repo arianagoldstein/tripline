@@ -5,6 +5,8 @@ import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 // a Trip object represents a trip created by a user that will be displayed on their profile and in the stream
@@ -18,6 +20,7 @@ public class Trip extends ParseObject {
     public static final String KEY_END_DATE = "endDate";
     public static final String KEY_COVER_PHOTO = "coverPhoto";
     public static final String KEY_AUTHOR = "author";
+    public static final String KEY_CREATED_AT = "createdAt";
 
     public Trip() {
 
@@ -77,6 +80,12 @@ public class Trip extends ParseObject {
 
     public void setAuthor(User user) {
         put(KEY_AUTHOR, user);
+    }
+
+    // takes in a Date and returns a string in mm/dd/yy format
+    public String getFormattedDate(Date dateToFormat) {
+        Format f = new SimpleDateFormat("MM/dd/yy");
+        return f.format(dateToFormat);
     }
 
 }

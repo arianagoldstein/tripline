@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="10dp"
     tools:context=".ui.profile.ProfileFragment">
 
     <ImageView
         android:id="@+id/ivProfilePic"
         android:layout_width="112dp"
         android:layout_height="103dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/profile"
@@ -21,23 +20,112 @@
         android:id="@+id/tvNameProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Name"
+        android:layout_marginTop="8dp"
+        tools:text="Name"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.089"
+        app:layout_constraintHorizontal_bias="0.066"
         app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnLogout"
+        android:layout_width="80dp"
+        android:layout_height="35dp"
+        android:text="@string/log_out"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.988"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvTrips"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="56dp"
-        android:text="LOG OUT"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="24dp"
+        android:text="@string/trips"
+        app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
+        app:layout_constraintTop_toTopOf="@+id/tvFollowers" />
+
+    <TextView
+        android:id="@+id/tvFollowers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="@string/followers"
+        app:layout_constraintEnd_toStartOf="@+id/tvFollowing"
+        app:layout_constraintHorizontal_bias="0.555"
+        app:layout_constraintStart_toEndOf="@+id/tvTrips"
+        app:layout_constraintTop_toBottomOf="@+id/tvFollowersCount" />
+
+    <TextView
+        android:id="@+id/tvFollowing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/following"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.948"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/tvFollowers" />
+
+    <TextView
+        android:id="@+id/tvTripsCount"
+        android:layout_width="43dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="24dp"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
+        app:layout_constraintTop_toTopOf="@+id/tvFollowersCount"
+        tools:text="1000" />
+
+    <TextView
+        android:id="@+id/tvFollowersCount"
+        android:layout_width="56dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="40dp"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/tvFollowingCount"
+        app:layout_constraintHorizontal_bias="0.467"
+        app:layout_constraintStart_toEndOf="@+id/tvTripsCount"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="100000" />
+
+    <TextView
+        android:id="@+id/tvFollowingCount"
+        android:layout_width="61dp"
+        android:layout_height="22dp"
+        android:layout_marginEnd="24dp"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvFollowersCount"
+        tools:text="100000" />
+
+    <ImageView
+        android:id="@+id/ivMapPlaceholder"
+        android:layout_width="382dp"
+        android:layout_height="155dp"
+        android:layout_marginTop="12dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivProfilePic"
+        app:srcCompat="@drawable/map_placeholder"
+        tools:src="@tools:sample/avatars" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTripsProfile"
+        android:layout_width="382dp"
+        android:layout_height="381dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivMapPlaceholder" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

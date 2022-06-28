@@ -26,11 +26,11 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // checking if the user is already logged in
-//        if (ParseUser.getCurrentUser() != null) {
-//            Log.i(TAG, ParseUser.getCurrentUser().getUsername());
-//            goMainActivity();
-//        }
+        // checking if the user is already logged in. if so, we should bring them to the MainActivity
+        if (ParseUser.getCurrentUser() != null) {
+            Log.i(TAG, ParseUser.getCurrentUser().getUsername());
+            goMainActivity();
+        }
 
         // when the user clicks "log in," we use their credentials to log them in
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
