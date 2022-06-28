@@ -48,7 +48,7 @@ public class Event extends ParseObject {
         return getString(KEY_ACTIVITY_TYPE);
     }
 
-    public void setKeyActivityType(String activityType) {
+    public void setActivityType(String activityType) {
         put(KEY_ACTIVITY_TYPE, activityType);
     }
 

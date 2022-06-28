@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,13 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tripline.LoginActivity;
 import com.example.tripline.MainActivity;
-import com.example.tripline.TripAdapterProfile;
-import com.example.tripline.TripAdapterStream;
+import com.example.tripline.TripProfileAdapter;
 import com.example.tripline.databinding.FragmentProfileBinding;
 import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -37,7 +34,7 @@ public class ProfileFragment extends Fragment {
     private FragmentProfileBinding binding;
     public static final String TAG = "ProfileFragment";
     private RecyclerView rvTripsProfile;
-    protected TripAdapterProfile adapter;
+    protected TripProfileAdapter adapter;
     protected List<Trip> userTrips;
     private int numTripsByThisUser;
 
@@ -86,7 +83,7 @@ public class ProfileFragment extends Fragment {
         // connecting RecyclerView of Trips with the adapter
         rvTripsProfile = binding.rvTripsProfile;
         userTrips = new ArrayList<>();
-        adapter = new TripAdapterProfile(getContext(), userTrips);
+        adapter = new TripProfileAdapter(getContext(), userTrips);
         binding.rvTripsProfile.setAdapter(adapter);
 
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
