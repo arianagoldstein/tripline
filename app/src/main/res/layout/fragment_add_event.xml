@@ -7,18 +7,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-            <Button
-                android:id="@+id/btnAddEvent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/add_event"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.947"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivCoverPhotoAddEvent" />
+    <Button
+        android:id="@+id/btnAddEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="@string/add_event"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.897"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gvGallery" />
 
-            <TextView
+    <TextView
                 android:id="@+id/tvAddEvent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -93,18 +93,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spActivityType" />
 
-    <ImageView
-        android:id="@+id/ivCoverPhotoAddEvent"
-        android:layout_width="149dp"
-        android:layout_height="143dp"
-        android:layout_marginTop="8dp"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.061"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPhotosEvent"
-        app:srcCompat="@drawable/border" />
-
     <Spinner
         android:id="@+id/spActivityType"
         android:layout_width="365dp"
@@ -115,5 +103,27 @@
         app:layout_constraintHorizontal_bias="0.347"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvActivityType" />
+
+    <Button
+        android:id="@+id/btnAddPhotos"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="4dp"
+        android:text="+"
+        app:layout_constraintStart_toEndOf="@+id/tvPhotosEvent"
+        app:layout_constraintTop_toBottomOf="@+id/spActivityType" />
+
+    <GridView
+        android:id="@+id/gvGallery"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_weight="1"
+        android:numColumns="3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnAddPhotos" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
