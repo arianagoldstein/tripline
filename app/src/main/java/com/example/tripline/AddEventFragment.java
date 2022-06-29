@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.tripline.adapters.GalleryAdapter;
 import com.example.tripline.databinding.FragmentAddEventBinding;
 import com.example.tripline.models.Event;
 import com.example.tripline.models.Trip;
@@ -36,7 +37,6 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.List;
 

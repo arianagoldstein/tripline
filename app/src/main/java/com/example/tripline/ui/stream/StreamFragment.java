@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.tripline.TripStreamAdapter;
+import com.example.tripline.adapters.TripStreamAdapter;
 import com.example.tripline.databinding.FragmentStreamBinding;
 import com.example.tripline.models.Trip;
 import com.parse.FindCallback;

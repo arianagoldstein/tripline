@@ -1,4 +1,4 @@
-package com.example.tripline;
+package com.example.tripline.adapters;
 
 
 import android.content.Context;
@@ -13,6 +13,8 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.tripline.MainActivity;
+import com.example.tripline.R;
 import com.example.tripline.databinding.ItemTripStreamBinding;
 import com.example.tripline.models.Trip;
 

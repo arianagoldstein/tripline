@@ -52,7 +52,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
     <TextView
-        android:id="@+id/tvDescriptionEvent"
+        android:id="@+id/tvDescriptionEventAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -81,7 +81,7 @@
                 android:inputType="textPersonName"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvDescriptionEvent" />
+                app:layout_constraintTop_toBottomOf="@+id/tvDescriptionEventAdd" />
 
     <TextView
         android:id="@+id/tvPhotosEvent"
