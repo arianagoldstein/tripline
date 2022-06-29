@@ -2,21 +2,22 @@ package com.example.tripline;
 
 import android.os.Bundle;
 
-import com.example.tripline.models.User;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.tripline.databinding.ActivityMainBinding;
+import com.example.tripline.models.Trip;
+import com.example.tripline.models.User;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String TAG = "MainActivity";
+    public Trip selectedTrip;
     private ActivityMainBinding binding;
     public static User currentUser;
 
@@ -41,5 +42,4 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
         navView.setSelectedItemId(R.id.navigation_profile); // default tab should be profile
     }
-
 }

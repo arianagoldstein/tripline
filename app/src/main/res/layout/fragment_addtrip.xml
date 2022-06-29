@@ -25,7 +25,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.947"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivCoverPhotoAddEvent" />
+                app:layout_constraintTop_toBottomOf="@+id/ivCoverPhotoAddTrip" />
 
             <TextView
                 android:id="@+id/tvAddTrip"
@@ -159,11 +159,11 @@
                 app:layout_constraintTop_toBottomOf="@+id/etStartDate" />
 
             <ImageView
-                android:id="@+id/ivCoverPhotoAddEvent"
-                android:layout_width="376dp"
-                android:layout_height="144dp"
+                android:id="@+id/ivCoverPhotoAddTrip"
+                android:layout_width="366dp"
+                android:layout_height="166dp"
                 android:layout_marginTop="8dp"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.485"
                 app:layout_constraintStart_toStartOf="parent"

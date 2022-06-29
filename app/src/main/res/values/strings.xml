@@ -29,8 +29,10 @@
     <string name="cover_photo">COVER PHOTO</string>
     <string name="end_date">END DATE</string>
     <string name="start_date">START DATE</string>
+    <string name="trip_details">Trip Details</string>
 
     <string-array name="activityTypes">
+        <item>select an activity type</item>
         <item>restaurant</item>
         <item>hotel</item>
         <item>activity</item>

@@ -9,17 +9,49 @@
         android:id="@+id/navigation_stream"
         android:name="com.example.tripline.ui.stream.StreamFragment"
         android:label="@string/title_stream"
-        tools:layout="@layout/fragment_stream" />
+        tools:layout="@layout/fragment_stream" >
+        <action
+            android:id="@+id/action_navigation_stream_to_navigation_tripdetails"
+            app:destination="@id/navigation_tripdetails" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_addtrip"
         android:name="com.example.tripline.ui.addtrip.AddTripFragment"
         android:label="@string/title_addtrip"
-        tools:layout="@layout/fragment_addtrip" />
+        tools:layout="@layout/fragment_addtrip" >
+        <action
+            android:id="@+id/action_navigation_addtrip_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_addevent"
+        android:name="com.example.tripline.AddEventFragment"
+        android:label="@string/add_event"
+        tools:layout="@layout/fragment_add_event" >
+        <action
+            android:id="@+id/action_navigation_addevent_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_tripdetails"
+        android:name="com.example.tripline.TripDetailsFragment"
+        android:label="@string/trip_details"
+        tools:layout="@layout/fragment_trip_details" >
+        <action
+            android:id="@+id/action_navigation_tripdetails_to_navigation_addevent"
+            app:destination="@id/navigation_addevent" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.tripline.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_navigation_profile_to_navigation_tripdetails"
+            app:destination="@id/navigation_tripdetails" />
+    </fragment>
 </navigation>

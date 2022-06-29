@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.tripline.TripAdapterStream;
+import com.example.tripline.TripStreamAdapter;
 import com.example.tripline.databinding.FragmentStreamBinding;
 import com.example.tripline.models.Trip;
 import com.parse.FindCallback;
@@ -30,7 +30,7 @@ public class StreamFragment extends Fragment {
     public static final String TAG = "StreamFragment";
     private FragmentStreamBinding binding;
     private RecyclerView rvTrips;
-    protected TripAdapterStream adapter;
+    protected TripStreamAdapter adapter;
     protected List<Trip> allTrips;
 
     public StreamFragment() {
@@ -66,7 +66,7 @@ public class StreamFragment extends Fragment {
         // connecting RecyclerView of Trips with the adapter
         rvTrips = binding.rvTrips;
         allTrips = new ArrayList<>();
-        adapter = new TripAdapterStream(getContext(), allTrips);
+        adapter = new TripStreamAdapter(getContext(), allTrips);
         binding.rvTrips.setAdapter(adapter);
 
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
