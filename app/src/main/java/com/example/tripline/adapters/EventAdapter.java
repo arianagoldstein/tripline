@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tripline.R;
 import com.example.tripline.databinding.ItemEventBinding;
 import com.example.tripline.models.Event;
 import com.example.tripline.models.Photo;
@@ -66,7 +67,31 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         public void bind(Event event) {
             binding.tvTripTitleEvent.setText(event.getTitle());
             binding.tvDescriptionEvent.setText(event.getDescription());
-            binding.tvActivityTypeEvent.setText(event.getActivityType());
+
+            String activityType = event.getActivityType();
+            binding.tvActivityTypeEvent.setText(activityType);
+
+            // displaying icon depending on the activity type of the event
+            switch(activityType) {
+                case ("restaurant"):
+                    binding.ivIconEvent.setImageResource(R.drawable.restaurant_icon);
+                    break;
+                case ("hotel"):
+                    binding.ivIconEvent.setImageResource(R.drawable.hotel_icon);
+                    break;
+                case ("activity"):
+                    binding.ivIconEvent.setImageResource(R.drawable.activity_icon);
+                    break;
+                case ("tour"):
+                    binding.ivIconEvent.setImageResource(R.drawable.tour_icon);
+                    break;
+                case ("event"):
+                    binding.ivIconEvent.setImageResource(R.drawable.event_icon);
+                    break;
+                default:
+                    binding.ivIconEvent.setImageResource(R.drawable.pin_icon);
+                    break;
+            }
 
             // setting up horizontal recyclerview for event photos
             eventPhotos = new ArrayList<>();

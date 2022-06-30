@@ -6,22 +6,23 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/ivLocationIconEvent"
-        android:layout_width="45dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:id="@+id/ivIconEvent"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/eventpin" />
+        app:srcCompat="@drawable/pin_icon" />
 
     <TextView
         android:id="@+id/tvTripTitleEvent"
         android:layout_width="201dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/ivLocationIconEvent"
+        app:layout_constraintStart_toEndOf="@+id/ivIconEvent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Snorkeling in the Atlantic" />
 
@@ -40,17 +41,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivLocationIconEvent" />
+        app:layout_constraintTop_toBottomOf="@+id/ivIconEvent" />
 
     <TextView
         android:id="@+id/tvDescriptionEvent"
         android:layout_width="344dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/ivLocationIconEvent"
-        app:layout_constraintStart_toEndOf="@+id/ivLocationIconEvent"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivIconEvent"
+        app:layout_constraintStart_toEndOf="@+id/ivIconEvent"
         app:layout_constraintTop_toBottomOf="@+id/tvTripTitleEvent"
         tools:text="a super cool snorkeling trip yay" />
 
