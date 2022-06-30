@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -25,6 +26,8 @@ import com.example.tripline.R;
 import com.example.tripline.databinding.FragmentAddtripBinding;
 import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
@@ -32,6 +35,7 @@ import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 // this fragment will allow the user to add a new trip to their profile
@@ -43,6 +47,9 @@ public class AddTripFragment extends Fragment {
     // variables for photo upload
     private final static int PICK_PHOTO_CODE = 1046;
     private ParseFile coverPhoto;
+
+    private Date startDate;
+    private Date endDate;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -58,6 +65,41 @@ public class AddTripFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // initializing dates as null before they're selected
+        startDate = null;
+        endDate = null;
+
+        // constructing a Material Date Picker
+        MaterialDatePicker.Builder<Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
+        builder.setTitleText("SELECT A RANGE OF DATES");
+        final MaterialDatePicker materialDatePicker = builder.build();
+
+        // shows the date picker
+        binding.ibChooseDates.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                materialDatePicker.show(((MainActivity) getContext()).getSupportFragmentManager(), "DATE_PICKER");
+            }
+        });
+
+        materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+            @Override
+            public void onPositiveButtonClick(Object selection) {
+                Pair selectedDates = (Pair) materialDatePicker.getSelection();
+                // then obtain the startDate & endDate from the range
+                final Pair<Date, Date> rangeDate = new Pair<>(new Date((Long) selectedDates.first), new Date((Long) selectedDates.second));
+                // assigned variables
+                startDate = rangeDate.first;
+                endDate = rangeDate.second;
+
+                // format the dates in your desired display mode
+                SimpleDateFormat simpleFormat = new SimpleDateFormat("MMM dd, yyyy");
+                // display it with setText
+                binding.tvStartDateDisplay.setText(simpleFormat.format(startDate));
+                binding.tvEndDateDisplay.setText(simpleFormat.format(endDate));
+            }
+        });
 
         // when the user clicks on the cover photo placeholder, they can upload a photo
         binding.ivCoverPhotoAddTrip.setOnClickListener(new View.OnClickListener() {
@@ -75,8 +117,6 @@ public class AddTripFragment extends Fragment {
                 String title = binding.etTitle.getText().toString();
                 ParseGeoPoint location = new ParseGeoPoint(0, 0);
                 String description = binding.etDescription.getText().toString();
-                Date startDate = new Date();
-                Date endDate = new Date();
 
                 // can't post with an empty title
                 if (title.isEmpty()) {
@@ -87,6 +127,12 @@ public class AddTripFragment extends Fragment {
                 // can't post with an empty description
                 if (description.isEmpty()) {
                     Toast.makeText(getContext(), "Description cannot be empty", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // can't post without a start and end date
+                if (startDate == null || endDate == null) {
+                    Toast.makeText(getContext(), "A start and end date must be selected", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -131,8 +177,8 @@ public class AddTripFragment extends Fragment {
                 binding.etTitle.setText("");
                 binding.etLocation.setText("");
                 binding.etDescription.setText("");
-                binding.etStartDate.setText("");
-                binding.etEndDate.setText("");
+                binding.tvStartDateDisplay.setText("");
+                binding.tvEndDateDisplay.setText("");
                 binding.ivCoverPhotoAddTrip.setImageResource(0);
             }
         });

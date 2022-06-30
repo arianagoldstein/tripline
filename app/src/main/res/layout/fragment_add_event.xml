@@ -29,33 +29,33 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                android:text="@string/title"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvAddEvent" />
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAddEvent" />
 
-            <EditText
-                android:id="@+id/etTitleEvent"
-                android:layout_width="365dp"
-                android:layout_height="35dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+    <EditText
+        android:id="@+id/etTitleEvent"
+        android:layout_width="355dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
     <TextView
         android:id="@+id/tvDescriptionEventAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="16dp"
         android:text="@string/description"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,29 +65,29 @@
         android:id="@+id/tvActivityType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="16dp"
         android:text="@string/activity_type"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etDescriptionEvent" />
 
     <EditText
-                android:id="@+id/etDescriptionEvent"
-                android:layout_width="365dp"
-                android:layout_height="35dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvDescriptionEventAdd" />
+        android:id="@+id/etDescriptionEvent"
+        android:layout_width="355dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescriptionEventAdd" />
 
     <TextView
         android:id="@+id/tvPhotosEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="16dp"
         android:text="@string/photo_s"
         app:layout_constraintStart_toStartOf="parent"
@@ -95,8 +95,9 @@
 
     <Spinner
         android:id="@+id/spActivityType"
-        android:layout_width="365dp"
+        android:layout_width="355dp"
         android:layout_height="35dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="8dp"
         android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
@@ -124,6 +125,42 @@
         android:numColumns="3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnAddPhotos" />
+        app:layout_constraintTop_toBottomOf="@+id/ivPhotosIcon" />
+
+    <ImageView
+        android:id="@+id/ivTitleIconEvent"
+        android:layout_width="33dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvTitle"
+        app:srcCompat="@drawable/title_icon" />
+
+    <ImageView
+        android:id="@+id/ivDescriptionIconEvent"
+        android:layout_width="33dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvDescriptionEventAdd"
+        app:srcCompat="@drawable/description_icon" />
+
+    <ImageView
+        android:id="@+id/ivActivityTypeIcon"
+        android:layout_width="33dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvActivityType"
+        app:srcCompat="@drawable/activitytype_icon" />
+
+    <ImageView
+        android:id="@+id/ivPhotosIcon"
+        android:layout_width="33dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvPhotosEvent"
+        app:srcCompat="@drawable/photos_icon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
