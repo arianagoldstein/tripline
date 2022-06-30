@@ -84,6 +84,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvLocation" />
 
+
             <TextView
                 android:id="@+id/tvDescription"
                 android:layout_width="wrap_content"
@@ -93,7 +94,6 @@
                 android:text="@string/description"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etLocation" />
-
 
             <EditText
                 android:id="@+id/etDescription"
@@ -211,6 +211,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tvPhotosEvent"
                 app:srcCompat="@drawable/photo_icon" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

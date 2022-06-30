@@ -56,4 +56,7 @@ dependencies {
 
     // dependencies for Material Design
     implementation 'com.google.android.material:material:1.6.1'
+
+    // dependencies for Google Places API
+    implementation 'com.google.android.libraries.places:places:2.6.0'
 }

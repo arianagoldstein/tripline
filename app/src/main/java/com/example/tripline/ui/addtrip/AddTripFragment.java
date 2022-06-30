@@ -1,5 +1,6 @@
 package com.example.tripline.ui.addtrip;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
@@ -26,6 +27,11 @@ import com.example.tripline.R;
 import com.example.tripline.databinding.FragmentAddtripBinding;
 import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.parse.ParseException;
@@ -36,7 +42,9 @@ import com.parse.SaveCallback;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 // this fragment will allow the user to add a new trip to their profile
 public class AddTripFragment extends Fragment {
@@ -50,6 +58,8 @@ public class AddTripFragment extends Fragment {
 
     private Date startDate;
     private Date endDate;
+
+    private final static int AUTOCOMPLETE_REQUEST_CODE = 1;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -65,6 +75,23 @@ public class AddTripFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Google Places API stuff
+        binding.ivLocationIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Set the fields to specify which types of place data to
+                // return after the user has made a selection.
+                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+
+                // Start the autocomplete intent.
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
+                        .build(getContext());
+                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+            }
+        });
+
+
 
         // initializing dates as null before they're selected
         startDate = null;
@@ -222,19 +249,47 @@ public class AddTripFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if ((data != null) && requestCode == PICK_PHOTO_CODE) {
-            Uri photoUri = data.getData();
+        // executing different versions of this function based on how it was triggered
+        switch (requestCode) {
+            // we have a cover photo that we need to convert to a ParseFile
+            case PICK_PHOTO_CODE:
+                if ((data != null)) {
+                    Uri photoUri = data.getData();
 
-            // load the image located at photoUri into selectedImage
-            Bitmap selectedImage = loadFromUri(photoUri);
+                    // load the image located at photoUri into selectedImage
+                    Bitmap selectedImage = loadFromUri(photoUri);
 
-            // compressing the image so that it can upload to Parse successfully
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            coverPhoto = new ParseFile("coverphoto.jpg", stream.toByteArray());
+                    // compressing the image so that it can upload to Parse successfully
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    coverPhoto = new ParseFile("coverphoto.jpg", stream.toByteArray());
 
-            // load the selected image into the cover photo preview
-            binding.ivCoverPhotoAddTrip.setImageBitmap(selectedImage);
+                    // load the selected image into the cover photo preview
+                    binding.ivCoverPhotoAddTrip.setImageBitmap(selectedImage);
+                }
+                break;
+            // the user has typed a location into the autocomplete search
+            case (AUTOCOMPLETE_REQUEST_CODE):
+                if (resultCode == Activity.RESULT_OK) {
+                    // getting the place the user input
+                    Place place = Autocomplete.getPlaceFromIntent(data);
+                    Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " + place.getLatLng());
+
+                    binding.etLocation.setText(place.getName());
+                } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                    // TODO: Handle the error.
+                    Status status = Autocomplete.getStatusFromIntent(data);
+                    Log.i(TAG, status.getStatusMessage());
+                } else if (resultCode == Activity.RESULT_CANCELED) {
+                    // The user canceled the operation.
+                }
+                super.onActivityResult(requestCode, resultCode, data);
+                return;
+            default:
+                Log.i(TAG, "default case");
+                break;
         }
+
     }
+
 }

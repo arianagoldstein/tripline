@@ -63,17 +63,13 @@ public class AddEventFragment extends Fragment implements AdapterView.OnItemSele
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         binding = FragmentAddEventBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-
-        return root;
+        return binding.getRoot();
     }
 
     @Override
