@@ -28,6 +28,7 @@ import com.example.tripline.databinding.FragmentAddtripBinding;
 import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
@@ -58,6 +59,8 @@ public class AddTripFragment extends Fragment {
 
     private Date startDate;
     private Date endDate;
+    private double latitude;
+    private double longitude;
 
     private final static int AUTOCOMPLETE_REQUEST_CODE = 1;
 
@@ -82,7 +85,7 @@ public class AddTripFragment extends Fragment {
             public void onClick(View v) {
                 // Set the fields to specify which types of place data to
                 // return after the user has made a selection.
-                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
 
                 // Start the autocomplete intent.
                 Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
@@ -142,7 +145,7 @@ public class AddTripFragment extends Fragment {
             public void onClick(View v) {
                 // getting user input
                 String title = binding.etTitle.getText().toString();
-                ParseGeoPoint location = new ParseGeoPoint(0, 0);
+                ParseGeoPoint location = new ParseGeoPoint(latitude, longitude);
                 String description = binding.etDescription.getText().toString();
 
                 // can't post with an empty title
@@ -272,10 +275,16 @@ public class AddTripFragment extends Fragment {
             case (AUTOCOMPLETE_REQUEST_CODE):
                 if (resultCode == Activity.RESULT_OK) {
                     // getting the place the user input
-                    Place place = Autocomplete.getPlaceFromIntent(data);
-                    Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " + place.getLatLng());
+                    Place inputPlace = Autocomplete.getPlaceFromIntent(data);
+                    Log.i(TAG, "Place: " + inputPlace.getName() + ", " + inputPlace.getId() + ", " + inputPlace.getLatLng());
 
-                    binding.etLocation.setText(place.getName());
+                    // getting the latitude and longitude from the place the user selected
+                    LatLng latLngPair = inputPlace.getLatLng();
+                    latitude = latLngPair.latitude;
+                    longitude = latLngPair.longitude;
+
+                    binding.etLocation.setText(inputPlace.getName());
+
                 } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                     // TODO: Handle the error.
                     Status status = Autocomplete.getStatusFromIntent(data);
