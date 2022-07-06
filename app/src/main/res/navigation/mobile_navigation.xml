@@ -53,5 +53,15 @@
         <action
             android:id="@+id/action_navigation_profile_to_navigation_tripdetails"
             app:destination="@id/navigation_tripdetails" />
+        <action
+            android:id="@+id/action_navigation_profile_to_navigation_map"
+            app:destination="@id/navigation_map" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_map"
+        android:name="com.example.tripline.MapFragment"
+        android:label="@string/map"
+        tools:layout="@layout/fragment_map" >
     </fragment>
 </navigation>

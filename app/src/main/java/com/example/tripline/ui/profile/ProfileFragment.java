@@ -11,12 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tripline.LoginActivity;
 import com.example.tripline.MainActivity;
-import com.example.tripline.MapFragment;
 import com.example.tripline.R;
 import com.example.tripline.adapters.TripProfileAdapter;
 import com.example.tripline.databinding.FragmentProfileBinding;
@@ -76,16 +77,12 @@ public class ProfileFragment extends Fragment {
         rvTripsProfile.setLayoutManager(llm);
 
         binding.btnLogout.setOnClickListener(v -> onLogoutBtnClicked());
-        binding.ivMapPlaceholder.setOnClickListener(v -> onMapImgClicked());
+        binding.ivMapPlaceholder.setOnClickListener(v -> onMapImgClicked(view));
     }
 
-    private void onMapImgClicked() {
-        Fragment fragment = new MapFragment();
-        ((MainActivity) getContext())
-                .getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment_activity_main, fragment)
-                .commit();
+    private void onMapImgClicked(View view) {
+        NavController navController = Navigation.findNavController(view);
+        navController.navigate(R.id.action_navigation_profile_to_navigation_map);
     }
 
     private void onLogoutBtnClicked() {
