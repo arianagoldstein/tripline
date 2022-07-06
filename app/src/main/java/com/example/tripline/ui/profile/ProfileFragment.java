@@ -16,6 +16,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.tripline.LoginActivity;
 import com.example.tripline.MainActivity;
 import com.example.tripline.R;
@@ -25,6 +26,7 @@ import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -78,6 +80,25 @@ public class ProfileFragment extends Fragment {
 
         binding.btnLogout.setOnClickListener(v -> onLogoutBtnClicked());
         binding.ivMapPlaceholder.setOnClickListener(v -> onMapImgClicked(view));
+
+        displayStaticMap();
+    }
+
+    private void displayStaticMap() {
+        // displaying a static map on the profile page
+        StringBuilder url = new StringBuilder("https://maps.googleapis.com/maps/api/staticmap?size=382x155&zoom=1&maptype=terrain&markers=color:0x00C7D1%7Csize:tiny");
+
+        for (int i = 0; i < MainActivity.userTrips.size(); i++) {
+            if (i >= 15) {  // static maps can display maximum of 15 markers
+                break;
+            }
+            ParseGeoPoint point = MainActivity.userTrips.get(i).getLocation();
+            String result = point.getLatitude() + "," + point.getLongitude();
+            url.append("%7C").append(result);
+        }
+        url.append("&key=").append(getString(R.string.maps_api_key));
+
+        Glide.with(getContext()).load(url.toString()).into(binding.ivMapPlaceholder);
     }
 
     private void onMapImgClicked(View view) {
