@@ -11,17 +11,35 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.example.tripline.adapters.EventAdapter;
+import com.example.tripline.adapters.EventPhotoAdapter;
 import com.example.tripline.databinding.FragmentTripDetailsBinding;
+import com.example.tripline.models.Event;
+import com.example.tripline.models.Photo;
 import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TripDetailsFragment extends Fragment {
 
     public static final String TAG = "TripDetailsFragment";
     private FragmentTripDetailsBinding binding;
+    private Trip trip;
+    private List<Event> eventList;
+    private EventAdapter adapter;
 
     public TripDetailsFragment() {
         // Required empty public constructor
@@ -50,7 +68,7 @@ public class TripDetailsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Trip trip = ((MainActivity) getContext()).selectedTrip;
+        trip = ((MainActivity) getContext()).selectedTrip;
         Log.i(TAG, "in TripDetailsFragment with trip " + trip.getTitle());
 
         // populating the XML elements with the details of this trip
@@ -77,6 +95,46 @@ public class TripDetailsFragment extends Fragment {
                 // now we have an instance of the navbar, so we can go anywhere
                 NavController navController = Navigation.findNavController(view);
                 navController.navigate(R.id.action_navigation_tripdetails_to_navigation_addevent);
+            }
+        });
+
+        queryEvents();
+
+        // setting up recyclerview for events
+        eventList = new ArrayList<>();
+        adapter = new EventAdapter(getContext(), eventList);
+        binding.rvEvents.setAdapter(adapter);
+        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        binding.rvEvents.setLayoutManager(llm);
+    }
+
+
+    // loads the events associated with this Trip
+    protected void queryEvents() {
+        // specifying the type of data we want to query
+        ParseQuery<Event> query = ParseQuery.getQuery(Event.class);
+
+        // getting Events associated with this Trip
+        query.whereEqualTo(Event.KEY_TRIP, trip);
+
+        query.findInBackground(new FindCallback<Event>() {
+            @Override
+            public void done(List<Event> events, ParseException e) {
+
+                // if there is an exception, e will not be null
+                if (e != null) {
+                    Log.e(TAG, "Issue getting events: ", e);
+                }
+
+                // at this point, we have gotten the events successfully
+                for (Event event : events) {
+                    Log.i(TAG, "Event title: " + event.getTitle());
+                }
+
+                // adding the events from Parse into our events list
+                eventList.clear();
+                eventList.addAll(events);
+                adapter.notifyDataSetChanged();
             }
         });
     }

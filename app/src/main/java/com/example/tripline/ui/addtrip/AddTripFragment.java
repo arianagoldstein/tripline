@@ -1,22 +1,22 @@
 package com.example.tripline.ui.addtrip;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -27,15 +27,25 @@ import com.example.tripline.R;
 import com.example.tripline.databinding.FragmentAddtripBinding;
 import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 // this fragment will allow the user to add a new trip to their profile
 public class AddTripFragment extends Fragment {
@@ -46,6 +56,13 @@ public class AddTripFragment extends Fragment {
     // variables for photo upload
     private final static int PICK_PHOTO_CODE = 1046;
     private ParseFile coverPhoto;
+
+    private Date startDate;
+    private Date endDate;
+    private double latitude;
+    private double longitude;
+
+    private final static int AUTOCOMPLETE_REQUEST_CODE = 1;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -62,6 +79,58 @@ public class AddTripFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Google Places API stuff
+        binding.ivLocationIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Set the fields to specify which types of place data to
+                // return after the user has made a selection.
+                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
+
+                // Start the autocomplete intent.
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
+                        .build(getContext());
+                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+            }
+        });
+
+
+
+        // initializing dates as null before they're selected
+        startDate = null;
+        endDate = null;
+
+        // constructing a Material Date Picker
+        MaterialDatePicker.Builder<Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
+        builder.setTitleText("SELECT A RANGE OF DATES");
+        final MaterialDatePicker materialDatePicker = builder.build();
+
+        // shows the date picker
+        binding.ibChooseDates.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                materialDatePicker.show(((MainActivity) getContext()).getSupportFragmentManager(), "DATE_PICKER");
+            }
+        });
+
+        materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+            @Override
+            public void onPositiveButtonClick(Object selection) {
+                Pair selectedDates = (Pair) materialDatePicker.getSelection();
+                // then obtain the startDate & endDate from the range
+                final Pair<Date, Date> rangeDate = new Pair<>(new Date((Long) selectedDates.first), new Date((Long) selectedDates.second));
+                // assigned variables
+                startDate = rangeDate.first;
+                endDate = rangeDate.second;
+
+                // format the dates in your desired display mode
+                SimpleDateFormat simpleFormat = new SimpleDateFormat("MMM dd, yyyy");
+                // display it with setText
+                binding.tvStartDateDisplay.setText(simpleFormat.format(startDate));
+                binding.tvEndDateDisplay.setText(simpleFormat.format(endDate));
+            }
+        });
+
         // when the user clicks on the cover photo placeholder, they can upload a photo
         binding.ivCoverPhotoAddTrip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,10 +145,8 @@ public class AddTripFragment extends Fragment {
             public void onClick(View v) {
                 // getting user input
                 String title = binding.etTitle.getText().toString();
-                ParseGeoPoint location = new ParseGeoPoint(0, 0);
+                ParseGeoPoint location = new ParseGeoPoint(latitude, longitude);
                 String description = binding.etDescription.getText().toString();
-                Date startDate = new Date();
-                Date endDate = new Date();
 
                 // can't post with an empty title
                 if (title.isEmpty()) {
@@ -90,6 +157,12 @@ public class AddTripFragment extends Fragment {
                 // can't post with an empty description
                 if (description.isEmpty()) {
                     Toast.makeText(getContext(), "Description cannot be empty", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // can't post without a start and end date
+                if (startDate == null || endDate == null) {
+                    Toast.makeText(getContext(), "A start and end date must be selected", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -134,8 +207,8 @@ public class AddTripFragment extends Fragment {
                 binding.etTitle.setText("");
                 binding.etLocation.setText("");
                 binding.etDescription.setText("");
-                binding.etStartDate.setText("");
-                binding.etEndDate.setText("");
+                binding.tvStartDateDisplay.setText("");
+                binding.tvEndDateDisplay.setText("");
                 binding.ivCoverPhotoAddTrip.setImageResource(0);
             }
         });
@@ -179,19 +252,53 @@ public class AddTripFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if ((data != null) && requestCode == PICK_PHOTO_CODE) {
-            Uri photoUri = data.getData();
+        // executing different versions of this function based on how it was triggered
+        switch (requestCode) {
+            // we have a cover photo that we need to convert to a ParseFile
+            case PICK_PHOTO_CODE:
+                if ((data != null)) {
+                    Uri photoUri = data.getData();
 
-            // load the image located at photoUri into selectedImage
-            Bitmap selectedImage = loadFromUri(photoUri);
+                    // load the image located at photoUri into selectedImage
+                    Bitmap selectedImage = loadFromUri(photoUri);
 
-            // compressing the image so that it can upload to Parse successfully
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            coverPhoto = new ParseFile("coverphoto.jpg", stream.toByteArray());
+                    // compressing the image so that it can upload to Parse successfully
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    coverPhoto = new ParseFile("coverphoto.jpg", stream.toByteArray());
 
-            // load the selected image into the cover photo preview
-            binding.ivCoverPhotoAddTrip.setImageBitmap(selectedImage);
+                    // load the selected image into the cover photo preview
+                    binding.ivCoverPhotoAddTrip.setImageBitmap(selectedImage);
+                }
+                break;
+            // the user has typed a location into the autocomplete search
+            case (AUTOCOMPLETE_REQUEST_CODE):
+                if (resultCode == Activity.RESULT_OK) {
+                    // getting the place the user input
+                    Place inputPlace = Autocomplete.getPlaceFromIntent(data);
+                    Log.i(TAG, "Place: " + inputPlace.getName() + ", " + inputPlace.getId() + ", " + inputPlace.getLatLng());
+
+                    // getting the latitude and longitude from the place the user selected
+                    LatLng latLngPair = inputPlace.getLatLng();
+                    latitude = latLngPair.latitude;
+                    longitude = latLngPair.longitude;
+
+                    binding.etLocation.setText(inputPlace.getName());
+
+                } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                    // TODO: Handle the error.
+                    Status status = Autocomplete.getStatusFromIntent(data);
+                    Log.i(TAG, status.getStatusMessage());
+                } else if (resultCode == Activity.RESULT_CANCELED) {
+                    // The user canceled the operation.
+                }
+                super.onActivityResult(requestCode, resultCode, data);
+                return;
+            default:
+                Log.i(TAG, "default case");
+                break;
         }
+
     }
+
 }

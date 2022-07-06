@@ -47,10 +47,16 @@ dependencies {
     implementation 'com.github.parse-community.Parse-SDK-Android:parse:1.25.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1' // for logging API calls to LogCat
 
-    //dependencies for Glide (displaying images)
+    // dependencies for Glide (displaying images)
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
     // dependencies for pull-to-refresh functionality in stream
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+    // dependencies for Material Design
+    implementation 'com.google.android.material:material:1.6.1'
+
+    // dependencies for Google Places API
+    implementation 'com.google.android.libraries.places:places:2.6.0'
 }

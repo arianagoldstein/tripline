@@ -11,8 +11,11 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.tripline.databinding.ActivityMainBinding;
 import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
+import com.google.android.libraries.places.api.Places;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,5 +44,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
         navView.setSelectedItemId(R.id.navigation_profile); // default tab should be profile
+
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), getString(R.string.places_api_key), Locale.US);
+        }
     }
 }
