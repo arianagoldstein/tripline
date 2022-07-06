@@ -15,6 +15,8 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     public Trip selectedTrip;
     private ActivityMainBinding binding;
     public static User currentUser;
+    public static List<Trip> userTrips;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         // setting the currentUser to whoever is logged in
         currentUser = (User) ParseUser.getCurrentUser();
+        userTrips = new ArrayList<>();
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
