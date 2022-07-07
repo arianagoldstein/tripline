@@ -83,6 +83,8 @@ public class ProfileFragment extends Fragment {
 
         binding.btnLogout.setOnClickListener(v -> onLogoutBtnClicked());
         binding.ivMapPlaceholder.setOnClickListener(v -> onMapImgClicked(view));
+        binding.tvFollowersCount.setOnClickListener(v -> onFollowerCountClicked(v));
+        binding.tvFollowingCount.setOnClickListener(v -> onFollowingCountClicked(v));
 
         displayStaticMap();
         getFollowers();
@@ -117,6 +119,16 @@ public class ProfileFragment extends Fragment {
         Intent i = new Intent(getContext(), LoginActivity.class);
         startActivity(i);
         getActivity().finish();
+    }
+
+    private void onFollowerCountClicked(View view) {
+        NavController navController = Navigation.findNavController(view);
+        navController.navigate(R.id.action_navigation_profile_to_navigation_follower);
+    }
+
+    private void onFollowingCountClicked(View view) {
+        NavController navController = Navigation.findNavController(view);
+        navController.navigate(R.id.action_navigation_profile_to_navigation_following);
     }
 
     @Override
@@ -162,6 +174,8 @@ public class ProfileFragment extends Fragment {
     protected void getFollowers() {
         // we want to get the Users that FOLLOW the logged-in user, the followers
         ParseQuery<UserFollower> query = ParseQuery.getQuery(UserFollower.class);
+        query.include(UserFollower.KEY_USER_ID);
+        query.include(UserFollower.KEY_FOLLOWER_ID);
         query.whereEqualTo(UserFollower.KEY_USER_ID, ParseUser.getCurrentUser());
 
         query.findInBackground(new FindCallback<UserFollower>() {
@@ -173,6 +187,10 @@ public class ProfileFragment extends Fragment {
                 }
 
                 // at this point, we have gotten the user-follower list successfully
+                MainActivity.userFollowers.clear();
+                for (UserFollower uf : userFollowers) {
+                    MainActivity.userFollowers.add(uf.getFollower());
+                }
                 numFollowers = userFollowers.size();
                 binding.tvFollowersCount.setText(String.valueOf(numFollowers));
             }
@@ -182,6 +200,8 @@ public class ProfileFragment extends Fragment {
     protected void getFollowing() {
         ParseQuery<UserFollower> query = ParseQuery.getQuery(UserFollower.class);
         // we want to get the Users that the logged-in user follows, the following
+        query.include(UserFollower.KEY_USER_ID);
+        query.include(UserFollower.KEY_FOLLOWER_ID);
         query.whereEqualTo(UserFollower.KEY_FOLLOWER_ID, ParseUser.getCurrentUser());
 
         query.findInBackground(new FindCallback<UserFollower>() {
@@ -193,6 +213,10 @@ public class ProfileFragment extends Fragment {
                 }
 
                 // at this point, we have gotten the user-follower list successfully
+                MainActivity.userFollowing.clear();
+                for (UserFollower uf : userFollowers) {
+                    MainActivity.userFollowing.add(uf.getUserF());
+                }
                 numFollowing = userFollowers.size();
                 binding.tvFollowingCount.setText(String.valueOf(numFollowing));
             }
