@@ -1,14 +1,22 @@
 package com.example.tripline.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.tripline.databinding.ItemFollowingBinding;
 import com.example.tripline.models.User;
+import com.example.tripline.models.UserFollower;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -52,6 +60,29 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.View
 
         public void bind(User followingU) {
             binding.tvFollowingName.setText(followingU.getFirstName() + " " + followingU.getLastName());
+            Glide.with(context).load(followingU.getProfilePic().getUrl()).into(binding.ivProfilePicFollowing);
+            binding.btnUnfollow.setOnClickListener(v -> onUnfollowBtnClicked(followingU));
+        }
+
+        private void onUnfollowBtnClicked(User followingU) {
+            ParseQuery<UserFollower> query = ParseQuery.getQuery(UserFollower.class);
+            query.whereEqualTo(UserFollower.KEY_USER_ID, followingU);
+            query.whereEqualTo(UserFollower.KEY_FOLLOWER_ID, ParseUser.getCurrentUser());
+            query.findInBackground((objects, e) -> unfollowUser(objects, e));
+        }
+
+        private void unfollowUser(List<UserFollower> objects, ParseException e) {
+            if (e != null) {
+                Log.e(TAG, "Issue finding user to unfollow", e);
+            }
+            for (UserFollower object : objects) {
+                try {
+                    object.delete();
+                } catch (ParseException ex) {
+                    ex.printStackTrace();
+                }
+                object.saveInBackground();
+            }
         }
     }
 }
