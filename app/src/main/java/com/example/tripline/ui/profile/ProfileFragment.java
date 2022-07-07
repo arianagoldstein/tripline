@@ -11,21 +11,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.tripline.LoginActivity;
 import com.example.tripline.MainActivity;
+import com.example.tripline.R;
 import com.example.tripline.adapters.TripProfileAdapter;
 import com.example.tripline.databinding.FragmentProfileBinding;
 import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 // this fragment will display the profile of the user who is currently logged in
@@ -35,7 +39,6 @@ public class ProfileFragment extends Fragment {
     public static final String TAG = "ProfileFragment";
     private RecyclerView rvTripsProfile;
     protected TripProfileAdapter adapter;
-    protected List<Trip> userTrips;
     private int numTripsByThisUser;
 
     // gets triggered every time we come back to the profile fragment
@@ -44,7 +47,7 @@ public class ProfileFragment extends Fragment {
         super.onResume();
         // query trips from the database
         Log.i(TAG, "onResume");
-        userTrips.clear();
+        MainActivity.userTrips.clear();
         adapter.notifyDataSetChanged();
         getUserTrips();
     }
@@ -57,22 +60,6 @@ public class ProfileFragment extends Fragment {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        User userToDisplay = MainActivity.currentUser;
-        Log.i(TAG, "Displaying profile for user " + userToDisplay.getFirstName() + " " + userToDisplay.getLastName());
-        binding.tvNameProfile.setText(userToDisplay.getFirstName() + " " + userToDisplay.getLastName());
-
-        // clicking the logout button logs the user out and brings them to the login page
-        binding.btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "onClick logout button");
-                ParseUser.logOut();
-                Intent i = new Intent(getContext(), LoginActivity.class);
-                startActivity(i);
-                getActivity().finish();
-            }
-        });
-
         return root;
     }
 
@@ -80,14 +67,51 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        User userToDisplay = MainActivity.currentUser;
+        Log.i(TAG, "Displaying profile for user " + userToDisplay.getFirstName() + " " + userToDisplay.getLastName());
+        binding.tvNameProfile.setText(userToDisplay.getFirstName() + " " + userToDisplay.getLastName());
+
         // connecting RecyclerView of Trips with the adapter
         rvTripsProfile = binding.rvTripsProfile;
-        userTrips = new ArrayList<>();
-        adapter = new TripProfileAdapter(getContext(), userTrips);
+        adapter = new TripProfileAdapter(getContext(), MainActivity.userTrips);
         binding.rvTripsProfile.setAdapter(adapter);
-
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         rvTripsProfile.setLayoutManager(llm);
+
+        binding.btnLogout.setOnClickListener(v -> onLogoutBtnClicked());
+        binding.ivMapPlaceholder.setOnClickListener(v -> onMapImgClicked(view));
+
+        displayStaticMap();
+    }
+
+    private void displayStaticMap() {
+        // displaying a static map on the profile page
+        StringBuilder url = new StringBuilder("https://maps.googleapis.com/maps/api/staticmap?size=382x155&zoom=1&maptype=terrain&markers=color:0x00C7D1%7Csize:tiny");
+
+        for (int i = 0; i < MainActivity.userTrips.size(); i++) {
+            if (i >= 15) {  // static maps can display maximum of 15 markers
+                break;
+            }
+            ParseGeoPoint point = MainActivity.userTrips.get(i).getLocation();
+            String result = point.getLatitude() + "," + point.getLongitude();
+            url.append("%7C").append(result);
+        }
+        url.append("&key=").append(getString(R.string.maps_api_key));
+
+        Glide.with(getContext()).load(url.toString()).into(binding.ivMapPlaceholder);
+    }
+
+    private void onMapImgClicked(View view) {
+        NavController navController = Navigation.findNavController(view);
+        navController.navigate(R.id.action_navigation_profile_to_navigation_map);
+    }
+
+    private void onLogoutBtnClicked() {
+        Log.i(TAG, "onClick logout button");
+        ParseUser.logOut();
+        Intent i = new Intent(getContext(), LoginActivity.class);
+        startActivity(i);
+        getActivity().finish();
     }
 
     @Override
@@ -122,13 +146,13 @@ public class ProfileFragment extends Fragment {
                     Log.i(TAG, "Trip title: " + trip.getTitle());
                 }
 
-                // displaying the number of tripscreated by this user
+                // displaying the number of trips created by this user
                 numTripsByThisUser = trips.size();
                 binding.tvTripsCount.setText(String.valueOf(numTripsByThisUser));
 
                 // adding the trips from Parse into our trips list
-                userTrips.clear();
-                userTrips.addAll(trips);
+                MainActivity.userTrips.clear();
+                MainActivity.userTrips.addAll(trips);
                 adapter.notifyDataSetChanged();
             }
         });
