@@ -62,7 +62,7 @@ public class TripStreamAdapter extends RecyclerView.Adapter<TripStreamAdapter.Vi
         public void bind(Trip trip) {
             // populating the XML elements with the details of this trip
             binding.tvTripTitleStream.setText(trip.getTitle());
-            binding.tvLocationStream.setText(trip.getLocation().toString());
+            binding.tvLocationStream.setText(trip.getFormattedLocation());
             binding.tvStartDateStream.setText(trip.getFormattedDate(trip.getStartDate()) + " - ");
             binding.tvEndDateStream.setText(trip.getFormattedDate(trip.getEndDate()));
             Glide.with(context).load(trip.getCoverPhoto().getUrl()).into(binding.ivCoverPhotoStream);

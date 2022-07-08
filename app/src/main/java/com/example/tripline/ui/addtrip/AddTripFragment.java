@@ -29,6 +29,8 @@ import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.model.AddressComponent;
+import com.google.android.libraries.places.api.model.AddressComponents;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
@@ -61,6 +63,7 @@ public class AddTripFragment extends Fragment {
     private Date endDate;
     private double latitude;
     private double longitude;
+    private String formattedLocation;
 
     private final static int AUTOCOMPLETE_REQUEST_CODE = 1;
 
@@ -85,7 +88,7 @@ public class AddTripFragment extends Fragment {
             public void onClick(View v) {
                 // Set the fields to specify which types of place data to
                 // return after the user has made a selection.
-                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
+                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS_COMPONENTS);
 
                 // Start the autocomplete intent.
                 Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
@@ -171,15 +174,15 @@ public class AddTripFragment extends Fragment {
                     Toast.makeText(getContext(), "A cover photo must be uploaded", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                // network call here. network call in callback is where you do postTrip
                 // posting this trip with the user's input from the fields
-                postTrip(title, location, description, startDate, endDate, coverPhoto, MainActivity.currentUser);
+                postTrip(title, location, description, startDate, endDate, coverPhoto, formattedLocation, MainActivity.currentUser);
 
             }
         });
     }
 
-    private void postTrip(String title, ParseGeoPoint location, String description, Date startDate, Date endDate, ParseFile coverPhoto, User currentUser) {
+    private void postTrip(String title, ParseGeoPoint location, String description, Date startDate, Date endDate, ParseFile coverPhoto, String formattedLocation, User currentUser) {
         // constructing the new trip to post to Parse
         Trip trip = new Trip();
         trip.setTitle(title);
@@ -188,6 +191,7 @@ public class AddTripFragment extends Fragment {
         trip.setStartDate(startDate);
         trip.setEndDate(endDate);
         trip.setCoverPhoto(coverPhoto);
+        trip.setFormattedLocation(formattedLocation);
         trip.setAuthor(currentUser);
 
         trip.saveInBackground(new SaveCallback() {
@@ -276,7 +280,17 @@ public class AddTripFragment extends Fragment {
                 if (resultCode == Activity.RESULT_OK) {
                     // getting the place the user input
                     Place inputPlace = Autocomplete.getPlaceFromIntent(data);
-                    Log.i(TAG, "Place: " + inputPlace.getName() + ", " + inputPlace.getId() + ", " + inputPlace.getLatLng());
+                    AddressComponents comp = inputPlace.getAddressComponents();
+                    List<AddressComponent> compList = comp.asList();
+                    formattedLocation = "";
+                    for (AddressComponent component : compList) {
+                        if (component.getTypes().contains("locality") || component.getTypes().contains("administrative_area_level_1")) {
+                            formattedLocation += component.getName() + ", ";
+                        }
+                        if (component.getTypes().contains("country")) {
+                            formattedLocation += component.getShortName();
+                        }
+                    }
 
                     // getting the latitude and longitude from the place the user selected
                     LatLng latLngPair = inputPlace.getLatLng();
