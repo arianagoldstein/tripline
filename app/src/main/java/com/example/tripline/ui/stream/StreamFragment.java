@@ -48,7 +48,6 @@ public class StreamFragment extends Fragment {
         super.onResume();
         // query trips from the database
         Log.i(TAG, "onResume");
-        getUserFollows();
         queryTrips();
     }
 
@@ -77,19 +76,19 @@ public class StreamFragment extends Fragment {
         rvTrips.setLayoutManager(llm);
 
         following = new ArrayList<>();
+        queryUserFollows();
 
-        binding.swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getUserFollows();
-                queryTrips();
-            }
-        });
+        binding.swipeContainer.setOnRefreshListener(() -> onRefresh());
 
         // configuring the refreshing colors
         binding.swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_blue_light,
                 android.R.color.holo_green_light);
+    }
+
+    private void onRefresh() {
+        queryUserFollows();
+        queryTrips();
     }
 
     @Override
@@ -108,30 +107,23 @@ public class StreamFragment extends Fragment {
         query.whereContainedIn(Trip.KEY_AUTHOR, following);
         query.setLimit(20);
 
-        query.findInBackground(new FindCallback<Trip>() {
-            @Override
-            public void done(List<Trip> trips, ParseException e) {
-                binding.swipeContainer.setRefreshing(false);
-
-                // if there is an exception, e will not be null
-                if (e != null) {
-                    Log.e(TAG, "Issue getting trips: ", e);
-                }
-
-                // at this point, we have gotten the trips successfully
-                for (Trip trip : trips) {
-                    Log.i(TAG, "Trip title: " + trip.getTitle());
-                }
-
-                // adding the trips from Parse into our trips list
-                allTrips.clear();
-                allTrips.addAll(trips);
-                adapter.notifyDataSetChanged();
-            }
-        });
+        query.findInBackground((trips, e) -> addTrips(trips, e));
     }
 
-    protected void getUserFollows() {
+    private void addTrips(List<Trip> trips, ParseException e) {
+        binding.swipeContainer.setRefreshing(false);
+
+        if (e != null) {
+            Log.e(TAG, "Issue getting trips: ", e);
+        }
+
+        // at this point, we have gotten the trips successfully
+        allTrips.clear();
+        allTrips.addAll(trips);
+        adapter.notifyDataSetChanged();
+    }
+
+    protected void queryUserFollows() {
 
         // specifying the type of data we want to query
         ParseQuery<UserFollower> query = ParseQuery.getQuery(UserFollower.class);
@@ -139,22 +131,19 @@ public class StreamFragment extends Fragment {
         // we want to get the Users that the logged-in user follows
         query.whereEqualTo(UserFollower.KEY_FOLLOWER_ID, ParseUser.getCurrentUser());
 
-        query.findInBackground(new FindCallback<UserFollower>() {
-            @Override
-            public void done(List<UserFollower> userFollowers, ParseException e) {
-                // if there is an exception, e will not be null
-                if (e != null) {
-                    Log.e(TAG, "Issue getting following for user " + ParseUser.getCurrentUser().getUsername(), e);
-                }
+        query.findInBackground((userFollowers, e) -> addFollowing(userFollowers, e));
+    }
 
-                following.clear();
-                // at this point, we have gotten the user-follower list successfully
-                for (UserFollower userFollower : userFollowers) {
-                    following.add(userFollower.getUserF());
-                }
-                // now, we have a list of the Users that the logged-in user follows
-            }
-        });
+    private void addFollowing(List<UserFollower> userFollowers, ParseException e) {
+        if (e != null) {
+            Log.e(TAG, "Issue getting following for user " + ParseUser.getCurrentUser().getUsername(), e);
+        }
+        following.clear();
+        // at this point, we have gotten the user-follower list successfully
+        for (UserFollower userFollower : userFollowers) {
+            following.add(userFollower.getUserF());
+        }
+        // now, we have a list of the Users that the logged-in user follows
     }
 
 }

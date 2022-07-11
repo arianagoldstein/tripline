@@ -1,5 +1,6 @@
 package com.example.tripline.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.tripline.R;
 import com.example.tripline.databinding.ItemFollowerBinding;
 import com.example.tripline.models.User;
 import com.example.tripline.models.UserFollower;
@@ -62,6 +64,8 @@ public class FollowerAdapter extends RecyclerView.Adapter<FollowerAdapter.ViewHo
             binding.tvFollowerName.setText(follower.getFirstName() + " " + follower.getLastName());
             Glide.with(context).load(follower.getProfilePic().getUrl()).into(binding.ivProfilePicFollower);
             binding.btnRemoveFollower.setOnClickListener(v -> onRemoveBtnClicked(follower));
+            binding.btnRemoveFollower.setBackgroundColor(context.getColor(R.color.turquoise));
+            binding.btnRemoveFollower.setText(R.string.remove);
         }
 
         private void onRemoveBtnClicked(User follower) {
@@ -69,6 +73,8 @@ public class FollowerAdapter extends RecyclerView.Adapter<FollowerAdapter.ViewHo
             query.whereEqualTo(UserFollower.KEY_USER_ID, ParseUser.getCurrentUser());
             query.whereEqualTo(UserFollower.KEY_FOLLOWER_ID, follower);
             query.findInBackground((objects, e) -> removeFollower(objects, e));
+            binding.btnRemoveFollower.setBackgroundColor(context.getColor(R.color.gray));
+            binding.btnRemoveFollower.setText(R.string.removed);
         }
 
         private void removeFollower(List<UserFollower> objects, ParseException e) {

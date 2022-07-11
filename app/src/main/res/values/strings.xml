@@ -31,6 +31,10 @@
     <string name="start_date">START DATE</string>
     <string name="trip_details">Trip Details</string>
     <string name="map">Map</string>
+    <string name="remove">REMOVE</string>
+    <string name="removed">REMOVED</string>
+    <string name="unfollow">UNFOLLOW</string>
+    <string name="unfollowed">UNFOLLOWED</string>
 
     <string-array name="activityTypes">
         <item>select an activity type</item>

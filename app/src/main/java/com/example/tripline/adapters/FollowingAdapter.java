@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.tripline.R;
 import com.example.tripline.databinding.ItemFollowingBinding;
 import com.example.tripline.models.User;
 import com.example.tripline.models.UserFollower;
@@ -62,6 +63,8 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.View
             binding.tvFollowingName.setText(followingU.getFirstName() + " " + followingU.getLastName());
             Glide.with(context).load(followingU.getProfilePic().getUrl()).into(binding.ivProfilePicFollowing);
             binding.btnUnfollow.setOnClickListener(v -> onUnfollowBtnClicked(followingU));
+            binding.btnUnfollow.setBackgroundColor(context.getColor(R.color.turquoise));
+            binding.btnUnfollow.setText(R.string.unfollow);
         }
 
         private void onUnfollowBtnClicked(User followingU) {
@@ -69,6 +72,8 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.View
             query.whereEqualTo(UserFollower.KEY_USER_ID, followingU);
             query.whereEqualTo(UserFollower.KEY_FOLLOWER_ID, ParseUser.getCurrentUser());
             query.findInBackground((objects, e) -> unfollowUser(objects, e));
+            binding.btnUnfollow.setBackgroundColor(context.getColor(R.color.gray));
+            binding.btnUnfollow.setText(R.string.unfollowed);
         }
 
         private void unfollowUser(List<UserFollower> objects, ParseException e) {
