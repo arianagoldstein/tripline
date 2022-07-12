@@ -1,16 +1,15 @@
 package com.example.tripline;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tripline.databinding.ActivityLoginBinding;
-import com.example.tripline.databinding.ActivityMainBinding;
 import com.example.tripline.models.User;
-import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
@@ -41,7 +40,6 @@ public class LoginActivity extends AppCompatActivity {
                 // get user input
                 String email = binding.etEmailAddressLogin.getText().toString();
                 String password = binding.etPasswordLogin.getText().toString();
-
                 loginUser(email, password);
             }
         });
@@ -62,21 +60,20 @@ public class LoginActivity extends AppCompatActivity {
         Log.i(TAG, "Attempting to log in user with email " + username + " and password " + password);
 
         // connect to Parse to log in the user
-        ParseUser.logInInBackground(username, password, new LogInCallback() {
-            @Override
-            public void done(ParseUser user, ParseException e) {
-                // if the login is not successful, we'll get an exception
-                if (e != null) {
-                    Log.e(TAG, "Issue with login: ", e);
-                    return;
-                }
+        ParseUser.logInInBackground(username, password, (user, e) -> onLoginDone(e));
+    }
 
-                // if the action succeeds, then the exception e will be null and we can start the main activity
-                MainActivity.currentUser = (User) ParseUser.getCurrentUser();
-                goMainActivity();
-            }
-        });
+    private void onLoginDone(ParseException e) {
+        // if the login is not successful, we'll get an exception
+        if (e != null) {
+            Log.e(TAG, "Issue with login: ", e);
+            Toast.makeText(LoginActivity.this, "Invalid login.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        // if the action succeeds, then the exception e will be null and we can start the main activity
+        MainActivity.currentUser = (User) ParseUser.getCurrentUser();
+        goMainActivity();
     }
 
     // brings the user to their profile screen

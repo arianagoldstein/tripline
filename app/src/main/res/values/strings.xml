@@ -17,9 +17,9 @@
     <string name="add_a_trip">ADD A TRIP</string>
     <string name="title">TITLE</string>
     <string name="log_out">LOG OUT</string>
-    <string name="trips">TRIPS</string>
-    <string name="followers">FOLLOWERS</string>
-    <string name="following">FOLLOWING</string>
+    <string name="trips">trips</string>
+    <string name="followers">followers</string>
+    <string name="following">following</string>
     <string name="add_event">ADD EVENT</string>
     <string name="add_an_event">ADD AN EVENT</string>
     <string name="description">DESCRIPTION</string>
@@ -35,6 +35,7 @@
     <string name="removed">REMOVED</string>
     <string name="unfollow">UNFOLLOW</string>
     <string name="unfollowed">UNFOLLOWED</string>
+    <string name="search">Search</string>
 
     <string-array name="activityTypes">
         <item>select an activity type</item>

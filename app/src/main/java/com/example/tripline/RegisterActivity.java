@@ -18,7 +18,6 @@ import com.example.tripline.databinding.ActivityRegisterBinding;
 import com.example.tripline.models.User;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.SignUpCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -40,54 +39,48 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         // allowing user to upload a profile picture
-        binding.ivProfilePicUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onPickPhoto(v);
-            }
-        });
+        binding.ivProfilePicUpload.setOnClickListener(v -> onPickPhoto(v));
 
         // once the user signs up and clicks "register," they should go to the profile screen
-        binding.btnRegisterRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "onClick register button");
+        binding.btnRegisterRegister.setOnClickListener(v -> onRegister());
+    }
 
-                // get user input
-                String firstName = binding.etFirstName.getText().toString();
-                String lastName = binding.etLastName.getText().toString();
-                String email = binding.etEmailAddressRegister.getText().toString();
-                String password = binding.etPasswordRegister.getText().toString();
-                String confPassword = binding.etConfirmPassword.getText().toString();
+    private void onRegister() {
+        Log.i(TAG, "onClick register button");
 
-                // can't register without first and last name
-                if (firstName.isEmpty() || lastName.isEmpty()) {
-                    Toast.makeText(RegisterActivity.this, "First and last name are required", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        // get user input
+        String firstName = binding.etFirstName.getText().toString();
+        String lastName = binding.etLastName.getText().toString();
+        String email = binding.etEmailAddressRegister.getText().toString();
+        String password = binding.etPasswordRegister.getText().toString();
+        String confPassword = binding.etConfirmPassword.getText().toString();
 
-                // can't register without an email address
-                if (email.isEmpty()) {
-                    Toast.makeText(RegisterActivity.this, "Email is required", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        // can't register without first and last name
+        if (firstName.isEmpty() || lastName.isEmpty()) {
+            Toast.makeText(RegisterActivity.this, "First and last name are required", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-                // can't register if passwords don't match
-                if (!(password.equals(confPassword))) {
-                    Log.i(TAG, "Passwords do not match");
-                    Toast.makeText(RegisterActivity.this, "Passwords do not match!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        // can't register without an email address
+        if (email.isEmpty()) {
+            Toast.makeText(RegisterActivity.this, "Email is required", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-                // can't register without a profile photo
-                if (profilePic == null || binding.ivProfilePicUpload.getDrawable() == null) {
-                    Toast.makeText(RegisterActivity.this, "A cover photo must be uploaded", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        // can't register if passwords don't match
+        if (!(password.equals(confPassword))) {
+            Log.i(TAG, "Passwords do not match");
+            Toast.makeText(RegisterActivity.this, "Passwords do not match!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-                registerUser(firstName, lastName, email, password, confPassword, profilePic);
-            }
-        });
+        // can't register without a profile photo
+        if (profilePic == null || binding.ivProfilePicUpload.getDrawable() == null) {
+            Toast.makeText(RegisterActivity.this, "A cover photo must be uploaded", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        registerUser(firstName, lastName, email, password, profilePic);
     }
 
     // functions for cover photo upload
@@ -99,6 +92,8 @@ public class RegisterActivity extends AppCompatActivity {
         if (intent.resolveActivity(getPackageManager()) != null) {
             // bring up gallery to select a photo
             startActivityForResult(intent, PICK_PHOTO_CODE);
+        } else {
+            Toast.makeText(RegisterActivity.this, "Could not find photos on this device.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -116,6 +111,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            Toast.makeText(this, "Issue decoding image(s).", Toast.LENGTH_SHORT).show();
         }
         return image;
     }
@@ -141,7 +137,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     // registers the user with the information they've entered
-    private void registerUser(String fName, String lName, String email, String password, String confPassword, ParseFile profilePic) {
+    private void registerUser(String fName, String lName, String email, String password, ParseFile profilePic) {
         Log.i(TAG, "Attempting to register user with email " + email);
 
         // constructing a new User object to represent this user
@@ -153,19 +149,19 @@ public class RegisterActivity extends AppCompatActivity {
         // user.setProfilePic(profilePic);
 
         // connect to Parse to register the user
-        user.signUpInBackground(new SignUpCallback() {
-            @Override
-            public void done(ParseException e) {
-                // if the signup is not successful, we'll get an exception
-                if (e != null) {
-                    Log.e(TAG, "Issue with registration: ", e);
-                    return;
-                }
-                // if the action succeeds, then the exception e will be null and we can start the main activity
-                MainActivity.currentUser = user;
-                goMainActivity();
-            }
-        });
+        user.signUpInBackground(e -> onRegisterDone(e, user));
+    }
+
+    private void onRegisterDone(ParseException e, User user) {
+        // if the signup is not successful, we'll get an exception
+        if (e != null) {
+            Log.e(TAG, "Issue with registration: ", e);
+            Toast.makeText(RegisterActivity.this, "Issue with registration.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // if the action succeeds, then the exception e will be null and we can start the main activity
+        MainActivity.currentUser = user;
+        goMainActivity();
     }
 
     // brings the user to their profile screen
