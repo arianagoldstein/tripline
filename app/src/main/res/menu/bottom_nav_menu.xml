@@ -7,6 +7,11 @@
         android:title="@string/title_stream" />
 
     <item
+        android:id="@+id/navigation_search"
+        android:icon="@drawable/search_icon"
+        android:title="@string/search" />
+
+    <item
         android:id="@+id/navigation_addtrip"
         android:icon="@drawable/addtrip_icon"
         android:title="@string/title_addtrip" />

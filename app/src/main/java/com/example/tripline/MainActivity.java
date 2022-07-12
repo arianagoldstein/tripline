@@ -1,6 +1,8 @@
 package com.example.tripline;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -13,6 +15,7 @@ import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     public static List<Trip> userTrips;
     public static List<User> userFollowing;
     public static List<User> userFollowers;
+    public static List<Trip> allTrips;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +45,14 @@ public class MainActivity extends AppCompatActivity {
         userTrips = new ArrayList<>();
         userFollowing = new ArrayList<>();
         userFollowers = new ArrayList<>();
+        allTrips = new ArrayList<>();
+        getAllTrips();
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_stream, R.id.navigation_addtrip, R.id.navigation_profile)
+                R.id.navigation_stream, R.id.navigation_search, R.id.navigation_addtrip, R.id.navigation_profile)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -56,5 +62,19 @@ public class MainActivity extends AppCompatActivity {
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), getString(R.string.places_api_key), Locale.US);
         }
+    }
+
+    private void getAllTrips() {
+        // specifying the type of data we want to query
+        ParseQuery<Trip> query = ParseQuery.getQuery(Trip.class);
+        query.findInBackground((trips, e) -> {
+            // if there is an exception, e will not be null
+            if (e != null) {
+                Log.e(TAG, "Issue getting trips", e);
+                Toast.makeText(MainActivity.this, "Issue getting trips.", Toast.LENGTH_SHORT).show();
+            }
+            MainActivity.allTrips.clear();
+            MainActivity.allTrips.addAll(trips);
+        });
     }
 }

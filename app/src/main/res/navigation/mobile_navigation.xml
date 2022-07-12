@@ -85,4 +85,14 @@
         tools:layout="@layout/fragment_following" >
     </fragment>
 
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="com.example.tripline.ui.search.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_navigation_search_to_navigation_tripdetails"
+            app:destination="@id/navigation_tripdetails" />
+    </fragment>
+
 </navigation>
