@@ -5,6 +5,7 @@ import android.app.Application;
 import com.example.tripline.models.Event;
 import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
+import com.example.tripline.models.UserFollower;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
@@ -21,6 +22,7 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(User.class);
         ParseObject.registerSubclass(Trip.class);
         ParseObject.registerSubclass(Event.class);
+        ParseObject.registerSubclass(UserFollower.class);
 
         // use for troubleshooting -- remove this line for production
         Parse.setLogLevel(Parse.LOG_LEVEL_DEBUG);

@@ -73,7 +73,7 @@ public class TripDetailsFragment extends Fragment {
 
         // populating the XML elements with the details of this trip
         binding.tvTripTitleDetails.setText(trip.getTitle());
-        binding.tvLocationDetails.setText(trip.getLocation().toString());
+        binding.tvLocationDetails.setText(trip.getFormattedLocation());
         binding.tvStartDateDetails.setText(trip.getFormattedDate(trip.getStartDate()) + " - ");
         binding.tvEndDateDetails.setText(trip.getFormattedDate(trip.getEndDate()));
         Glide.with(this).load(trip.getCoverPhoto().getUrl()).into(binding.ivCoverPhotoDetails);

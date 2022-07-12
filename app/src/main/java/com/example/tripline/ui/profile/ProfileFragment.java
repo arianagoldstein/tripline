@@ -24,6 +24,7 @@ import com.example.tripline.adapters.TripProfileAdapter;
 import com.example.tripline.databinding.FragmentProfileBinding;
 import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
+import com.example.tripline.models.UserFollower;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -40,6 +41,8 @@ public class ProfileFragment extends Fragment {
     private RecyclerView rvTripsProfile;
     protected TripProfileAdapter adapter;
     private int numTripsByThisUser;
+    private int numFollowers = 0;
+    private int numFollowing = 0;
 
     // gets triggered every time we come back to the profile fragment
     @Override
@@ -80,8 +83,12 @@ public class ProfileFragment extends Fragment {
 
         binding.btnLogout.setOnClickListener(v -> onLogoutBtnClicked());
         binding.ivMapPlaceholder.setOnClickListener(v -> onMapImgClicked(view));
+        binding.tvFollowersCount.setOnClickListener(v -> onFollowerCountClicked(v));
+        binding.tvFollowingCount.setOnClickListener(v -> onFollowingCountClicked(v));
 
         displayStaticMap();
+        getFollowers();
+        getFollowing();
     }
 
     private void displayStaticMap() {
@@ -114,6 +121,16 @@ public class ProfileFragment extends Fragment {
         getActivity().finish();
     }
 
+    private void onFollowerCountClicked(View view) {
+        NavController navController = Navigation.findNavController(view);
+        navController.navigate(R.id.action_navigation_profile_to_navigation_follower);
+    }
+
+    private void onFollowingCountClicked(View view) {
+        NavController navController = Navigation.findNavController(view);
+        navController.navigate(R.id.action_navigation_profile_to_navigation_following);
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -142,11 +159,6 @@ public class ProfileFragment extends Fragment {
                 }
 
                 // at this point, we have gotten the trips successfully
-                for (Trip trip : trips) {
-                    Log.i(TAG, "Trip title: " + trip.getTitle());
-                }
-
-                // displaying the number of trips created by this user
                 numTripsByThisUser = trips.size();
                 binding.tvTripsCount.setText(String.valueOf(numTripsByThisUser));
 
@@ -154,6 +166,59 @@ public class ProfileFragment extends Fragment {
                 MainActivity.userTrips.clear();
                 MainActivity.userTrips.addAll(trips);
                 adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+
+    protected void getFollowers() {
+        // we want to get the Users that FOLLOW the logged-in user, the followers
+        ParseQuery<UserFollower> query = ParseQuery.getQuery(UserFollower.class);
+        query.include(UserFollower.KEY_USER_ID);
+        query.include(UserFollower.KEY_FOLLOWER_ID);
+        query.whereEqualTo(UserFollower.KEY_USER_ID, ParseUser.getCurrentUser());
+
+        query.findInBackground(new FindCallback<UserFollower>() {
+            @Override
+            public void done(List<UserFollower> userFollowers, ParseException e) {
+                // if there is an exception, e will not be null
+                if (e != null) {
+                    Log.e(TAG, "Issue getting followers for user " + ParseUser.getCurrentUser().getUsername(), e);
+                }
+
+                // at this point, we have gotten the user-follower list successfully
+                MainActivity.userFollowers.clear();
+                for (UserFollower uf : userFollowers) {
+                    MainActivity.userFollowers.add(uf.getFollower());
+                }
+                numFollowers = userFollowers.size();
+                binding.tvFollowersCount.setText(String.valueOf(numFollowers));
+            }
+        });
+    }
+
+    protected void getFollowing() {
+        ParseQuery<UserFollower> query = ParseQuery.getQuery(UserFollower.class);
+        // we want to get the Users that the logged-in user follows, the following
+        query.include(UserFollower.KEY_USER_ID);
+        query.include(UserFollower.KEY_FOLLOWER_ID);
+        query.whereEqualTo(UserFollower.KEY_FOLLOWER_ID, ParseUser.getCurrentUser());
+
+        query.findInBackground(new FindCallback<UserFollower>() {
+            @Override
+            public void done(List<UserFollower> userFollowers, ParseException e) {
+                // if there is an exception, e will not be null
+                if (e != null) {
+                    Log.e(TAG, "Issue getting followers for user " + ParseUser.getCurrentUser().getUsername(), e);
+                }
+
+                // at this point, we have gotten the user-follower list successfully
+                MainActivity.userFollowing.clear();
+                for (UserFollower uf : userFollowers) {
+                    MainActivity.userFollowing.add(uf.getUserF());
+                }
+                numFollowing = userFollowers.size();
+                binding.tvFollowingCount.setText(String.valueOf(numFollowing));
             }
         });
     }

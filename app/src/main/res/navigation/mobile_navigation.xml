@@ -56,6 +56,12 @@
         <action
             android:id="@+id/action_navigation_profile_to_navigation_map"
             app:destination="@id/navigation_map" />
+        <action
+            android:id="@+id/action_navigation_profile_to_navigation_follower"
+            app:destination="@id/navigation_follower" />
+        <action
+            android:id="@+id/action_navigation_profile_to_navigation_following"
+            app:destination="@id/navigation_following" />
     </fragment>
 
     <fragment
@@ -64,4 +70,19 @@
         android:label="@string/map"
         tools:layout="@layout/fragment_map" >
     </fragment>
+
+    <fragment
+        android:id="@+id/navigation_follower"
+        android:name="com.example.tripline.FollowerFragment"
+        android:label="Follower"
+        tools:layout="@layout/fragment_follower" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_following"
+        android:name="com.example.tripline.FollowingFragment"
+        android:label="Following"
+        tools:layout="@layout/fragment_following" >
+    </fragment>
+
 </navigation>

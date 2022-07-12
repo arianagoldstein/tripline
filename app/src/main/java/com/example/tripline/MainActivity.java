@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     public static User currentUser;
     public static List<Trip> userTrips;
+    public static List<User> userFollowing;
+    public static List<User> userFollowers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
         // setting the currentUser to whoever is logged in
         currentUser = (User) ParseUser.getCurrentUser();
         userTrips = new ArrayList<>();
+        userFollowing = new ArrayList<>();
+        userFollowers = new ArrayList<>();
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each

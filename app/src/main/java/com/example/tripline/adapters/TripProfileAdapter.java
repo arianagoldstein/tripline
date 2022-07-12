@@ -62,7 +62,7 @@ public class TripProfileAdapter extends RecyclerView.Adapter<TripProfileAdapter.
         public void bind(Trip trip) {
             // populating the XML elements with the details of this trip
             binding.tvTripTitleProfile.setText(trip.getTitle());
-            binding.tvLocationProfile.setText(trip.getLocation().toString());
+            binding.tvLocationProfile.setText(trip.getFormattedLocation());
             binding.tvStartDateProfile.setText(trip.getFormattedDate(trip.getStartDate()) + " - ");
             binding.tvEndDateProfile.setText(trip.getFormattedDate(trip.getEndDate()));
             Glide.with(context).load(trip.getCoverPhoto().getUrl()).into(binding.ivCoverPhotoProfile);
