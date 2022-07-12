@@ -1,6 +1,5 @@
 package com.example.tripline.adapters;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,11 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.tripline.MainActivity;
 import com.example.tripline.R;
 import com.example.tripline.databinding.ItemFollowerBinding;
 import com.example.tripline.models.User;
 import com.example.tripline.models.UserFollower;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -63,9 +62,16 @@ public class FollowerAdapter extends RecyclerView.Adapter<FollowerAdapter.ViewHo
         public void bind(User follower) {
             binding.tvFollowerName.setText(follower.getFirstName() + " " + follower.getLastName());
             Glide.with(context).load(follower.getProfilePic().getUrl()).into(binding.ivProfilePicFollower);
-            binding.btnRemoveFollower.setOnClickListener(v -> onRemoveBtnClicked(follower));
-            binding.btnRemoveFollower.setBackgroundColor(context.getColor(R.color.turquoise));
-            binding.btnRemoveFollower.setText(R.string.remove);
+
+            // if this is someone else's profile, we shouldn't be able to remove followers
+            if (!(MainActivity.userToDisplay.hasSameId(ParseUser.getCurrentUser()))) { // if this is someone else's profile
+                binding.btnRemoveFollower.setVisibility(View.GONE);
+            } else {
+                binding.btnRemoveFollower.setVisibility(View.VISIBLE);
+                binding.btnRemoveFollower.setOnClickListener(v -> onRemoveBtnClicked(follower));
+                binding.btnRemoveFollower.setBackgroundColor(context.getColor(R.color.turquoise));
+                binding.btnRemoveFollower.setText(R.string.remove);
+            }
         }
 
         private void onRemoveBtnClicked(User follower) {

@@ -39,6 +39,7 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseUser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -135,7 +136,7 @@ public class AddTripFragment extends Fragment {
         }
         // network call here. network call in callback is where you do postTrip
         // posting this trip with the user's input from the fields
-        postTrip(title, location, description, startDate, endDate, coverPhoto, formattedLocation, MainActivity.currentUser);
+        postTrip(title, location, description, startDate, endDate, coverPhoto, formattedLocation, (User) ParseUser.getCurrentUser());
     }
 
     private void onLocationAdd() {

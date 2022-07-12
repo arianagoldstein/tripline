@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_navigation_stream_to_navigation_tripdetails"
             app:destination="@id/navigation_tripdetails" />
+        <action
+            android:id="@+id/action_navigation_stream_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
     </fragment>
 
     <fragment
@@ -43,6 +46,9 @@
         <action
             android:id="@+id/action_navigation_tripdetails_to_navigation_addevent"
             app:destination="@id/navigation_addevent" />
+        <action
+            android:id="@+id/action_navigation_tripdetails_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
     </fragment>
 
     <fragment

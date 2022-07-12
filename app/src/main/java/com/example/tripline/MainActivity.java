@@ -27,11 +27,13 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
     public Trip selectedTrip;
     private ActivityMainBinding binding;
-    public static User currentUser;
-    public static List<Trip> userTrips;
+
+    // TODO: move these to a ViewModel
     public static List<User> userFollowing;
     public static List<User> userFollowers;
     public static List<Trip> allTrips;
+    public static User userToDisplay;
+    public static List<Trip> userToDisplayTrips;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +42,11 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // setting the currentUser to whoever is logged in
-        currentUser = (User) ParseUser.getCurrentUser();
-        userTrips = new ArrayList<>();
+        userToDisplayTrips = new ArrayList<>();
         userFollowing = new ArrayList<>();
         userFollowers = new ArrayList<>();
         allTrips = new ArrayList<>();
+        userToDisplay = (User) ParseUser.getCurrentUser();
         getAllTrips();
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -67,6 +68,15 @@ public class MainActivity extends AppCompatActivity {
     private void getAllTrips() {
         // specifying the type of data we want to query
         ParseQuery<Trip> query = ParseQuery.getQuery(Trip.class);
+        query.include(Trip.KEY_AUTHOR);
+        query.include(Trip.KEY_FORMATTED_LOCATION);
+        query.include(Trip.KEY_TITLE);
+        query.include(Trip.KEY_LOCATION);
+        query.include(Trip.KEY_COVER_PHOTO);
+        query.include(Trip.KEY_START_DATE);
+        query.include(Trip.KEY_DESCRIPTION);
+        query.include(Trip.KEY_END_DATE);
+
         query.findInBackground((trips, e) -> {
             // if there is an exception, e will not be null
             if (e != null) {

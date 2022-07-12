@@ -160,7 +160,6 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
         // if the action succeeds, then the exception e will be null and we can start the main activity
-        MainActivity.currentUser = user;
         goMainActivity();
     }
 

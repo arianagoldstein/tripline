@@ -10,18 +10,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.tripline.adapters.FollowingAdapter;
 import com.example.tripline.databinding.FragmentFollowingBinding;
 import com.example.tripline.models.User;
 import com.example.tripline.models.UserFollower;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FollowingFragment extends Fragment {
@@ -67,7 +63,7 @@ public class FollowingFragment extends Fragment {
         // we want to get the Users that the logged-in user follows, the following
         query.include(UserFollower.KEY_USER_ID);
         query.include(UserFollower.KEY_FOLLOWER_ID);
-        query.whereEqualTo(UserFollower.KEY_FOLLOWER_ID, ParseUser.getCurrentUser());
+        query.whereEqualTo(UserFollower.KEY_FOLLOWER_ID, MainActivity.userToDisplay);
 
         query.findInBackground((userFollowers, e) -> addFollowing(userFollowers, e));
     }
@@ -75,7 +71,7 @@ public class FollowingFragment extends Fragment {
     private void addFollowing(List<UserFollower> userFollowers, ParseException e) {
         binding.swipeContainerFollowing.setRefreshing(false);
         if (e != null) {
-            Log.e(TAG, "Issue getting following for user " + ParseUser.getCurrentUser().getUsername(), e);
+            Log.e(TAG, "Issue getting following for user " + MainActivity.userToDisplay.getFirstName(), e);
         }
 
         // at this point, we have gotten the user-follower list successfully

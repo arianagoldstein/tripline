@@ -69,7 +69,7 @@ public class FollowerFragment extends Fragment {
         ParseQuery<UserFollower> query = ParseQuery.getQuery(UserFollower.class);
         query.include(UserFollower.KEY_USER_ID);
         query.include(UserFollower.KEY_FOLLOWER_ID);
-        query.whereEqualTo(UserFollower.KEY_USER_ID, ParseUser.getCurrentUser());
+        query.whereEqualTo(UserFollower.KEY_USER_ID, MainActivity.userToDisplay);
 
         query.findInBackground((userFollowers, e) -> addFollowers(userFollowers, e));
     }
@@ -77,7 +77,7 @@ public class FollowerFragment extends Fragment {
     private void addFollowers(List<UserFollower> userFollowers, ParseException e) {
         binding.swipeContainerFollower.setRefreshing(false);
         if (e != null) {
-            Log.e(TAG, "Issue getting followers for user " + ParseUser.getCurrentUser().getUsername(), e);
+            Log.e(TAG, "Issue getting followers for user " + MainActivity.userToDisplay.getFirstName(), e);
         }
 
         // at this point, we have gotten the user-follower list successfully

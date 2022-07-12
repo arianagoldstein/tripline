@@ -13,6 +13,7 @@
         android:layout_width="400dp"
         android:layout_height="30dp"
         android:layout_marginTop="16dp"
+        android:queryHint="search..."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toStartOf="parent"

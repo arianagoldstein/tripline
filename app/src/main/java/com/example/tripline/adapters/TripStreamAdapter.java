@@ -2,6 +2,7 @@ package com.example.tripline.adapters;
 
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,6 +69,18 @@ public class TripStreamAdapter extends RecyclerView.Adapter<TripStreamAdapter.Vi
             Glide.with(context).load(trip.getCoverPhoto().getUrl()).into(binding.ivCoverPhotoStream);
             binding.tvDescriptionStream.setText(trip.getDescription());
             binding.tvAuthorNameStream.setText(trip.getAuthor().getFirstName() + " " + trip.getAuthor().getLastName());
+
+            // clicking on the author's name brings you to their profile
+            binding.tvAuthorNameStream.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MainActivity.userToDisplay = trip.getAuthor();
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("isCurrentUser", false);
+                    NavController navController = Navigation.findNavController(itemView);
+                    navController.navigate(R.id.action_navigation_stream_to_navigation_profile, bundle);
+                }
+            });
         }
 
         @Override

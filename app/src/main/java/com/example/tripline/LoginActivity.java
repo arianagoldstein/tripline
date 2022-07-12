@@ -9,7 +9,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tripline.databinding.ActivityLoginBinding;
-import com.example.tripline.models.User;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
@@ -72,7 +71,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // if the action succeeds, then the exception e will be null and we can start the main activity
-        MainActivity.currentUser = (User) ParseUser.getCurrentUser();
         goMainActivity();
     }
 

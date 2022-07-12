@@ -10,11 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.tripline.MainActivity;
 import com.example.tripline.R;
 import com.example.tripline.databinding.ItemFollowingBinding;
 import com.example.tripline.models.User;
 import com.example.tripline.models.UserFollower;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -62,9 +62,16 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.View
         public void bind(User followingU) {
             binding.tvFollowingName.setText(followingU.getFirstName() + " " + followingU.getLastName());
             Glide.with(context).load(followingU.getProfilePic().getUrl()).into(binding.ivProfilePicFollowing);
-            binding.btnUnfollow.setOnClickListener(v -> onUnfollowBtnClicked(followingU));
-            binding.btnUnfollow.setBackgroundColor(context.getColor(R.color.turquoise));
-            binding.btnUnfollow.setText(R.string.unfollow);
+
+            // if this is someone else's profile, we shouldn't be able to unfollow
+            if (!(MainActivity.userToDisplay.hasSameId(ParseUser.getCurrentUser()))) {
+                binding.btnUnfollow.setVisibility(View.GONE);
+            } else {
+                binding.btnUnfollow.setVisibility(View.VISIBLE);
+                binding.btnUnfollow.setOnClickListener(v -> onUnfollowBtnClicked(followingU));
+                binding.btnUnfollow.setBackgroundColor(context.getColor(R.color.turquoise));
+                binding.btnUnfollow.setText(R.string.unfollow);
+            }
         }
 
         private void onUnfollowBtnClicked(User followingU) {

@@ -15,20 +15,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.tripline.adapters.EventAdapter;
-import com.example.tripline.adapters.EventPhotoAdapter;
 import com.example.tripline.databinding.FragmentTripDetailsBinding;
 import com.example.tripline.models.Event;
-import com.example.tripline.models.Photo;
 import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +72,19 @@ public class TripDetailsFragment extends Fragment {
         binding.tvEndDateDetails.setText(trip.getFormattedDate(trip.getEndDate()));
         Glide.with(this).load(trip.getCoverPhoto().getUrl()).into(binding.ivCoverPhotoDetails);
         binding.tvDescriptionDetails.setText(trip.getDescription());
+        binding.tvAuthorDetails.setText(trip.getAuthor().getFirstName() + " " + trip.getAuthor().getLastName());
+
+        // clicking on the author's name brings you to their profile
+        binding.tvAuthorDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.userToDisplay = trip.getAuthor();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isCurrentUser", false);
+                NavController navController = Navigation.findNavController(view);
+                navController.navigate(R.id.action_navigation_tripdetails_to_navigation_profile, bundle);
+            }
+        });
 
         // displaying options to edit if the user created this trip
         if (trip.getAuthor().hasSameId((User) ParseUser.getCurrentUser())){
