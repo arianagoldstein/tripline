@@ -32,6 +32,8 @@ public class FollowerFragment extends Fragment {
     private FragmentFollowerBinding binding;
     protected FollowerAdapter adapter;
     protected List<User> allFollowers;
+    private User user;
+    private boolean isCurrentUser;
 
     public FollowerFragment() {
         // Required empty public constructor
@@ -40,6 +42,11 @@ public class FollowerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            isCurrentUser = getArguments().getBoolean("isCurrentUser", true);
+        } else {
+            isCurrentUser = true;
+        }
     }
 
     @Override
@@ -54,6 +61,8 @@ public class FollowerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        user = getCurrentUser();
+
         allFollowers = MainActivity.userFollowers;
         adapter = new FollowerAdapter(getContext(), allFollowers);
         binding.rvFollowers.setAdapter(adapter);
@@ -64,12 +73,20 @@ public class FollowerFragment extends Fragment {
         binding.swipeContainerFollower.setOnRefreshListener(() -> getFollowers());
     }
 
+    private User getCurrentUser() {
+        if (isCurrentUser) {
+            return (User) ParseUser.getCurrentUser();
+        } else {
+            return MainActivity.userToDisplay;
+        }
+    }
+
     protected void getFollowers() {
         // we want to get the Users that FOLLOW the logged-in user, the followers
         ParseQuery<UserFollower> query = ParseQuery.getQuery(UserFollower.class);
         query.include(UserFollower.KEY_USER_ID);
         query.include(UserFollower.KEY_FOLLOWER_ID);
-        query.whereEqualTo(UserFollower.KEY_USER_ID, MainActivity.userToDisplay);
+        query.whereEqualTo(UserFollower.KEY_USER_ID, user);
 
         query.findInBackground((userFollowers, e) -> addFollowers(userFollowers, e));
     }
@@ -77,7 +94,7 @@ public class FollowerFragment extends Fragment {
     private void addFollowers(List<UserFollower> userFollowers, ParseException e) {
         binding.swipeContainerFollower.setRefreshing(false);
         if (e != null) {
-            Log.e(TAG, "Issue getting followers for user " + MainActivity.userToDisplay.getFirstName(), e);
+            Log.e(TAG, "Issue getting followers for user " + user.getFirstName(), e);
         }
 
         // at this point, we have gotten the user-follower list successfully

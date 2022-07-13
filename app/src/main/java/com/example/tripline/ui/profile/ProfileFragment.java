@@ -197,13 +197,17 @@ public class ProfileFragment extends Fragment {
     }
 
     private void onFollowerCountClicked(View view) {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isCurrentUser", isCurrentUser);
         NavController navController = Navigation.findNavController(view);
-        navController.navigate(R.id.action_navigation_profile_to_navigation_follower);
+        navController.navigate(R.id.action_navigation_profile_to_navigation_follower, bundle);
     }
 
     private void onFollowingCountClicked(View view) {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isCurrentUser", isCurrentUser);
         NavController navController = Navigation.findNavController(view);
-        navController.navigate(R.id.action_navigation_profile_to_navigation_following);
+        navController.navigate(R.id.action_navigation_profile_to_navigation_following, bundle);
     }
 
     @Override
