@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
 import com.example.tripline.LoginActivity;
 import com.example.tripline.MainActivity;
+import com.example.tripline.TripViewModel;
 import com.example.tripline.R;
 import com.example.tripline.adapters.TripProfileAdapter;
 import com.example.tripline.databinding.FragmentProfileBinding;
@@ -46,14 +48,22 @@ public class ProfileFragment extends Fragment {
     private User user;
     private boolean isCurrentUser;
 
+    private TripViewModel sharedViewModel;
+    private String source;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // noting how we got to this fragment: from the navbar or someone else's post
         if (getArguments() != null) {
-            isCurrentUser = getArguments().getBoolean("isCurrentUser", true);
+            source = getArguments().getString("source");
         } else {
-            isCurrentUser = true;
+            source = null;
         }
+
+        // TODO: with viewModel
+        sharedViewModel = ViewModelProviders.of(requireActivity()).get(TripViewModel.class);
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -71,7 +81,13 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        user = getCurrentUser();
+        // based on where we came from, display logged-in user or other user
+        if ("bottomNav".equals(source)) {
+            user = (User) ParseUser.getCurrentUser();
+        } else {
+            user = sharedViewModel.getUserToDisplay();
+        }
+        isCurrentUser = sharedViewModel.isCurrentUser();
 
         Log.i(TAG, "Displaying profile for user " + user.getFirstName() + " " + user.getLastName());
         binding.tvNameProfile.setText(user.getFirstName() + " " + user.getLastName());
@@ -133,15 +149,6 @@ public class ProfileFragment extends Fragment {
         MainActivity.userToDisplayTrips.clear();
         adapter.notifyDataSetChanged();
         getUserTrips();
-    }
-
-    // returns the user whose profile we want to view
-    private User getCurrentUser() {
-        if (isCurrentUser) {
-            return (User) ParseUser.getCurrentUser();
-        } else {
-            return MainActivity.userToDisplay;
-        }
     }
 
     private void followUser(User userToDisplay) {

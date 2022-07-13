@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.tripline.MainActivity;
 import com.example.tripline.R;
+import com.example.tripline.TripViewModel;
 import com.example.tripline.databinding.ItemTripStreamBinding;
 import com.example.tripline.models.Trip;
 
@@ -26,10 +29,13 @@ public class TripStreamAdapter extends RecyclerView.Adapter<TripStreamAdapter.Vi
     public static final String TAG = "TripStreamAdapter";
     private Context context;
     private List<Trip> trips;
+    private TripViewModel sharedViewModel;
 
     public TripStreamAdapter(Context context, List<Trip> trips) {
         this.context = context;
         this.trips = trips;
+        // TODO: with ViewModel
+        sharedViewModel = ViewModelProviders.of((FragmentActivity) context).get(TripViewModel.class);
     }
 
     @NonNull
@@ -74,9 +80,9 @@ public class TripStreamAdapter extends RecyclerView.Adapter<TripStreamAdapter.Vi
             binding.tvAuthorNameStream.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MainActivity.userToDisplay = trip.getAuthor();
                     Bundle bundle = new Bundle();
-                    bundle.putBoolean("isCurrentUser", false);
+                    bundle.putString("source", "tripStreamAdapter");
+                    sharedViewModel.setUserToDisplay(trip.getAuthor());
                     NavController navController = Navigation.findNavController(itemView);
                     navController.navigate(R.id.action_navigation_stream_to_navigation_profile, bundle);
                 }

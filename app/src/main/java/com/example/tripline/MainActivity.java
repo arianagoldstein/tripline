@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -42,6 +43,10 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // ViewModel
+         TripViewModel sharedViewModel = ViewModelProviders.of(this).get(TripViewModel.class);
+         sharedViewModel.setUserToDisplay((User) ParseUser.getCurrentUser());
 
         userToDisplayTrips = new ArrayList<>();
         userFollowing = new ArrayList<>();
