@@ -44,7 +44,6 @@ public class ProfileFragment extends Fragment {
     private int numFollowers = 0;
     private int numFollowing = 0;
     private User user;
-    private boolean other;
     private boolean isCurrentUser;
 
     @Override
@@ -84,7 +83,7 @@ public class ProfileFragment extends Fragment {
         binding.rvTripsProfile.setLayoutManager(llm);
 
         // if this is someone else's profile, we shouldn't be able to log out but we should be able to follow
-        if (!(user.hasSameId(ParseUser.getCurrentUser()))) {
+        if (!isCurrentUser) {
             binding.btnLogout.setVisibility(View.GONE);
             binding.btnFollowContainer.setVisibility(View.VISIBLE);
 
@@ -181,7 +180,7 @@ public class ProfileFragment extends Fragment {
         }
         url.append("&key=").append(getString(R.string.maps_api_key));
 
-        Glide.with(getContext()).load(url.toString()).into(binding.ivMapPlaceholder);
+        Glide.with(getContext()).load(url.toString()).placeholder(R.drawable.map_placeholder).into(binding.ivMapPlaceholder);
     }
 
     private void onMapImgClicked(View view) {

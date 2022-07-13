@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     public static List<Trip> allTrips;
     public static User userToDisplay;
     public static List<Trip> userToDisplayTrips;
+    NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_stream, R.id.navigation_search, R.id.navigation_addtrip, R.id.navigation_profile)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
         navView.setSelectedItemId(R.id.navigation_profile); // default tab should be profile
@@ -63,6 +64,16 @@ public class MainActivity extends AppCompatActivity {
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), getString(R.string.places_api_key), Locale.US);
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        return navController.navigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     private void getAllTrips() {

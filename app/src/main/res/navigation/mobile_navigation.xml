@@ -75,6 +75,9 @@
         android:name="com.example.tripline.MapFragment"
         android:label="@string/map"
         tools:layout="@layout/fragment_map" >
+        <action
+            android:id="@+id/action_navigation_map_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
     </fragment>
 
     <fragment
@@ -82,6 +85,9 @@
         android:name="com.example.tripline.FollowerFragment"
         android:label="Follower"
         tools:layout="@layout/fragment_follower" >
+        <action
+            android:id="@+id/action_navigation_follower_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
     </fragment>
 
     <fragment
@@ -89,6 +95,9 @@
         android:name="com.example.tripline.FollowingFragment"
         android:label="Following"
         tools:layout="@layout/fragment_following" >
+        <action
+            android:id="@+id/action_navigation_following_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
     </fragment>
 
     <fragment
