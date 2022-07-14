@@ -36,11 +36,10 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
-import com.parse.SaveCallback;
+import com.parse.ParseUser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -82,22 +81,9 @@ public class AddTripFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Google Places API stuff
-        binding.ivLocationIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Set the fields to specify which types of place data to
-                // return after the user has made a selection.
-                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS_COMPONENTS);
-
-                // Start the autocomplete intent.
-                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
-                        .build(getContext());
-                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
-            }
-        });
-
-
+        // adding a location with Google Places API
+        binding.ivLocationIcon.setOnClickListener(v -> onLocationAdd());
+        binding.tvLocationAdd.setOnClickListener(v -> onLocationAdd());
 
         // initializing dates as null before they're selected
         startDate = null;
@@ -109,77 +95,74 @@ public class AddTripFragment extends Fragment {
         final MaterialDatePicker materialDatePicker = builder.build();
 
         // shows the date picker
-        binding.ibChooseDates.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                materialDatePicker.show(((MainActivity) getContext()).getSupportFragmentManager(), "DATE_PICKER");
-            }
-        });
-
-        materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
-            @Override
-            public void onPositiveButtonClick(Object selection) {
-                Pair selectedDates = (Pair) materialDatePicker.getSelection();
-                // then obtain the startDate & endDate from the range
-                final Pair<Date, Date> rangeDate = new Pair<>(new Date((Long) selectedDates.first), new Date((Long) selectedDates.second));
-                // assigned variables
-                startDate = rangeDate.first;
-                endDate = rangeDate.second;
-
-                // format the dates in your desired display mode
-                SimpleDateFormat simpleFormat = new SimpleDateFormat("MMM dd, yyyy");
-                // display it with setText
-                binding.tvStartDateDisplay.setText(simpleFormat.format(startDate));
-                binding.tvEndDateDisplay.setText(simpleFormat.format(endDate));
-            }
-        });
+        binding.dateHitArea.setOnClickListener(v -> materialDatePicker.show(((MainActivity) getContext()).getSupportFragmentManager(), "DATE_PICKER"));
+        materialDatePicker.addOnPositiveButtonClickListener(selection -> onSaveRange(materialDatePicker));
 
         // when the user clicks on the cover photo placeholder, they can upload a photo
-        binding.ivCoverPhotoAddTrip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onPickPhoto(v);
-            }
-        });
+        binding.ivCoverPhotoAddTrip.setOnClickListener(v -> onPickPhoto(v));
 
         // when the user clicks Add Trip, gather the user input and check for empty fields
-        binding.btnAddTrip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // getting user input
-                String title = binding.etTitle.getText().toString();
-                ParseGeoPoint location = new ParseGeoPoint(latitude, longitude);
-                String description = binding.etDescription.getText().toString();
+        binding.btnAddTrip.setOnClickListener(v -> onAddTripClicked());
+    }
 
-                // can't post with an empty title
-                if (title.isEmpty()) {
-                    Toast.makeText(getContext(), "Title cannot be empty", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+    private void onAddTripClicked() {
+        // getting user input
+        String title = binding.etTitle.getText().toString();
+        ParseGeoPoint location = new ParseGeoPoint(latitude, longitude);
+        String description = binding.etDescription.getText().toString();
 
-                // can't post with an empty description
-                if (description.isEmpty()) {
-                    Toast.makeText(getContext(), "Description cannot be empty", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        // can't post with an empty title
+        if (title.isEmpty()) {
+            Toast.makeText(getContext(), "Title cannot be empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-                // can't post without a start and end date
-                if (startDate == null || endDate == null) {
-                    Toast.makeText(getContext(), "A start and end date must be selected", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        // can't post with an empty description
+        if (description.isEmpty()) {
+            Toast.makeText(getContext(), "Description cannot be empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-                // can't post Trip without a cover photo
-                if (coverPhoto == null || binding.ivCoverPhotoAddTrip.getDrawable() == null) {
-                    Toast.makeText(getContext(), "A cover photo must be uploaded", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                // network call here. network call in callback is where you do postTrip
-                // posting this trip with the user's input from the fields
-                postTrip(title, location, description, startDate, endDate, coverPhoto, formattedLocation, MainActivity.currentUser);
+        // can't post without a start and end date
+        if (startDate == null || endDate == null) {
+            Toast.makeText(getContext(), "A start and end date must be selected", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-            }
-        });
+        // can't post Trip without a cover photo
+        if (coverPhoto == null || binding.ivCoverPhotoAddTrip.getDrawable() == null) {
+            Toast.makeText(getContext(), "A cover photo must be uploaded", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // network call here. network call in callback is where you do postTrip
+        // posting this trip with the user's input from the fields
+        postTrip(title, location, description, startDate, endDate, coverPhoto, formattedLocation, (User) ParseUser.getCurrentUser());
+    }
+
+    private void onLocationAdd() {
+        // set the fields to specify which types of place data to
+        // return after the user has made a selection
+        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS_COMPONENTS);
+
+        // start the autocomplete intent
+        Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
+                .build(getContext());
+        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+    }
+
+    private void onSaveRange(MaterialDatePicker materialDatePicker) {
+        Pair selectedDates = (Pair) materialDatePicker.getSelection();
+        // then obtain the startDate & endDate from the range
+        final Pair<Date, Date> rangeDate = new Pair<>(new Date((Long) selectedDates.first), new Date((Long) selectedDates.second));
+        // assigned variables
+        startDate = rangeDate.first;
+        endDate = rangeDate.second;
+
+        // format the dates in your desired display mode
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("MMM dd, yyyy");
+        // display it with setText
+        binding.tvStartDateDisplay.setText(simpleFormat.format(startDate));
+        binding.tvEndDateDisplay.setText(simpleFormat.format(endDate));
     }
 
     private void postTrip(String title, ParseGeoPoint location, String description, Date startDate, Date endDate, ParseFile coverPhoto, String formattedLocation, User currentUser) {
@@ -194,28 +177,21 @@ public class AddTripFragment extends Fragment {
         trip.setFormattedLocation(formattedLocation);
         trip.setAuthor(currentUser);
 
-        trip.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Error while saving trip with title " + title, e);
-                }
-                // if we get here, the trip was saved successfully
-                Log.i(TAG, "Trip added successfully!");
+        trip.saveInBackground(e -> onTripAdded(e, title));
+    }
 
-                // navigate to profile after adding trip
-                NavController navController = Navigation.findNavController(getView());
-                navController.navigate(R.id.action_navigation_addtrip_to_navigation_profile);
+    private void onTripAdded(ParseException e, String title) {
+        if (e != null) {
+            Log.e(TAG, "Error while saving trip with title " + title, e);
+            Toast.makeText(getContext(), "Error saving trip.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // if we get here, the trip was saved successfully
+        Log.i(TAG, "Trip added successfully!");
 
-                // clearing fields when the trip is successfully posted
-                binding.etTitle.setText("");
-                binding.etLocation.setText("");
-                binding.etDescription.setText("");
-                binding.tvStartDateDisplay.setText("");
-                binding.tvEndDateDisplay.setText("");
-                binding.ivCoverPhotoAddTrip.setImageResource(0);
-            }
-        });
+        // navigate to profile after adding trip
+        NavController navController = Navigation.findNavController(getView());
+        navController.navigate(R.id.action_navigation_addtrip_to_navigation_profile);
     }
 
     @Override
@@ -233,6 +209,8 @@ public class AddTripFragment extends Fragment {
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
             // bring up gallery to select a photo
             startActivityForResult(intent, PICK_PHOTO_CODE);
+        } else {
+            Toast.makeText(getContext(), "Could not find photos on this device.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -250,6 +228,8 @@ public class AddTripFragment extends Fragment {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            Toast.makeText(getContext(), "Issue decoding image(s).", Toast.LENGTH_SHORT).show();
+
         }
         return image;
     }
@@ -297,12 +277,13 @@ public class AddTripFragment extends Fragment {
                     latitude = latLngPair.latitude;
                     longitude = latLngPair.longitude;
 
-                    binding.etLocation.setText(inputPlace.getName());
+                    binding.tvLocationAdd.setText(inputPlace.getName());
 
                 } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                    // TODO: Handle the error.
                     Status status = Autocomplete.getStatusFromIntent(data);
                     Log.i(TAG, status.getStatusMessage());
+                    Toast.makeText(getContext(), "Error with autocomplete.", Toast.LENGTH_SHORT).show();
+                    return;
                 } else if (resultCode == Activity.RESULT_CANCELED) {
                     // The user canceled the operation.
                 }

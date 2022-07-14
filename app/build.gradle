@@ -59,4 +59,7 @@ dependencies {
 
     // dependencies for Google Places API
     implementation 'com.google.android.libraries.places:places:2.6.0'
+
+    // dependencies for ViewModel
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
 }

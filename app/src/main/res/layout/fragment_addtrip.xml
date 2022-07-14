@@ -18,6 +18,16 @@
             android:layout_height="wrap_content"
             tools:context=".ui.addtrip.AddTripFragment">
 
+            <View
+                android:id="@+id/date_hit_area"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@android:color/transparent"
+                app:layout_constraintBottom_toTopOf="@id/tvPhotosEvent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etDescription" />
+
             <Button
                 android:id="@+id/btnAddTrip"
                 android:layout_width="wrap_content"
@@ -72,14 +82,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etTitle" />
 
-            <EditText
-                android:id="@+id/etLocation"
+            <TextView
+                android:id="@+id/tvLocationAdd"
                 android:layout_width="355dp"
                 android:layout_height="35dp"
                 android:layout_marginStart="48dp"
                 android:layout_marginTop="8dp"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:text="tap here to add location"
+                android:gravity="center_vertical"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvLocation" />
@@ -93,7 +104,7 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/description"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etLocation" />
+                app:layout_constraintTop_toBottomOf="@+id/tvLocationAdd" />
 
             <EditText
                 android:id="@+id/etDescription"
@@ -212,11 +223,8 @@
                 app:layout_constraintTop_toTopOf="@+id/tvPhotosEvent"
                 app:srcCompat="@drawable/photo_icon" />
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     </ScrollView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -33,7 +33,7 @@ public class MapFragment extends Fragment {
 
     private void onGoogleMapReady(GoogleMap googleMap) {
         // when map is loaded, add pins for all trips
-        for (Trip trip : MainActivity.userTrips) {
+        for (Trip trip : MainActivity.userToDisplayTrips) {
             ParseGeoPoint point = trip.getLocation();
             LatLng latLng = new LatLng(point.getLatitude(), point.getLongitude());
 

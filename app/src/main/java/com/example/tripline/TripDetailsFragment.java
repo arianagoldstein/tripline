@@ -9,26 +9,20 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.tripline.adapters.EventAdapter;
-import com.example.tripline.adapters.EventPhotoAdapter;
 import com.example.tripline.databinding.FragmentTripDetailsBinding;
 import com.example.tripline.models.Event;
-import com.example.tripline.models.Photo;
 import com.example.tripline.models.Trip;
-import com.example.tripline.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +35,8 @@ public class TripDetailsFragment extends Fragment {
     private List<Event> eventList;
     private EventAdapter adapter;
 
+    private TripViewModel sharedViewModel;
+
     public TripDetailsFragment() {
         // Required empty public constructor
     }
@@ -52,6 +48,9 @@ public class TripDetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // TODO: with ViewModel
+        sharedViewModel = ViewModelProviders.of(requireActivity()).get(TripViewModel.class);
     }
 
     @Override
@@ -78,9 +77,23 @@ public class TripDetailsFragment extends Fragment {
         binding.tvEndDateDetails.setText(trip.getFormattedDate(trip.getEndDate()));
         Glide.with(this).load(trip.getCoverPhoto().getUrl()).into(binding.ivCoverPhotoDetails);
         binding.tvDescriptionDetails.setText(trip.getDescription());
+        binding.tvAuthorDetails.setText(trip.getAuthor().getFirstName() + " " + trip.getAuthor().getLastName());
+
+        // clicking on the author's name brings you to their profile
+        binding.tvAuthorDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: with ViewModel
+                Bundle bundle = new Bundle();
+                bundle.putString("source", "tripDetail");
+                sharedViewModel.setUserToDisplay(trip.getAuthor());
+                NavController navController = Navigation.findNavController(view);
+                navController.navigate(R.id.action_navigation_tripdetails_to_navigation_profile, bundle);
+            }
+        });
 
         // displaying options to edit if the user created this trip
-        if (trip.getAuthor().hasSameId((User) ParseUser.getCurrentUser())){
+        if (trip.getAuthor().hasSameId(ParseUser.getCurrentUser())){
             Log.i(TAG, "user logged in is the author of this trip");
             binding.btnAddEvent.setVisibility(View.VISIBLE);
         } else {

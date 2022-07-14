@@ -79,11 +79,11 @@
         android:id="@+id/divDetails"
         android:layout_width="361dp"
         android:layout_height="1dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:background="#00c7d1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDescriptionDetails" />
+        app:layout_constraintTop_toBottomOf="@+id/tvAuthorDetails" />
 
     <Button
         android:id="@+id/btnAddEvent"
@@ -101,6 +101,16 @@
         android:layout_width="match_parent"
         android:layout_height="350dp"
         app:layout_constraintTop_toBottomOf="@+id/divDetails" />
+
+    <TextView
+        android:id="@+id/tvAuthorDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescriptionDetails"
+        tools:text="Ariana Goldstein" />
 
     <!--    <include-->
 <!--        android:id="@+id/eventItem"-->

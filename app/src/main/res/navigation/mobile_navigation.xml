@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_navigation_stream_to_navigation_tripdetails"
             app:destination="@id/navigation_tripdetails" />
+        <action
+            android:id="@+id/action_navigation_stream_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
     </fragment>
 
     <fragment
@@ -43,13 +46,19 @@
         <action
             android:id="@+id/action_navigation_tripdetails_to_navigation_addevent"
             app:destination="@id/navigation_addevent" />
+        <action
+            android:id="@+id/action_navigation_tripdetails_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.tripline.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
-        tools:layout="@layout/fragment_profile" >
+        tools:layout="@layout/fragment_profile">
+        <argument
+            android:name="source"
+            android:defaultValue="bottomNav" />
         <action
             android:id="@+id/action_navigation_profile_to_navigation_tripdetails"
             app:destination="@id/navigation_tripdetails" />
@@ -69,6 +78,9 @@
         android:name="com.example.tripline.MapFragment"
         android:label="@string/map"
         tools:layout="@layout/fragment_map" >
+        <action
+            android:id="@+id/action_navigation_map_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
     </fragment>
 
     <fragment
@@ -76,6 +88,9 @@
         android:name="com.example.tripline.FollowerFragment"
         android:label="Follower"
         tools:layout="@layout/fragment_follower" >
+        <action
+            android:id="@+id/action_navigation_follower_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
     </fragment>
 
     <fragment
@@ -83,6 +98,19 @@
         android:name="com.example.tripline.FollowingFragment"
         android:label="Following"
         tools:layout="@layout/fragment_following" >
+        <action
+            android:id="@+id/action_navigation_following_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="com.example.tripline.ui.search.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_navigation_search_to_navigation_tripdetails"
+            app:destination="@id/navigation_tripdetails" />
     </fragment>
 
 </navigation>

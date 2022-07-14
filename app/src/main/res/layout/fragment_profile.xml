@@ -21,13 +21,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        tools:text="Name"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.066"
         app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Name" />
 
     <Button
         android:id="@+id/btnLogout"
@@ -42,48 +42,69 @@
 
     <TextView
         android:id="@+id/tvTrips"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:autoSizeTextType="uniform"
+        android:maxLines="1"
         android:text="@string/trips"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        app:layout_constraintEnd_toStartOf="@+id/tvFollowers"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
         app:layout_constraintTop_toTopOf="@+id/tvFollowers" />
 
     <TextView
         android:id="@+id/tvFollowers"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
+        android:autoSizeTextType="uniform"
+        android:maxLines="1"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         android:text="@string/followers"
+        android:textAlignment="center"
+        android:textAllCaps="true"
         app:layout_constraintEnd_toStartOf="@+id/tvFollowing"
         app:layout_constraintHorizontal_bias="0.555"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@+id/tvTrips"
         app:layout_constraintTop_toBottomOf="@+id/tvFollowersCount" />
 
     <TextView
         android:id="@+id/tvFollowing"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:autoSizeTextType="uniform"
+        android:maxLines="1"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         android:text="@string/following"
+        android:textAlignment="center"
+        android:textAllCaps="true"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintTop_toTopOf="@+id/tvFollowers" />
 
     <TextView
         android:id="@+id/tvTripsCount"
-        android:layout_width="43dp"
+        android:layout_width="0dp"
         android:layout_height="22dp"
-        android:layout_marginStart="24dp"
         android:textAlignment="center"
         android:textSize="16sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/tvFollowersCount"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
         app:layout_constraintTop_toTopOf="@+id/tvFollowersCount"
         tools:text="1000" />
 
     <TextView
         android:id="@+id/tvFollowersCount"
-        android:layout_width="56dp"
+        android:layout_width="0dp"
         android:layout_height="22dp"
         android:layout_marginTop="40dp"
         android:textAlignment="center"
@@ -91,19 +112,22 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/tvFollowingCount"
         app:layout_constraintHorizontal_bias="0.467"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@+id/tvTripsCount"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="100000" />
 
     <TextView
         android:id="@+id/tvFollowingCount"
-        android:layout_width="61dp"
+        android:layout_width="0dp"
         android:layout_height="22dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="16dp"
         android:textAlignment="center"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/tvFollowersCount"
         app:layout_constraintTop_toTopOf="@+id/tvFollowersCount"
         tools:text="100000" />
 
@@ -111,11 +135,12 @@
         android:id="@+id/ivMapPlaceholder"
         android:layout_width="382dp"
         android:layout_height="155dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivProfilePic"
+        app:layout_constraintTop_toBottomOf="@+id/btnFollowContainer"
         app:srcCompat="@drawable/map_placeholder"
         tools:src="@tools:sample/avatars" />
 
@@ -127,5 +152,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivMapPlaceholder" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/btnFollowContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/tvFollowers" >
+
+        <Button
+            android:id="@+id/btnFollow"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginTop="8dp"
+            android:text="follow"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

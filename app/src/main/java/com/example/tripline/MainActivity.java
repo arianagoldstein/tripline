@@ -1,8 +1,11 @@
 package com.example.tripline;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -13,6 +16,7 @@ import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -24,10 +28,14 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
     public Trip selectedTrip;
     private ActivityMainBinding binding;
-    public static User currentUser;
-    public static List<Trip> userTrips;
+
+    // TODO: move these to a ViewModel
     public static List<User> userFollowing;
     public static List<User> userFollowers;
+    public static List<Trip> allTrips;
+    public static User userToDisplay;
+    public static List<Trip> userToDisplayTrips;
+    NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,19 +44,24 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // setting the currentUser to whoever is logged in
-        currentUser = (User) ParseUser.getCurrentUser();
-        userTrips = new ArrayList<>();
+        // ViewModel
+         TripViewModel sharedViewModel = ViewModelProviders.of(this).get(TripViewModel.class);
+         sharedViewModel.setUserToDisplay((User) ParseUser.getCurrentUser());
+
+        userToDisplayTrips = new ArrayList<>();
         userFollowing = new ArrayList<>();
         userFollowers = new ArrayList<>();
+        allTrips = new ArrayList<>();
+        userToDisplay = (User) ParseUser.getCurrentUser();
+        getAllTrips();
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_stream, R.id.navigation_addtrip, R.id.navigation_profile)
+                R.id.navigation_stream, R.id.navigation_search, R.id.navigation_addtrip, R.id.navigation_profile)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
         navView.setSelectedItemId(R.id.navigation_profile); // default tab should be profile
@@ -56,5 +69,38 @@ public class MainActivity extends AppCompatActivity {
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), getString(R.string.places_api_key), Locale.US);
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        return navController.navigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    private void getAllTrips() {
+        // specifying the type of data we want to query
+        ParseQuery<Trip> query = ParseQuery.getQuery(Trip.class);
+        query.include(Trip.KEY_AUTHOR);
+        query.include(Trip.KEY_FORMATTED_LOCATION);
+        query.include(Trip.KEY_TITLE);
+        query.include(Trip.KEY_LOCATION);
+        query.include(Trip.KEY_COVER_PHOTO);
+        query.include(Trip.KEY_START_DATE);
+        query.include(Trip.KEY_DESCRIPTION);
+        query.include(Trip.KEY_END_DATE);
+
+        query.findInBackground((trips, e) -> {
+            // if there is an exception, e will not be null
+            if (e != null) {
+                Log.e(TAG, "Issue getting trips", e);
+                Toast.makeText(MainActivity.this, "Issue getting trips.", Toast.LENGTH_SHORT).show();
+            }
+            MainActivity.allTrips.clear();
+            MainActivity.allTrips.addAll(trips);
+        });
     }
 }
