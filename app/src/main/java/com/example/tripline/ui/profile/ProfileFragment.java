@@ -84,6 +84,7 @@ public class ProfileFragment extends Fragment {
         // based on where we came from, display logged-in user or other user
         if ("bottomNav".equals(source)) {
             user = (User) ParseUser.getCurrentUser();
+            sharedViewModel.setUserToDisplay(user);
         } else {
             user = sharedViewModel.getUserToDisplay();
         }
@@ -131,15 +132,6 @@ public class ProfileFragment extends Fragment {
         binding.tvFollowingCount.setOnClickListener(v -> onFollowingCountClicked(v));
     }
 
-    private boolean checkIfFollowing(User user) {
-        for (int i = 0; i < MainActivity.userFollowing.size(); i++) {
-            if (MainActivity.userFollowing.get(i).hasSameId(user)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     // gets triggered every time we come back to the profile fragment
     @Override
     public void onResume() {
@@ -151,6 +143,15 @@ public class ProfileFragment extends Fragment {
         getUserTrips();
     }
 
+    private boolean checkIfFollowing(User user) {
+        for (int i = 0; i < MainActivity.userFollowing.size(); i++) {
+            if (MainActivity.userFollowing.get(i).hasSameId(user)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void followUser(User userToDisplay) {
         binding.btnFollow.setBackgroundColor(getContext().getColor(R.color.gray));
         binding.btnFollow.setText(R.string.following);
@@ -159,18 +160,17 @@ public class ProfileFragment extends Fragment {
         userFollower.setFollower((User) ParseUser.getCurrentUser());
         userFollower.setUserF(userToDisplay);
 
-        userFollower.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Error following user", e);
-                    Toast.makeText(getContext(), "Error following user", Toast.LENGTH_SHORT).show();
-                }
+        userFollower.saveInBackground(e -> onFollowerUser(e));
+    }
 
-                // if we get here, the user was followed
-                Log.i(TAG, "User followed successfully!");
-            }
-        });
+    private void onFollowerUser(ParseException e) {
+        if (e != null) {
+            Log.e(TAG, "Error following user", e);
+            Toast.makeText(getContext(), "Error following user", Toast.LENGTH_SHORT).show();
+        }
+
+        // if we get here, the user was followed
+        Log.i(TAG, "User followed successfully!");
     }
 
     private void displayStaticMap() {

@@ -34,7 +34,6 @@ public class TripStreamAdapter extends RecyclerView.Adapter<TripStreamAdapter.Vi
     public TripStreamAdapter(Context context, List<Trip> trips) {
         this.context = context;
         this.trips = trips;
-        // TODO: with ViewModel
         sharedViewModel = ViewModelProviders.of((FragmentActivity) context).get(TripViewModel.class);
     }
 

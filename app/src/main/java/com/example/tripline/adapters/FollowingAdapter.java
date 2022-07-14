@@ -1,17 +1,22 @@
 package com.example.tripline.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.tripline.MainActivity;
 import com.example.tripline.R;
+import com.example.tripline.TripViewModel;
 import com.example.tripline.databinding.ItemFollowingBinding;
 import com.example.tripline.models.User;
 import com.example.tripline.models.UserFollower;
@@ -26,10 +31,12 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.View
     public static final String TAG = "FollowingAdapter";
     private Context context;
     private List<User> following;
+    private TripViewModel sharedViewModel;
 
     public FollowingAdapter(Context context, List<User> following) {
         this.context = context;
         this.following = following;
+        sharedViewModel = ViewModelProviders.of((FragmentActivity) context).get(TripViewModel.class);
     }
 
     @NonNull
@@ -50,21 +57,23 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.View
         return following.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ItemFollowingBinding binding;
 
         public ViewHolder(ItemFollowingBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            binding.getRoot().setOnClickListener(this);
         }
 
+        // displaying information about this following
         public void bind(User followingU) {
             binding.tvFollowingName.setText(followingU.getFirstName() + " " + followingU.getLastName());
             Glide.with(context).load(followingU.getProfilePic().getUrl()).into(binding.ivProfilePicFollowing);
 
             // if this is someone else's profile, we shouldn't be able to unfollow
-            if (!(MainActivity.userToDisplay.hasSameId(ParseUser.getCurrentUser()))) {
+            if (!(sharedViewModel.isCurrentUser())) {
                 binding.btnUnfollow.setVisibility(View.GONE);
             } else {
                 binding.btnUnfollow.setVisibility(View.VISIBLE);
@@ -74,6 +83,7 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.View
             }
         }
 
+        // queries Parse to remove this following from the UserFollower table
         private void onUnfollowBtnClicked(User followingU) {
             ParseQuery<UserFollower> query = ParseQuery.getQuery(UserFollower.class);
             query.whereEqualTo(UserFollower.KEY_USER_ID, followingU);
@@ -83,6 +93,7 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.View
             binding.btnUnfollow.setText(R.string.unfollowed);
         }
 
+        // deleting this following from Parse
         private void unfollowUser(List<UserFollower> objects, ParseException e) {
             if (e != null) {
                 Log.e(TAG, "Issue finding user to unfollow", e);
@@ -94,6 +105,23 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.View
                     ex.printStackTrace();
                 }
                 object.saveInBackground();
+            }
+        }
+
+        // go to the other user's profile when the user clicks on it
+        @Override
+        public void onClick(View v) {
+            Log.i(TAG, "A following was clicked!");
+            int position = getAdapterPosition();
+
+            if (position != RecyclerView.NO_POSITION) {
+                User follow = following.get(position);
+                Bundle bundle = new Bundle();
+                bundle.putString("source", "followingAdapter");
+                sharedViewModel.setUserToDisplay(follow);
+                NavController navController = Navigation.findNavController(itemView);
+                navController.navigate(R.id.action_navigation_following_to_navigation_profile, bundle);
+
             }
         }
     }
