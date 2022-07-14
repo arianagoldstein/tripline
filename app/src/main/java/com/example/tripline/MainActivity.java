@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     public static List<User> userFollowing;
     public static List<User> userFollowers;
     public static List<Trip> allTrips;
-    public static User userToDisplay;
     public static List<Trip> userToDisplayTrips;
     NavController navController;
 
@@ -52,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
         userFollowing = new ArrayList<>();
         userFollowers = new ArrayList<>();
         allTrips = new ArrayList<>();
-        userToDisplay = (User) ParseUser.getCurrentUser();
         getAllTrips();
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
