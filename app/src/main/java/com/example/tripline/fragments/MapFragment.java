@@ -1,4 +1,4 @@
-package com.example.tripline;
+package com.example.tripline.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,8 +8,9 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.tripline.R;
 import com.example.tripline.models.Trip;
-import com.example.tripline.ui.profile.ProfileViewModel;
+import com.example.tripline.viewmodels.ProfileViewModel;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;

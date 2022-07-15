@@ -14,6 +14,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.tripline.databinding.ActivityMainBinding;
 import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
+import com.example.tripline.viewmodels.UserViewModel;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseQuery;
@@ -27,12 +28,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
     private ActivityMainBinding binding;
+    private NavController navController;
 
     // TODO: move these to a ViewModel
     public static List<Trip> allTrips;
-    public Trip selectedTrip;
-
-    NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         // ViewModel
-         TripViewModel sharedViewModel = ViewModelProviders.of(this).get(TripViewModel.class);
+         UserViewModel sharedViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
          sharedViewModel.setUserToDisplay((User) ParseUser.getCurrentUser());
 
         allTrips = new ArrayList<>();

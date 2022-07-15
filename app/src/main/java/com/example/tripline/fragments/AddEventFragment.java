@@ -1,4 +1,4 @@
-package com.example.tripline;
+package com.example.tripline.fragments;
 
 import android.content.ClipData;
 import android.content.Intent;
@@ -20,13 +20,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.tripline.R;
 import com.example.tripline.adapters.GalleryAdapter;
 import com.example.tripline.databinding.FragmentAddEventBinding;
 import com.example.tripline.models.Event;
 import com.example.tripline.models.Trip;
+import com.example.tripline.viewmodels.TripViewModel;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.SaveCallback;
@@ -56,6 +59,8 @@ public class AddEventFragment extends Fragment implements AdapterView.OnItemSele
     private GalleryAdapter galleryAdapter;
     private List<Uri> imageUriList;
 
+    private TripViewModel tripViewModel;
+
     public AddEventFragment() {
         // Required empty public constructor
     }
@@ -63,6 +68,7 @@ public class AddEventFragment extends Fragment implements AdapterView.OnItemSele
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        tripViewModel = ViewModelProviders.of(requireActivity()).get(TripViewModel.class);
     }
 
     @Override
@@ -84,7 +90,7 @@ public class AddEventFragment extends Fragment implements AdapterView.OnItemSele
         binding.spActivityType.setOnItemSelectedListener(this);
 
         // keeping track of which trip this event is associated with
-        trip = ((MainActivity) getContext()).selectedTrip;
+        trip = tripViewModel.getSelectedTrip();
 
         // initializing list of images
         imageUriList = new ArrayList<>();
@@ -211,7 +217,6 @@ public class AddEventFragment extends Fragment implements AdapterView.OnItemSele
                 navController.navigate(R.id.action_navigation_addevent_to_navigation_profile);
             }
         });
-
     }
 
     // methods to get the value the user selects from the dropdown menu

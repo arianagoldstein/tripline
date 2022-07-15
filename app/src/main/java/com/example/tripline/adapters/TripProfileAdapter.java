@@ -2,19 +2,20 @@ package com.example.tripline.adapters;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.tripline.MainActivity;
 import com.example.tripline.R;
+import com.example.tripline.viewmodels.TripViewModel;
 import com.example.tripline.databinding.ItemTripProfileBinding;
 import com.example.tripline.models.Trip;
 
@@ -25,10 +26,12 @@ public class TripProfileAdapter extends RecyclerView.Adapter<TripProfileAdapter.
     public static final String TAG = "TripProfileAdapter";
     private Context context;
     private List<Trip> trips;
+    private TripViewModel tripViewModel;
 
     public TripProfileAdapter(Context context, List<Trip> trips) {
         this.context = context;
         this.trips = trips;
+        tripViewModel = ViewModelProviders.of((FragmentActivity) context).get(TripViewModel.class);
     }
 
     @NonNull
@@ -68,24 +71,16 @@ public class TripProfileAdapter extends RecyclerView.Adapter<TripProfileAdapter.
             Glide.with(context).load(trip.getCoverPhoto().getUrl()).into(binding.ivCoverPhotoProfile);
         }
 
+        // getting the trip that the user clicked on and passing it to the details page to display it
         @Override
         public void onClick(View v) {
-            Log.i(TAG, "trip clicked!");
             int position = getAdapterPosition();
-
-            // getting the trip that the user clicked on and passing it to the details page to display it
             if (position != RecyclerView.NO_POSITION) {
                 Trip trip = trips.get(position);
-
-                // TODO: use a ViewModel here instead, this is a placeholder
-                ((MainActivity) context).selectedTrip = trip;
-
-                // now we have an instance of the navbar, so we can go anywhere
+                tripViewModel.setSelectedTrip(trip);
                 NavController navController = Navigation.findNavController(itemView);
                 navController.navigate(R.id.action_navigation_profile_to_navigation_tripdetails);
-
             }
         }
-
     }
 }

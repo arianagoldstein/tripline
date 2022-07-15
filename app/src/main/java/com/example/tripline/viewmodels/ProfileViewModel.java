@@ -1,4 +1,4 @@
-package com.example.tripline.ui.profile;
+package com.example.tripline.viewmodels;
 
 import androidx.lifecycle.ViewModel;
 

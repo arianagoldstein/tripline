@@ -3,7 +3,6 @@ package com.example.tripline.adapters;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +15,9 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.tripline.MainActivity;
 import com.example.tripline.R;
-import com.example.tripline.TripViewModel;
+import com.example.tripline.viewmodels.TripViewModel;
+import com.example.tripline.viewmodels.UserViewModel;
 import com.example.tripline.databinding.ItemTripStreamBinding;
 import com.example.tripline.models.Trip;
 
@@ -29,12 +28,14 @@ public class TripStreamAdapter extends RecyclerView.Adapter<TripStreamAdapter.Vi
     public static final String TAG = "TripStreamAdapter";
     private Context context;
     private List<Trip> trips;
-    private TripViewModel sharedViewModel;
+    private UserViewModel sharedViewModel;
+    private TripViewModel tripViewModel;
 
     public TripStreamAdapter(Context context, List<Trip> trips) {
         this.context = context;
         this.trips = trips;
-        sharedViewModel = ViewModelProviders.of((FragmentActivity) context).get(TripViewModel.class);
+        sharedViewModel = ViewModelProviders.of((FragmentActivity) context).get(UserViewModel.class);
+        tripViewModel = ViewModelProviders.of((FragmentActivity) context).get(TripViewModel.class);
     }
 
     @NonNull
@@ -74,39 +75,29 @@ public class TripStreamAdapter extends RecyclerView.Adapter<TripStreamAdapter.Vi
             Glide.with(context).load(trip.getCoverPhoto().getUrl()).into(binding.ivCoverPhotoStream);
             binding.tvDescriptionStream.setText(trip.getDescription());
             binding.tvAuthorNameStream.setText(trip.getAuthor().getFirstName() + " " + trip.getAuthor().getLastName());
-
-            // clicking on the author's name brings you to their profile
-            binding.tvAuthorNameStream.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("source", "tripStreamAdapter");
-                    sharedViewModel.setUserToDisplay(trip.getAuthor());
-                    NavController navController = Navigation.findNavController(itemView);
-                    navController.navigate(R.id.action_navigation_stream_to_navigation_profile, bundle);
-                }
-            });
+            binding.tvAuthorNameStream.setOnClickListener(v -> onAuthorClicked(trip));
         }
 
+        // clicking on the author's name brings you to their profile
+        private void onAuthorClicked(Trip trip) {
+            Bundle bundle = new Bundle();
+            bundle.putString("source", "tripStreamAdapter");
+            sharedViewModel.setUserToDisplay(trip.getAuthor());
+            NavController navController = Navigation.findNavController(itemView);
+            navController.navigate(R.id.action_navigation_stream_to_navigation_profile, bundle);
+        }
+
+        // getting the trip that the user clicked on and passing it to the details page to display it
         @Override
         public void onClick(View v) {
-            Log.i(TAG, "A trip was clicked!");
             int position = getAdapterPosition();
-
             if (position != RecyclerView.NO_POSITION) {
-
-                // getting the trip that the user clicked on
                 Trip trip = trips.get(position);
-
-                // TODO: use a ViewModel here instead, this is a placeholder
-                ((MainActivity) context).selectedTrip = trip;
-
-                // now we have an instance of the navbar, so we can go anywhere
+                tripViewModel.setSelectedTrip(trip);
                 NavController navController = Navigation.findNavController(itemView);
                 navController.navigate(R.id.action_navigation_stream_to_navigation_tripdetails);
 
             }
         }
-
     }
 }

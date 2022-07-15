@@ -1,11 +1,11 @@
-package com.example.tripline;
+package com.example.tripline.viewmodels;
 
 import androidx.lifecycle.ViewModel;
 
 import com.example.tripline.models.User;
 import com.parse.ParseUser;
 
-public class TripViewModel extends ViewModel {
+public class UserViewModel extends ViewModel {
 
     public static final String TAG = "MyViewModel";
 

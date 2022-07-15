@@ -1,4 +1,4 @@
-package com.example.tripline.ui.stream;
+package com.example.tripline.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -12,15 +12,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.tripline.MainActivity;
 import com.example.tripline.adapters.TripStreamAdapter;
 import com.example.tripline.databinding.FragmentStreamBinding;
 import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
 import com.example.tripline.models.UserFollower;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -53,9 +50,6 @@ public class StreamFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        StreamViewModel homeViewModel =
-                new ViewModelProvider(this).get(StreamViewModel.class);
-
         binding = FragmentStreamBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 

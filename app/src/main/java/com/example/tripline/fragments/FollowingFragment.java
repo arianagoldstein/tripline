@@ -1,4 +1,4 @@
-package com.example.tripline;
+package com.example.tripline.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +16,7 @@ import com.example.tripline.adapters.FollowingAdapter;
 import com.example.tripline.databinding.FragmentFollowingBinding;
 import com.example.tripline.models.User;
 import com.example.tripline.models.UserFollower;
+import com.example.tripline.viewmodels.UserViewModel;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
@@ -29,7 +30,7 @@ public class FollowingFragment extends Fragment {
     protected FollowingAdapter adapter;
     protected List<User> allFollowing;
     private User user;
-    private TripViewModel sharedViewModel;
+    private UserViewModel sharedViewModel;
 
     public FollowingFragment() {
         // Required empty public constructor
@@ -38,7 +39,7 @@ public class FollowingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedViewModel = ViewModelProviders.of(requireActivity()).get(TripViewModel.class);
+        sharedViewModel = ViewModelProviders.of(requireActivity()).get(UserViewModel.class);
     }
 
     @Override

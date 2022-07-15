@@ -1,4 +1,4 @@
-package com.example.tripline;
+package com.example.tripline.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -15,10 +15,13 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.example.tripline.R;
 import com.example.tripline.adapters.EventAdapter;
 import com.example.tripline.databinding.FragmentTripDetailsBinding;
 import com.example.tripline.models.Event;
 import com.example.tripline.models.Trip;
+import com.example.tripline.viewmodels.TripViewModel;
+import com.example.tripline.viewmodels.UserViewModel;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -34,7 +37,8 @@ public class TripDetailsFragment extends Fragment {
     private List<Event> eventList;
     private EventAdapter adapter;
 
-    private TripViewModel sharedViewModel;
+    private UserViewModel sharedViewModel;
+    private TripViewModel tripViewModel;
 
     public TripDetailsFragment() {
         // Required empty public constructor
@@ -43,7 +47,8 @@ public class TripDetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedViewModel = ViewModelProviders.of(requireActivity()).get(TripViewModel.class);
+        sharedViewModel = ViewModelProviders.of(requireActivity()).get(UserViewModel.class);
+        tripViewModel = ViewModelProviders.of(requireActivity()).get(TripViewModel.class);
     }
 
     @Override
@@ -60,7 +65,7 @@ public class TripDetailsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        trip = ((MainActivity) getContext()).selectedTrip;
+        trip = tripViewModel.getSelectedTrip();
         Log.i(TAG, "in TripDetailsFragment with trip " + trip.getTitle());
 
         displayTripDetails(view);
@@ -101,7 +106,7 @@ public class TripDetailsFragment extends Fragment {
 
     // brings user to addEvent fragment
     private void goToAddEvent(@NonNull View view) {
-        ((MainActivity) getContext()).selectedTrip = trip;
+        tripViewModel.setSelectedTrip(trip);
         NavController navController = Navigation.findNavController(view);
         navController.navigate(R.id.action_navigation_tripdetails_to_navigation_addevent);
     }

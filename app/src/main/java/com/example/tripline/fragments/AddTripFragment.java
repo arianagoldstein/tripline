@@ -1,4 +1,4 @@
-package com.example.tripline.ui.addtrip;
+package com.example.tripline.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -18,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -68,9 +67,6 @@ public class AddTripFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        AddTripViewModel addTripViewModel =
-                new ViewModelProvider(this).get(AddTripViewModel.class);
-
         binding = FragmentAddtripBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 

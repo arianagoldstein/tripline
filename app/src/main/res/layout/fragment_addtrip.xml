@@ -16,7 +16,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".ui.addtrip.AddTripFragment">
+            tools:context=".fragments.AddTripFragment">
 
             <View
                 android:id="@+id/date_hit_area"

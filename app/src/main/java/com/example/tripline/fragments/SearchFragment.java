@@ -1,4 +1,4 @@
-package com.example.tripline.ui.search;
+package com.example.tripline.fragments;
 
 import android.os.Bundle;
 

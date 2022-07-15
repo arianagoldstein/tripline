@@ -1,4 +1,4 @@
-package com.example.tripline.ui.profile;
+package com.example.tripline.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,12 +19,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
 import com.example.tripline.LoginActivity;
 import com.example.tripline.R;
-import com.example.tripline.TripViewModel;
+import com.example.tripline.viewmodels.UserViewModel;
 import com.example.tripline.adapters.TripProfileAdapter;
 import com.example.tripline.databinding.FragmentProfileBinding;
 import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
 import com.example.tripline.models.UserFollower;
+import com.example.tripline.viewmodels.ProfileViewModel;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
@@ -43,7 +44,7 @@ public class ProfileFragment extends Fragment {
     private User user;
     private boolean isCurrentUser;
 
-    private TripViewModel sharedViewModel;
+    private UserViewModel sharedViewModel;
     private ProfileViewModel profileViewModel;
     private String source;
 
@@ -57,7 +58,7 @@ public class ProfileFragment extends Fragment {
         } else {
             source = null;
         }
-        sharedViewModel = ViewModelProviders.of(requireActivity()).get(TripViewModel.class);
+        sharedViewModel = ViewModelProviders.of(requireActivity()).get(UserViewModel.class);
         profileViewModel = ViewModelProviders.of(requireActivity()).get(ProfileViewModel.class);
     }
 

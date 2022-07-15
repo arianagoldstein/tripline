@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tripline.R;
-import com.example.tripline.TripViewModel;
+import com.example.tripline.viewmodels.UserViewModel;
 import com.example.tripline.databinding.ItemFollowerBinding;
 import com.example.tripline.models.User;
 import com.example.tripline.models.UserFollower;
@@ -31,12 +31,12 @@ public class FollowerAdapter extends RecyclerView.Adapter<FollowerAdapter.ViewHo
     public static final String TAG = "FollowerAdapter";
     private Context context;
     private List<User> followers;
-    private TripViewModel sharedViewModel;
+    private UserViewModel sharedViewModel;
 
     public FollowerAdapter(Context context, List<User> followers) {
         this.context = context;
         this.followers = followers;
-        sharedViewModel = ViewModelProviders.of((FragmentActivity) context).get(TripViewModel.class);
+        sharedViewModel = ViewModelProviders.of((FragmentActivity) context).get(UserViewModel.class);
     }
 
     @NonNull
