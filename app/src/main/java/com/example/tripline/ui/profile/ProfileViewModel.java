@@ -1,19 +1,45 @@
 package com.example.tripline.ui.profile;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.example.tripline.models.Trip;
+import com.example.tripline.models.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProfileViewModel extends ViewModel {
 
-    private final MutableLiveData<String> mText;
+    public static final String TAG = "ProfileViewModel";
 
-    public ProfileViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is profile fragment");
+    private final List<Trip> userTrips = new ArrayList<>();
+    private final List<User> userFollowing = new ArrayList<>();
+    private final List<User> userFollowers = new ArrayList<>();
+
+    public List<Trip> getUserTrips() {
+        return userTrips;
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public void setUserTrips(final List<Trip> userTrips) {
+        this.userTrips.clear();
+        this.userTrips.addAll(userTrips);
+    }
+
+    public List<User> getUserFollowing() {
+        return userFollowing;
+    }
+
+    public void setUserFollowing(final List<User> userFollowing) {
+        this.userFollowing.clear();
+        this.userFollowing.addAll(userFollowing);
+    }
+
+    public List<User> getUserFollowers() {
+        return userFollowers;
+    }
+
+    public void setUserFollowers(final List<User> userFollowers) {
+        this.userFollowers.clear();
+        this.userFollowers.addAll(userFollowers);
     }
 }

@@ -11,7 +11,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -19,36 +18,33 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.tripline.LoginActivity;
-import com.example.tripline.MainActivity;
-import com.example.tripline.TripViewModel;
 import com.example.tripline.R;
+import com.example.tripline.TripViewModel;
 import com.example.tripline.adapters.TripProfileAdapter;
 import com.example.tripline.databinding.FragmentProfileBinding;
 import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
 import com.example.tripline.models.UserFollower;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // this fragment will display the profile of the user who is currently logged in
 public class ProfileFragment extends Fragment {
 
-    private FragmentProfileBinding binding;
     public static final String TAG = "ProfileFragment";
+
+    private FragmentProfileBinding binding;
     protected TripProfileAdapter adapter;
-    private int numTripsByThisUser;
-    private int numFollowers = 0;
-    private int numFollowing = 0;
     private User user;
     private boolean isCurrentUser;
 
     private TripViewModel sharedViewModel;
+    private ProfileViewModel profileViewModel;
     private String source;
 
     @Override
@@ -62,13 +58,11 @@ public class ProfileFragment extends Fragment {
             source = null;
         }
         sharedViewModel = ViewModelProviders.of(requireActivity()).get(TripViewModel.class);
+        profileViewModel = ViewModelProviders.of(requireActivity()).get(ProfileViewModel.class);
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        ProfileViewModel profileViewModel =
-                new ViewModelProvider(this).get(ProfileViewModel.class);
-
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
@@ -92,7 +86,7 @@ public class ProfileFragment extends Fragment {
         binding.tvNameProfile.setText(user.getFirstName() + " " + user.getLastName());
 
         // connecting RecyclerView of Trips with the adapter
-        adapter = new TripProfileAdapter(getContext(), MainActivity.userToDisplayTrips);
+        adapter = new TripProfileAdapter(getContext(), profileViewModel.getUserTrips());
         binding.rvTripsProfile.setAdapter(adapter);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         binding.rvTripsProfile.setLayoutManager(llm);
@@ -113,8 +107,6 @@ public class ProfileFragment extends Fragment {
         super.onResume();
         // query trips from the database
         Log.i(TAG, "onResume");
-        MainActivity.userToDisplayTrips.clear();
-        adapter.notifyDataSetChanged();
         getUserTrips();
     }
 
@@ -152,8 +144,8 @@ public class ProfileFragment extends Fragment {
 
     // checking if the logged-in user is following the user we're displaying
     private boolean checkIfFollowing(User user) {
-        for (int i = 0; i < MainActivity.userFollowing.size(); i++) {
-            if (MainActivity.userFollowing.get(i).hasSameId(user)) {
+        for (int i = 0; i < profileViewModel.getUserFollowing().size(); i++) {
+            if (profileViewModel.getUserFollowing().get(i).hasSameId(user)) {
                 return true;
             }
         }
@@ -186,17 +178,17 @@ public class ProfileFragment extends Fragment {
     private void displayStaticMap() {
         StringBuilder url = new StringBuilder("https://maps.googleapis.com/maps/api/staticmap?size=382x155&zoom=1&maptype=terrain&markers=color:0x00C7D1%7Csize:tiny");
 
-        for (int i = 0; i < MainActivity.userToDisplayTrips.size(); i++) {
+        for (int i = 0; i < profileViewModel.getUserTrips().size(); i++) {
             if (i >= 15) {  // static maps can display maximum of 15 markers
                 break;
             }
-            ParseGeoPoint point = MainActivity.userToDisplayTrips.get(i).getLocation();
+            ParseGeoPoint point = profileViewModel.getUserTrips().get(i).getLocation();
             String result = point.getLatitude() + "," + point.getLongitude();
             url.append("%7C").append(result);
         }
         url.append("&key=").append(getString(R.string.maps_api_key));
 
-        Glide.with(getContext()).load(url.toString()).placeholder(R.drawable.map_placeholder).into(binding.ivMapPlaceholder);
+        Glide.with(getContext()).load(url.toString()).placeholder(R.drawable.map_placeholder_img).into(binding.ivMapPlaceholder);
     }
 
     private void onMapImgClicked(View view) {
@@ -246,13 +238,13 @@ public class ProfileFragment extends Fragment {
         }
 
         // at this point, we have gotten the trips successfully
-        numTripsByThisUser = trips.size();
+        int numTripsByThisUser = trips.size();
         binding.tvTripsCount.setText(String.valueOf(numTripsByThisUser));
 
         // adding the trips from Parse into our trips list
-        MainActivity.userToDisplayTrips.clear();
-        MainActivity.userToDisplayTrips.addAll(trips);
+        profileViewModel.setUserTrips(trips);
         adapter.notifyDataSetChanged();
+        displayStaticMap();
     }
 
 
@@ -273,11 +265,12 @@ public class ProfileFragment extends Fragment {
         }
 
         // at this point, we have gotten the user-follower list successfully
-        MainActivity.userFollowers.clear();
+        List<User> followersToAdd = new ArrayList<>();
         for (UserFollower uf : userFollowers) {
-            MainActivity.userFollowers.add(uf.getFollower());
+            followersToAdd.add(uf.getFollower());
         }
-        numFollowers = userFollowers.size();
+        profileViewModel.setUserFollowers(followersToAdd);
+        int numFollowers = userFollowers.size();
         binding.tvFollowersCount.setText(String.valueOf(numFollowers));
     }
 
@@ -287,21 +280,22 @@ public class ProfileFragment extends Fragment {
         query.include(UserFollower.KEY_USER_ID);
         query.include(UserFollower.KEY_FOLLOWER_ID);
         query.whereEqualTo(UserFollower.KEY_FOLLOWER_ID, user);
-        query.findInBackground((userFollowers, e) -> pnFollowingFound(userFollowers, e));
+        query.findInBackground((userFollowers, e) -> onFollowingFound(userFollowers, e));
     }
 
-    private void pnFollowingFound(List<UserFollower> userFollowers, ParseException e) {
+    private void onFollowingFound(List<UserFollower> userFollowers, ParseException e) {
         // if there is an exception, e will not be null
         if (e != null) {
             Log.e(TAG, "Issue getting followers for user " + user.getFirstName(), e);
         }
 
         // at this point, we have gotten the user-follower list successfully
-        MainActivity.userFollowing.clear();
+        List<User> followingToAdd = new ArrayList<>();
         for (UserFollower uf : userFollowers) {
-            MainActivity.userFollowing.add(uf.getUserF());
+            followingToAdd.add(uf.getUserF());
         }
-        numFollowing = userFollowers.size();
+        profileViewModel.setUserFollowing(followingToAdd);
+        int numFollowing = userFollowers.size();
         binding.tvFollowingCount.setText(String.valueOf(numFollowing));
     }
 }

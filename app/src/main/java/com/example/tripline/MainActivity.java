@@ -26,14 +26,12 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
-    public Trip selectedTrip;
     private ActivityMainBinding binding;
 
     // TODO: move these to a ViewModel
-    public static List<User> userFollowing;
-    public static List<User> userFollowers;
     public static List<Trip> allTrips;
-    public static List<Trip> userToDisplayTrips;
+    public Trip selectedTrip;
+
     NavController navController;
 
     @Override
@@ -47,9 +45,6 @@ public class MainActivity extends AppCompatActivity {
          TripViewModel sharedViewModel = ViewModelProviders.of(this).get(TripViewModel.class);
          sharedViewModel.setUserToDisplay((User) ParseUser.getCurrentUser());
 
-        userToDisplayTrips = new ArrayList<>();
-        userFollowing = new ArrayList<>();
-        userFollowers = new ArrayList<>();
         allTrips = new ArrayList<>();
         getAllTrips();
 

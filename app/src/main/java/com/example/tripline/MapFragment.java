@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.tripline.models.Trip;
+import com.example.tripline.ui.profile.ProfileViewModel;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -17,9 +19,14 @@ import com.parse.ParseGeoPoint;
 
 public class MapFragment extends Fragment {
 
+    private ProfileViewModel sharedProfileViewModel;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        sharedProfileViewModel = ViewModelProviders.of(requireActivity()).get(ProfileViewModel.class);
+
         // initialize view
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
@@ -33,7 +40,7 @@ public class MapFragment extends Fragment {
 
     private void onGoogleMapReady(GoogleMap googleMap) {
         // when map is loaded, add pins for all trips
-        for (Trip trip : MainActivity.userToDisplayTrips) {
+        for (Trip trip : sharedProfileViewModel.getUserTrips()) {
             ParseGeoPoint point = trip.getLocation();
             LatLng latLng = new LatLng(point.getLatitude(), point.getLongitude());
 

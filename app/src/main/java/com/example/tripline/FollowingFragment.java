@@ -19,6 +19,7 @@ import com.example.tripline.models.UserFollower;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FollowingFragment extends Fragment {
@@ -54,7 +55,8 @@ public class FollowingFragment extends Fragment {
 
         user = sharedViewModel.getUserToDisplay();
 
-        allFollowing = MainActivity.userFollowing;
+        allFollowing = new ArrayList<>();
+        getFollowing();
         adapter = new FollowingAdapter(getContext(), allFollowing);
         binding.rvFollowing.setAdapter(adapter);
 

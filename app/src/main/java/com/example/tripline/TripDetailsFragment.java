@@ -86,20 +86,16 @@ public class TripDetailsFragment extends Fragment {
         binding.tvDescriptionDetails.setText(trip.getDescription());
         binding.tvAuthorDetails.setText(trip.getAuthor().getFirstName() + " " + trip.getAuthor().getLastName());
 
-        if (sharedViewModel.isCurrentUser()) {
-            binding.tvAuthorDetails.setVisibility(View.GONE);
-        } else {
-            binding.tvAuthorDetails.setVisibility(View.VISIBLE);
-            // clicking on the author's name brings you to their profile
-            binding.tvAuthorDetails.setOnClickListener(v -> goToAuthorProfile(view));
-        }
-
         // displaying options to edit if the user created this trip
         if (trip.getAuthor().hasSameId(ParseUser.getCurrentUser())){
             Log.i(TAG, "user logged in is the author of this trip");
             binding.btnAddEvent.setVisibility(View.VISIBLE);
+            binding.tvAuthorDetails.setVisibility(View.GONE);
         } else {
             binding.btnAddEvent.setVisibility(View.GONE);
+            binding.tvAuthorDetails.setVisibility(View.VISIBLE);
+            // clicking on the author's name brings you to their profile
+            binding.tvAuthorDetails.setOnClickListener(v -> goToAuthorProfile(view));
         }
     }
 

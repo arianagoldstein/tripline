@@ -141,7 +141,7 @@
         app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnFollowContainer"
-        app:srcCompat="@drawable/map_placeholder"
+        app:srcCompat="@drawable/map_placeholder_img"
         tools:src="@tools:sample/avatars" />
 
     <androidx.recyclerview.widget.RecyclerView
