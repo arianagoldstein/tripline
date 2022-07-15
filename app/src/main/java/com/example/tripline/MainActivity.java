@@ -14,6 +14,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.tripline.databinding.ActivityMainBinding;
 import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
+import com.example.tripline.viewmodels.SearchViewModel;
 import com.example.tripline.viewmodels.UserViewModel;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -29,9 +30,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
     private ActivityMainBinding binding;
     private NavController navController;
-
-    // TODO: move these to a ViewModel
-    public static List<Trip> allTrips;
+    private SearchViewModel searchViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +40,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         // ViewModel
-         UserViewModel sharedViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
-         sharedViewModel.setUserToDisplay((User) ParseUser.getCurrentUser());
-
-        allTrips = new ArrayList<>();
+        UserViewModel sharedViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        sharedViewModel.setUserToDisplay((User) ParseUser.getCurrentUser());
+        searchViewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
         getAllTrips();
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -91,8 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "Issue getting trips", e);
                 Toast.makeText(MainActivity.this, "Issue getting trips.", Toast.LENGTH_SHORT).show();
             }
-            MainActivity.allTrips.clear();
-            MainActivity.allTrips.addAll(trips);
+            searchViewModel.setAllTrips(trips);
         });
     }
 }
