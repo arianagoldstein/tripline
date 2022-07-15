@@ -102,6 +102,8 @@ public class AddTripFragment extends Fragment {
     }
 
     private void onAddTripClicked() {
+        binding.pbLoadingTrip.setVisibility(View.VISIBLE);
+        binding.vAddTripCover.setVisibility(View.VISIBLE);
         // getting user input
         String title = binding.etTitle.getText().toString();
         ParseGeoPoint location = new ParseGeoPoint(latitude, longitude);
@@ -177,6 +179,8 @@ public class AddTripFragment extends Fragment {
     }
 
     private void onTripAdded(ParseException e, String title) {
+        binding.pbLoadingTrip.setVisibility(View.INVISIBLE);
+        binding.vAddTripCover.setVisibility(View.INVISIBLE);
         if (e != null) {
             Log.e(TAG, "Error while saving trip with title " + title, e);
             Toast.makeText(getContext(), "Error saving trip.", Toast.LENGTH_SHORT).show();
