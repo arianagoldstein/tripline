@@ -111,6 +111,10 @@ public class StreamFragment extends Fragment {
             Log.e(TAG, "Issue getting trips: ", e);
         }
 
+        if (!(trips.isEmpty())) {
+            binding.tvNewUserStream.setVisibility(View.GONE);
+        }
+
         // at this point, we have gotten the trips successfully
         allTrips.clear();
         allTrips.addAll(trips);

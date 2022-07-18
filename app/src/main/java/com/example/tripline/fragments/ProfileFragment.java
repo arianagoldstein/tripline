@@ -85,6 +85,7 @@ public class ProfileFragment extends Fragment {
 
         Log.i(TAG, "Displaying profile for user " + user.getFirstName() + " " + user.getLastName());
         binding.tvNameProfile.setText(user.getFirstName() + " " + user.getLastName());
+        Glide.with(this).load(user.getProfilePic().getUrl()).circleCrop().into(binding.ivProfilePic);
 
         // connecting RecyclerView of Trips with the adapter
         adapter = new TripProfileAdapter(getContext(), profileViewModel.getUserTrips());

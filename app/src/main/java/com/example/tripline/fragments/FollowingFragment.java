@@ -85,6 +85,10 @@ public class FollowingFragment extends Fragment {
             Log.e(TAG, "Issue getting following for user " + user.getFirstName(), e);
         }
 
+        if (!(userFollowers.isEmpty())) {
+            binding.tvNewUserFollowing.setVisibility(View.GONE);
+        }
+
         // at this point, we have gotten the user-follower list successfully
         allFollowing.clear();
         for (UserFollower uf : userFollowers) {

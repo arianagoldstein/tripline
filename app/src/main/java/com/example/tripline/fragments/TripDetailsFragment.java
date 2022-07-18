@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.tripline.R;
-import com.example.tripline.Utility;
+import com.example.tripline.utility.Utility;
 import com.example.tripline.adapters.EventAdapter;
 import com.example.tripline.databinding.FragmentTripDetailsBinding;
 import com.example.tripline.models.Event;

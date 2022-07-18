@@ -6,6 +6,7 @@ import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -16,10 +17,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.tripline.databinding.ActivityRegisterBinding;
 import com.example.tripline.models.User;
+import com.example.tripline.utility.BitmapScaler;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -30,6 +35,8 @@ public class RegisterActivity extends AppCompatActivity {
     // variables for photo upload
     private final static int PICK_PHOTO_CODE = 1046;
     private ParseFile profilePic;
+    private File photoFile;
+    public String photoFileName = "photo.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,15 +132,45 @@ public class RegisterActivity extends AppCompatActivity {
 
             // load the image located at photoUri into selectedImage
             Bitmap selectedImage = loadFromUri(photoUri);
-
-            // compressing the image so that it can upload to Parse successfully
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            profilePic = new ParseFile("profilepic.jpg", stream.toByteArray());
+            photoFile = resizeFile(selectedImage);
+            profilePic = new ParseFile(photoFile);
 
             // load the selected image into the cover photo preview
             Glide.with(this).load(photoUri).circleCrop().into(binding.ivProfilePicUpload);
         }
+    }
+
+    private File resizeFile(Bitmap image) {
+        Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(image, 110);
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        File resizedFile = getPhotoFileUri(photoFileName);
+        try {
+            resizedFile.createNewFile();
+            FileOutputStream fos = null;
+            fos = new FileOutputStream(resizedFile);
+            fos.write(bytes.toByteArray());
+            fos.close();
+        } catch(IOException e) {
+            Log.e(TAG, "Error creating resized file", e);
+        }
+        return resizedFile;
+    }
+
+    // helper function to get a URI for the image file
+    private File getPhotoFileUri(String fileName) {
+
+        File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+            Log.d(TAG, "failed to create directory");
+        }
+
+        // Return the file target for the photo based on filename
+        File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
+
+        return file;
     }
 
     // registers the user with the information they've entered
@@ -146,10 +183,15 @@ public class RegisterActivity extends AppCompatActivity {
         user.setLastName(lName);
         user.setUsername(email);
         user.setPassword(password);
-        // user.setProfilePic(profilePic);
 
-        // connect to Parse to register the user
-        user.signUpInBackground(e -> onRegisterDone(e, user));
+        profilePic.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                user.setProfilePic(profilePic);
+                user.signUpInBackground(ex -> onRegisterDone(ex, user));
+            }
+        });
+
     }
 
     private void onRegisterDone(ParseException e, User user) {

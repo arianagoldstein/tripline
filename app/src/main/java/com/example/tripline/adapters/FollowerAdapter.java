@@ -70,7 +70,7 @@ public class FollowerAdapter extends RecyclerView.Adapter<FollowerAdapter.ViewHo
         // displaying information about this follower
         public void bind(User follower) {
             binding.tvFollowerName.setText(follower.getFirstName() + " " + follower.getLastName());
-            Glide.with(context).load(follower.getProfilePic().getUrl()).into(binding.ivProfilePicFollower);
+            Glide.with(context).load(follower.getProfilePic().getUrl()).circleCrop().into(binding.ivProfilePicFollower);
 
             // if this is someone else's profile, we shouldn't be able to remove followers
             if (!(sharedViewModel.isCurrentUser())) {

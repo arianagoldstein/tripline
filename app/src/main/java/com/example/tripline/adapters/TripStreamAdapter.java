@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tripline.R;
-import com.example.tripline.Utility;
+import com.example.tripline.utility.Utility;
 import com.example.tripline.databinding.ItemTripStreamBinding;
 import com.example.tripline.models.Trip;
 import com.example.tripline.viewmodels.TripViewModel;
@@ -79,6 +79,25 @@ public class TripStreamAdapter extends RecyclerView.Adapter<TripStreamAdapter.Vi
             binding.profileHitArea.setOnClickListener(v -> onAuthorClicked(trip));
             binding.tvCreatedAtStream.setText(Utility.calculateTimeAgo(trip.getCreatedAt()));
             Glide.with(context).load(trip.getAuthor().getProfilePic().getUrl()).circleCrop().into(binding.ivProfilePicStream);
+            binding.ibSaveTrip.setOnClickListener(v -> setSaveStatus(trip));
+
+            if (!(trip.getIsSaved())) {
+                binding.ibSaveTrip.setBackgroundResource(R.drawable.bookmark_empty_icon);
+            } else {
+                binding.ibSaveTrip.setBackgroundResource(R.drawable.bookmark_filled_icon);
+            }
+        }
+
+        // toggle the trip between being saved/not depending on its status in Parse
+        private void setSaveStatus(Trip trip) {
+            if (!(trip.getIsSaved())) {
+                binding.ibSaveTrip.setBackgroundResource(R.drawable.bookmark_filled_icon);
+                trip.setIsSaved(true);
+            } else {
+                binding.ibSaveTrip.setBackgroundResource(R.drawable.bookmark_empty_icon);
+                trip.setIsSaved(false);
+            }
+            trip.saveInBackground();
         }
 
         // clicking on the author's name brings you to their profile

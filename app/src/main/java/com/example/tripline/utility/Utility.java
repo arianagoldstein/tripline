@@ -1,4 +1,4 @@
-package com.example.tripline;
+package com.example.tripline.utility;
 
 import android.util.Log;
 
