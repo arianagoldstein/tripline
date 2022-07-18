@@ -48,7 +48,7 @@ import java.util.Date;
 import java.util.List;
 
 // this fragment will allow the user to add a new trip to their profile
-public class AddTripFragment extends Fragment {
+public class AddTripFragment extends BasePhotoFragment {
 
     public static final String TAG = "AddTripFragment";
     private FragmentAddtripBinding binding;
@@ -200,7 +200,6 @@ public class AddTripFragment extends Fragment {
         binding = null;
     }
 
-    // functions for cover photo upload
     public void onPickPhoto(View view) {
         // create intent for picking a photo from the gallery
         Intent intent = new Intent(Intent.ACTION_PICK,
@@ -214,26 +213,6 @@ public class AddTripFragment extends Fragment {
         }
     }
 
-    public Bitmap loadFromUri(Uri photoUri) {
-        Bitmap image = null;
-        try {
-            // check version of Android on device
-            if(Build.VERSION.SDK_INT > 27){
-                // on newer versions of Android, use the new decodeBitmap method
-                ImageDecoder.Source source = ImageDecoder.createSource(getContext().getContentResolver(), photoUri);
-                image = ImageDecoder.decodeBitmap(source);
-            } else {
-                // support older versions of Android by using getBitmap
-                image = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), photoUri);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(getContext(), "Issue decoding image(s).", Toast.LENGTH_SHORT).show();
-
-        }
-        return image;
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // executing different versions of this function based on how it was triggered
@@ -243,14 +222,9 @@ public class AddTripFragment extends Fragment {
                 if ((data != null)) {
                     Uri photoUri = data.getData();
                     binding.ivCoverPhotoAddTrip.setImageURI(photoUri);
-
-                    // load the image located at photoUri into selectedImage
                     Bitmap selectedImage = loadFromUri(photoUri);
-
-                    // compressing the image so that it can upload to Parse successfully
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    coverPhoto = new ParseFile("coverphoto.jpg", stream.toByteArray());
+                    photoFile = resizeFile(selectedImage, "trip", "tripImg.jpg");
+                    coverPhoto = new ParseFile(photoFile);
                 }
                 break;
             // the user has typed a location into the autocomplete search

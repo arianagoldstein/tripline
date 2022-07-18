@@ -32,6 +32,7 @@ import com.example.tripline.models.Trip;
 import com.example.tripline.viewmodels.TripViewModel;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,7 +43,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddEventFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+public class AddEventFragment extends BasePhotoFragment implements AdapterView.OnItemSelectedListener {
 
     public static final String TAG = "AddEventFragment";
     private FragmentAddEventBinding binding;
@@ -144,11 +145,8 @@ public class AddEventFragment extends Fragment implements AdapterView.OnItemSele
             Log.i(TAG, "image URI: " + uri);
 
             Bitmap image = loadFromUri(uri);
-
-            // compressing the image so that it can upload to Parse successfully
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            ParseFile file = new ParseFile("img" + i + ".jpg", stream.toByteArray());
+            photoFile = resizeFile(image, "event", "eventImg" + i + ".jpg");
+            ParseFile file = new ParseFile(photoFile);
 
             // constructing a new JSONObject to add to the array to save to Parse
             JSONObject jsonObject = new JSONObject();
@@ -178,25 +176,6 @@ public class AddEventFragment extends Fragment implements AdapterView.OnItemSele
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent,"Select Picture"), PICK_IMAGE_MULTIPLE);
-    }
-
-    // function that creates a Bitmap from the specified URI
-    private Bitmap loadFromUri(Uri photoUri) {
-        Bitmap image = null;
-        try {
-            // check version of Android on device
-            if(Build.VERSION.SDK_INT > 27){
-                // on newer versions of Android, use the new decodeBitmap method
-                ImageDecoder.Source source = ImageDecoder.createSource(getContext().getContentResolver(), photoUri);
-                image = ImageDecoder.decodeBitmap(source);
-            } else {
-                // support older versions of Android by using getBitmap
-                image = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), photoUri);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return image;
     }
 
     // saves this new event to the Parse database
