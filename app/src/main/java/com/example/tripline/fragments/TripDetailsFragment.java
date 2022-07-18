@@ -5,6 +5,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.tripline.R;
+import com.example.tripline.Utility;
 import com.example.tripline.adapters.EventAdapter;
 import com.example.tripline.databinding.FragmentTripDetailsBinding;
 import com.example.tripline.models.Event;
@@ -40,6 +44,8 @@ public class TripDetailsFragment extends Fragment {
     private UserViewModel sharedViewModel;
     private TripViewModel tripViewModel;
 
+    private Animation animation;
+
     public TripDetailsFragment() {
         // Required empty public constructor
     }
@@ -49,6 +55,11 @@ public class TripDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         sharedViewModel = ViewModelProviders.of(requireActivity()).get(UserViewModel.class);
         tripViewModel = ViewModelProviders.of(requireActivity()).get(TripViewModel.class);
+
+        // creating animation
+        animation = AnimationUtils.loadAnimation(getContext(), R.anim.circle_explosion_anim);
+        animation.setInterpolator(new AccelerateDecelerateInterpolator());
+        animation.setDuration(700);
     }
 
     @Override
@@ -69,7 +80,7 @@ public class TripDetailsFragment extends Fragment {
         Log.i(TAG, "in TripDetailsFragment with trip " + trip.getTitle());
 
         displayTripDetails(view);
-        binding.btnAddEvent.setOnClickListener(v -> goToAddEvent(view));
+        binding.fabAddEvent.setOnClickListener(v -> goToAddEvent(view));
         queryEvents();
 
         // setting up recyclerview for events
@@ -90,14 +101,15 @@ public class TripDetailsFragment extends Fragment {
         Glide.with(this).load(trip.getCoverPhoto().getUrl()).into(binding.ivCoverPhotoDetails);
         binding.tvDescriptionDetails.setText(trip.getDescription());
         binding.tvAuthorDetails.setText(trip.getAuthor().getFirstName() + " " + trip.getAuthor().getLastName());
+        binding.tvCreatedAtDetails.setText(Utility.calculateTimeAgo(trip.getCreatedAt()));
 
         // displaying options to edit if the user created this trip
         if (trip.getAuthor().hasSameId(ParseUser.getCurrentUser())){
             Log.i(TAG, "user logged in is the author of this trip");
-            binding.btnAddEvent.setVisibility(View.VISIBLE);
+            binding.fabAddEvent.setVisibility(View.VISIBLE);
             binding.tvAuthorDetails.setVisibility(View.GONE);
         } else {
-            binding.btnAddEvent.setVisibility(View.GONE);
+            binding.fabAddEvent.setVisibility(View.GONE);
             binding.tvAuthorDetails.setVisibility(View.VISIBLE);
             // clicking on the author's name brings you to their profile
             binding.tvAuthorDetails.setOnClickListener(v -> goToAuthorProfile(view));
@@ -106,9 +118,28 @@ public class TripDetailsFragment extends Fragment {
 
     // brings user to addEvent fragment
     private void goToAddEvent(@NonNull View view) {
-        tripViewModel.setSelectedTrip(trip);
-        NavController navController = Navigation.findNavController(view);
-        navController.navigate(R.id.action_navigation_tripdetails_to_navigation_addevent);
+        binding.fabAddEvent.setVisibility(View.INVISIBLE);
+        binding.circle.setVisibility(View.VISIBLE);
+
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                //
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                tripViewModel.setSelectedTrip(trip);
+                NavController navController = Navigation.findNavController(view);
+                navController.navigate(R.id.action_navigation_tripdetails_to_navigation_addevent);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+                //
+            }
+        });
+        binding.circle.startAnimation(animation);
     }
 
     // brings user to the profile of the author of the trip

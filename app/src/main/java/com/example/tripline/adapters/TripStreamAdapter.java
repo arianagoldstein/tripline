@@ -16,10 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tripline.R;
-import com.example.tripline.viewmodels.TripViewModel;
-import com.example.tripline.viewmodels.UserViewModel;
+import com.example.tripline.Utility;
 import com.example.tripline.databinding.ItemTripStreamBinding;
 import com.example.tripline.models.Trip;
+import com.example.tripline.viewmodels.TripViewModel;
+import com.example.tripline.viewmodels.UserViewModel;
 
 import java.util.List;
 
@@ -75,7 +76,9 @@ public class TripStreamAdapter extends RecyclerView.Adapter<TripStreamAdapter.Vi
             Glide.with(context).load(trip.getCoverPhoto().getUrl()).into(binding.ivCoverPhotoStream);
             binding.tvDescriptionStream.setText(trip.getDescription());
             binding.tvAuthorNameStream.setText(trip.getAuthor().getFirstName() + " " + trip.getAuthor().getLastName());
-            binding.tvAuthorNameStream.setOnClickListener(v -> onAuthorClicked(trip));
+            binding.profileHitArea.setOnClickListener(v -> onAuthorClicked(trip));
+            binding.tvCreatedAtStream.setText(Utility.calculateTimeAgo(trip.getCreatedAt()));
+            Glide.with(context).load(trip.getAuthor().getProfilePic().getUrl()).circleCrop().into(binding.ivProfilePicStream);
         }
 
         // clicking on the author's name brings you to their profile

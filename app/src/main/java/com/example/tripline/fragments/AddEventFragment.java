@@ -32,7 +32,6 @@ import com.example.tripline.models.Trip;
 import com.example.tripline.viewmodels.TripViewModel;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.SaveCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -98,12 +97,12 @@ public class AddEventFragment extends Fragment implements AdapterView.OnItemSele
     }
 
     private void onAddEventClicked() {
-        binding.pbLoadingEvent.setVisibility(View.VISIBLE);
-        binding.vAddEventCover.setVisibility(View.VISIBLE);
         String title = binding.etTitleEvent.getText().toString();
         String description = binding.etDescriptionEvent.getText().toString();
 
         if (checkUserInput(title, description)) return;
+        binding.pbLoadingEvent.setVisibility(View.VISIBLE);
+        binding.vAddEventCover.setVisibility(View.VISIBLE);
 
         JSONArray photoArray = getPhotoArray();
         if (photoArray == null) return;

@@ -15,9 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tripline.R;
-import com.example.tripline.viewmodels.TripViewModel;
 import com.example.tripline.databinding.ItemTripProfileBinding;
 import com.example.tripline.models.Trip;
+import com.example.tripline.viewmodels.TripViewModel;
 
 import java.util.List;
 

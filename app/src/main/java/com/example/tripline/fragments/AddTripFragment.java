@@ -102,8 +102,6 @@ public class AddTripFragment extends Fragment {
     }
 
     private void onAddTripClicked() {
-        binding.pbLoadingTrip.setVisibility(View.VISIBLE);
-        binding.vAddTripCover.setVisibility(View.VISIBLE);
         // getting user input
         String title = binding.etTitle.getText().toString();
         ParseGeoPoint location = new ParseGeoPoint(latitude, longitude);
@@ -132,8 +130,10 @@ public class AddTripFragment extends Fragment {
             Toast.makeText(getContext(), "A cover photo must be uploaded", Toast.LENGTH_SHORT).show();
             return;
         }
-        // network call here. network call in callback is where you do postTrip
-        // posting this trip with the user's input from the fields
+
+        binding.pbLoadingTrip.setVisibility(View.VISIBLE);
+        binding.vAddTripCover.setVisibility(View.VISIBLE);
+
         postTrip(title, location, description, startDate, endDate, coverPhoto, formattedLocation, (User) ParseUser.getCurrentUser());
     }
 
@@ -242,6 +242,7 @@ public class AddTripFragment extends Fragment {
             case PICK_PHOTO_CODE:
                 if ((data != null)) {
                     Uri photoUri = data.getData();
+                    binding.ivCoverPhotoAddTrip.setImageURI(photoUri);
 
                     // load the image located at photoUri into selectedImage
                     Bitmap selectedImage = loadFromUri(photoUri);
@@ -250,9 +251,6 @@ public class AddTripFragment extends Fragment {
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
                     coverPhoto = new ParseFile("coverphoto.jpg", stream.toByteArray());
-
-                    // load the selected image into the cover photo preview
-                    binding.ivCoverPhotoAddTrip.setImageBitmap(selectedImage);
                 }
                 break;
             // the user has typed a location into the autocomplete search

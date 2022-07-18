@@ -66,7 +66,7 @@
     <TextView
         android:id="@+id/tvDescriptionStream"
         android:layout_width="366dp"
-        android:layout_height="37dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -75,43 +75,64 @@
         app:layout_constraintTop_toBottomOf="@+id/ivCoverPhotoStream"
         tools:text="a week-long exploration of 3 of the beautiful islands of Hawaii complete with adventures and relaxation" />
 
-    <ImageButton
-        android:id="@+id/ibLikeStream"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/heart_empty"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDescriptionStream" />
-
-    <ImageButton
-        android:id="@+id/ibCommentStream"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/comment"
-        app:layout_constraintStart_toEndOf="@+id/ibLikeStream"
-        app:layout_constraintTop_toBottomOf="@+id/tvDescriptionStream" />
-
     <TextView
         android:id="@+id/tvAuthorNameStream"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        app:layout_constraintEnd_toStartOf="@+id/ivProfilePicStream"
         app:layout_constraintTop_toBottomOf="@+id/tvDescriptionStream"
         tools:text="Ariana Goldstein" />
+
+    <TextView
+        android:id="@+id/tvCreatedAtStream"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:textColor="@color/gray"
+        app:layout_constraintEnd_toStartOf="@+id/ivProfilePicStream"
+        app:layout_constraintTop_toBottomOf="@+id/tvAuthorNameStream"
+        tools:text="2 hours ago" />
 
     <View
         android:id="@+id/divStream"
         android:layout_width="361dp"
         android:layout_height="1dp"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="5dp"
         android:background="#00c7d1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAuthorNameStream" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_hit_area" />
+
+    <ImageButton
+        android:id="@+id/ibSaveTrip"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bookmark_empty_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescriptionStream" />
+
+    <ImageView
+        android:id="@+id/ivProfilePicStream"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="20dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescriptionStream"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <View
+        android:id="@+id/profile_hit_area"
+        android:layout_width="185dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="4dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescriptionStream" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
