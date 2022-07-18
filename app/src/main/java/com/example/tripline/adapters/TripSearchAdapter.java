@@ -1,7 +1,6 @@
 package com.example.tripline.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,19 +8,20 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.tripline.MainActivity;
 import com.example.tripline.R;
+import com.example.tripline.viewmodels.TripViewModel;
 import com.example.tripline.databinding.ItemTripProfileBinding;
 import com.example.tripline.models.Trip;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class TripSearchAdapter extends RecyclerView.Adapter<TripSearchAdapter.ViewHolder> implements Filterable {
 
@@ -29,10 +29,12 @@ public class TripSearchAdapter extends RecyclerView.Adapter<TripSearchAdapter.Vi
     private Context context;
     private List<Trip> allTrips;
     private List<Trip> filteredTrips;
+    private TripViewModel tripViewModel;
 
     public TripSearchAdapter(Context context, List<Trip> trips) {
         this.context = context;
         this.allTrips = trips;
+        tripViewModel = ViewModelProviders.of((FragmentActivity) context).get(TripViewModel.class);
     }
 
     @NonNull
@@ -56,7 +58,6 @@ public class TripSearchAdapter extends RecyclerView.Adapter<TripSearchAdapter.Vi
             return 0;
         }
     }
-
 
     // filtering search results to include trips where substrings match
     @Override
@@ -91,8 +92,6 @@ public class TripSearchAdapter extends RecyclerView.Adapter<TripSearchAdapter.Vi
         };
     }
 
-
-        
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ItemTripProfileBinding binding;
@@ -112,24 +111,17 @@ public class TripSearchAdapter extends RecyclerView.Adapter<TripSearchAdapter.Vi
             Glide.with(context).load(trip.getCoverPhoto().getUrl()).into(binding.ivCoverPhotoProfile);
         }
 
+        // getting the trip that the user clicked on and passing it to the details page to display it
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-
-            // getting the trip that the user clicked on and passing it to the details page to display it
             if (position != RecyclerView.NO_POSITION) {
                 Trip trip = filteredTrips.get(position);
-
-                // TODO: use a ViewModel here instead, this is a placeholder
-                ((MainActivity) context).selectedTrip = trip;
-
-                // now we have an instance of the navbar, so we can go anywhere
+                tripViewModel.setSelectedTrip(trip);
                 NavController navController = Navigation.findNavController(itemView);
                 navController.navigate(R.id.action_navigation_search_to_navigation_tripdetails);
-
             }
         }
-
     }
 }
 

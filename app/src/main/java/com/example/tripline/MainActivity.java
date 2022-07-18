@@ -14,6 +14,8 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.tripline.databinding.ActivityMainBinding;
 import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
+import com.example.tripline.viewmodels.SearchViewModel;
+import com.example.tripline.viewmodels.UserViewModel;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseQuery;
@@ -26,16 +28,9 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
-    public Trip selectedTrip;
     private ActivityMainBinding binding;
-
-    // TODO: move these to a ViewModel
-    public static List<User> userFollowing;
-    public static List<User> userFollowers;
-    public static List<Trip> allTrips;
-    public static User userToDisplay;
-    public static List<Trip> userToDisplayTrips;
-    NavController navController;
+    private NavController navController;
+    private SearchViewModel searchViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,14 +40,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         // ViewModel
-         TripViewModel sharedViewModel = ViewModelProviders.of(this).get(TripViewModel.class);
-         sharedViewModel.setUserToDisplay((User) ParseUser.getCurrentUser());
-
-        userToDisplayTrips = new ArrayList<>();
-        userFollowing = new ArrayList<>();
-        userFollowers = new ArrayList<>();
-        allTrips = new ArrayList<>();
-        userToDisplay = (User) ParseUser.getCurrentUser();
+        UserViewModel sharedViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        sharedViewModel.setUserToDisplay((User) ParseUser.getCurrentUser());
+        searchViewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
         getAllTrips();
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -99,8 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "Issue getting trips", e);
                 Toast.makeText(MainActivity.this, "Issue getting trips.", Toast.LENGTH_SHORT).show();
             }
-            MainActivity.allTrips.clear();
-            MainActivity.allTrips.addAll(trips);
+            searchViewModel.setAllTrips(trips);
         });
     }
 }

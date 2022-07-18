@@ -1,21 +1,27 @@
-package com.example.tripline.ui.search;
+package com.example.tripline.fragments;
 
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.tripline.MainActivity;
 import com.example.tripline.adapters.TripSearchAdapter;
 import com.example.tripline.databinding.FragmentSearchBinding;
 import com.example.tripline.models.Trip;
+import com.example.tripline.viewmodels.SearchViewModel;
+import com.example.tripline.viewmodels.TripViewModel;
+import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +33,8 @@ public class SearchFragment extends Fragment {
     protected TripSearchAdapter adapter;
     protected List<Trip> trips;
 
+    private SearchViewModel searchViewModel;
+
     public SearchFragment() {
         // Required empty public constructor
     }
@@ -34,6 +42,7 @@ public class SearchFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        searchViewModel = ViewModelProviders.of(requireActivity()).get(SearchViewModel.class);
     }
 
     @Override
@@ -48,8 +57,8 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // trips = new ArrayList<>();
-        adapter = new TripSearchAdapter(getContext(), MainActivity.allTrips);
+        trips = searchViewModel.getAllTrips();
+        adapter = new TripSearchAdapter(getContext(), trips);
         binding.rvSearchResults.setAdapter(adapter);
 
         LinearLayoutManager llm = new LinearLayoutManager(getContext());

@@ -1,4 +1,4 @@
-package com.example.tripline;
+package com.example.tripline.fragments;
 
 import android.content.ClipData;
 import android.content.Intent;
@@ -20,13 +20,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.tripline.R;
 import com.example.tripline.adapters.GalleryAdapter;
 import com.example.tripline.databinding.FragmentAddEventBinding;
 import com.example.tripline.models.Event;
 import com.example.tripline.models.Trip;
+import com.example.tripline.viewmodels.TripViewModel;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.SaveCallback;
@@ -56,6 +59,8 @@ public class AddEventFragment extends Fragment implements AdapterView.OnItemSele
     private GalleryAdapter galleryAdapter;
     private List<Uri> imageUriList;
 
+    private TripViewModel tripViewModel;
+
     public AddEventFragment() {
         // Required empty public constructor
     }
@@ -63,6 +68,7 @@ public class AddEventFragment extends Fragment implements AdapterView.OnItemSele
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        tripViewModel = ViewModelProviders.of(requireActivity()).get(TripViewModel.class);
     }
 
     @Override
@@ -84,89 +90,95 @@ public class AddEventFragment extends Fragment implements AdapterView.OnItemSele
         binding.spActivityType.setOnItemSelectedListener(this);
 
         // keeping track of which trip this event is associated with
-        trip = ((MainActivity) getContext()).selectedTrip;
+        trip = tripViewModel.getSelectedTrip();
 
-        // initializing list of images
         imageUriList = new ArrayList<>();
+        binding.btnAddPhotos.setOnClickListener(v -> onAddPhotosClicked());
+        binding.btnAddEvent.setOnClickListener(v -> onAddEventClicked());
+    }
 
-        // onclick listener for uploading multiple images
-        binding.btnAddPhotos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // clearing the list so we don't add photos twice
-                imageUriList.clear();
+    private void onAddEventClicked() {
+        binding.pbLoadingEvent.setVisibility(View.VISIBLE);
+        binding.vAddEventCover.setVisibility(View.VISIBLE);
+        String title = binding.etTitleEvent.getText().toString();
+        String description = binding.etDescriptionEvent.getText().toString();
 
-                // creating a new intent to select images from gallery
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent,"Select Picture"), PICK_IMAGE_MULTIPLE);
+        if (checkUserInput(title, description)) return;
+
+        JSONArray photoArray = getPhotoArray();
+        if (photoArray == null) return;
+
+        // calling function to post this new event to the database
+        postEvent(title, description, activityType, trip, photoArray);
+    }
+
+    private boolean checkUserInput(String title, String description) {
+        // user must include a title
+        if (title.isEmpty()) {
+            Toast.makeText(getContext(), "Title cannot be empty!", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        // user must include a description
+        if (description.isEmpty()) {
+            Toast.makeText(getContext(), "Description cannot be empty!", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        // user must select an activity type
+        if (nothingSelected || activityType.equals("select an activity type")) {
+            Toast.makeText(getContext(), "Activity type cannot be empty!", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return false;
+    }
+
+    @Nullable
+    private JSONArray getPhotoArray() {
+        // constructing array that will store user photos
+        JSONArray photoArray = new JSONArray();
+
+        // populating array with images (ParseFiles)
+        for (int i = 0; i < imageUriList.size(); i++) {
+            // getting the URI at this index
+            Uri uri = imageUriList.get(i);
+            Log.i(TAG, "image URI: " + uri);
+
+            Bitmap image = loadFromUri(uri);
+
+            // compressing the image so that it can upload to Parse successfully
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            ParseFile file = new ParseFile("img" + i + ".jpg", stream.toByteArray());
+
+            // constructing a new JSONObject to add to the array to save to Parse
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("image", file);
+                photoArray.put(jsonObject);
+            } catch (JSONException e) {
+                Log.e(TAG, "Error adding JSON object.");
             }
-        });
+        }
 
-        // outlining onclick listener for add event button
-        binding.btnAddEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String title = binding.etTitleEvent.getText().toString();
-                String description = binding.etDescriptionEvent.getText().toString();
+        // user must upload at least one image
+        if (photoArray.length() == 0) {
+            Toast.makeText(getContext(), "You must upload at least one image!", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        return photoArray;
+    }
 
-                // user must select an activity type
-                if (nothingSelected || activityType.equals("select an activity type")) {
-                    Toast.makeText(getContext(), "Activity type cannot be empty!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+    private void onAddPhotosClicked() {
+        // clearing the list so we don't add photos twice
+        imageUriList.clear();
 
-                // user must include a title
-                if (title.isEmpty()) {
-                    Toast.makeText(getContext(), "Title cannot be empty!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // user must include a description
-                if (description.isEmpty()) {
-                    Toast.makeText(getContext(), "Description cannot be empty!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // constructing array that will store user photos
-                JSONArray photoArray = new JSONArray();
-
-                // populating array with images (ParseFiles)
-                for (int i = 0; i < imageUriList.size(); i++) {
-                    // getting the URI at this index
-                    Uri uri = imageUriList.get(i);
-                    Log.i(TAG, "image URI: " + uri);
-
-                    Bitmap image = loadFromUri(uri);
-
-                    // compressing the image so that it can upload to Parse successfully
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    ParseFile file = new ParseFile("img" + i + ".jpg", stream.toByteArray());
-
-                    // constructing a new JSONObject to add to the array to save to Parse
-                    JSONObject jsonObject = new JSONObject();
-                    try {
-                        jsonObject.put("image", file);
-                        photoArray.put(jsonObject);
-                    } catch (JSONException e) {
-                        Log.e(TAG, "Error adding JSON object.");
-                    }
-                }
-
-                // user must upload at least one image
-                if (photoArray.length() == 0) {
-                    Toast.makeText(getContext(), "You must upload at least one image!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // calling function to post this new event to the database
-                postEvent(title, description, activityType, trip, photoArray);
-            }
-        });
-
+        // creating a new intent to select images from gallery
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,"Select Picture"), PICK_IMAGE_MULTIPLE);
     }
 
     // function that creates a Bitmap from the specified URI
@@ -197,21 +209,22 @@ public class AddEventFragment extends Fragment implements AdapterView.OnItemSele
         event.setTrip(trip);
         event.setPhotos(photoArray);
 
-        event.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Error while saving event with title " + title, e);
-                }
-                // if we get here, the event was saved successfully
-                Log.i(TAG, "Event added successfully!");
+        event.saveInBackground(e -> onEventSaved(e, title));
+    }
 
-                // navigate to profile after adding event
-                NavController navController = Navigation.findNavController(getView());
-                navController.navigate(R.id.action_navigation_addevent_to_navigation_profile);
-            }
-        });
+    private void onEventSaved(ParseException e, String title) {
+        binding.pbLoadingEvent.setVisibility(View.INVISIBLE);
+        binding.vAddEventCover.setVisibility(View.INVISIBLE);
 
+        if (e != null) {
+            Log.e(TAG, "Error while saving event with title " + title, e);
+        }
+        // if we get here, the event was saved successfully
+        Log.i(TAG, "Event added successfully!");
+
+        // navigate to profile after adding event
+        NavController navController = Navigation.findNavController(getView());
+        navController.navigate(R.id.action_navigation_addevent_to_navigation_profile);
     }
 
     // methods to get the value the user selects from the dropdown menu

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    tools:context=".ui.profile.ProfileFragment">
+    tools:context=".fragments.ProfileFragment">
 
     <ImageView
         android:id="@+id/ivProfilePic"
@@ -141,7 +141,7 @@
         app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnFollowContainer"
-        app:srcCompat="@drawable/map_placeholder"
+        app:srcCompat="@drawable/map_placeholder_img"
         tools:src="@tools:sample/avatars" />
 
     <androidx.recyclerview.widget.RecyclerView

@@ -1,4 +1,4 @@
-package com.example.tripline.ui.addtrip;
+package com.example.tripline.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -18,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -68,9 +67,6 @@ public class AddTripFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        AddTripViewModel addTripViewModel =
-                new ViewModelProvider(this).get(AddTripViewModel.class);
-
         binding = FragmentAddtripBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
@@ -106,6 +102,8 @@ public class AddTripFragment extends Fragment {
     }
 
     private void onAddTripClicked() {
+        binding.pbLoadingTrip.setVisibility(View.VISIBLE);
+        binding.vAddTripCover.setVisibility(View.VISIBLE);
         // getting user input
         String title = binding.etTitle.getText().toString();
         ParseGeoPoint location = new ParseGeoPoint(latitude, longitude);
@@ -181,6 +179,8 @@ public class AddTripFragment extends Fragment {
     }
 
     private void onTripAdded(ParseException e, String title) {
+        binding.pbLoadingTrip.setVisibility(View.INVISIBLE);
+        binding.vAddTripCover.setVisibility(View.INVISIBLE);
         if (e != null) {
             Log.e(TAG, "Error while saving trip with title " + title, e);
             Toast.makeText(getContext(), "Error saving trip.", Toast.LENGTH_SHORT).show();

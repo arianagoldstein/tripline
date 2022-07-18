@@ -1,4 +1,4 @@
-package com.example.tripline;
+package com.example.tripline.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -9,16 +9,18 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.tripline.adapters.FollowingAdapter;
 import com.example.tripline.databinding.FragmentFollowingBinding;
 import com.example.tripline.models.User;
 import com.example.tripline.models.UserFollower;
+import com.example.tripline.viewmodels.UserViewModel;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FollowingFragment extends Fragment {
@@ -28,7 +30,7 @@ public class FollowingFragment extends Fragment {
     protected FollowingAdapter adapter;
     protected List<User> allFollowing;
     private User user;
-    private boolean isCurrentUser;
+    private UserViewModel sharedViewModel;
 
     public FollowingFragment() {
         // Required empty public constructor
@@ -37,11 +39,7 @@ public class FollowingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            isCurrentUser = getArguments().getBoolean("isCurrentUser", true);
-        } else {
-            isCurrentUser = true;
-        }
+        sharedViewModel = ViewModelProviders.of(requireActivity()).get(UserViewModel.class);
     }
 
     @Override
@@ -56,9 +54,10 @@ public class FollowingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        user = getCurrentUser();
+        user = sharedViewModel.getUserToDisplay();
 
-        allFollowing = MainActivity.userFollowing;
+        allFollowing = new ArrayList<>();
+        getFollowing();
         adapter = new FollowingAdapter(getContext(), allFollowing);
         binding.rvFollowing.setAdapter(adapter);
 
@@ -68,17 +67,10 @@ public class FollowingFragment extends Fragment {
         binding.swipeContainerFollowing.setOnRefreshListener(() -> getFollowing());
     }
 
-    private User getCurrentUser() {
-        if (isCurrentUser) {
-            return (User) ParseUser.getCurrentUser();
-        } else {
-            return MainActivity.userToDisplay;
-        }
-    }
-
+    // getting the followers of the user we're displaying
     protected void getFollowing() {
-        ParseQuery<UserFollower> query = ParseQuery.getQuery(UserFollower.class);
         // we want to get the Users that the logged-in user follows, the following
+        ParseQuery<UserFollower> query = ParseQuery.getQuery(UserFollower.class);
         query.include(UserFollower.KEY_USER_ID);
         query.include(UserFollower.KEY_FOLLOWER_ID);
         query.whereEqualTo(UserFollower.KEY_FOLLOWER_ID, user);
@@ -86,6 +78,7 @@ public class FollowingFragment extends Fragment {
         query.findInBackground((userFollowers, e) -> addFollowing(userFollowers, e));
     }
 
+    // once we get the list of following, we add them to our list to display in the RecyclerView
     private void addFollowing(List<UserFollower> userFollowers, ParseException e) {
         binding.swipeContainerFollowing.setRefreshing(false);
         if (e != null) {
