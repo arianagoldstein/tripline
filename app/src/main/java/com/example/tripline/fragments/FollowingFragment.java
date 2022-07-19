@@ -87,6 +87,8 @@ public class FollowingFragment extends Fragment {
 
         if (!(userFollowers.isEmpty())) {
             binding.tvNewUserFollowing.setVisibility(View.GONE);
+        } else {
+            binding.tvNewUserFollowing.setVisibility(View.VISIBLE);
         }
 
         // at this point, we have gotten the user-follower list successfully

@@ -1,5 +1,7 @@
 package com.example.tripline.models;
 
+import androidx.annotation.Nullable;
+
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -10,8 +12,8 @@ public class City extends ParseObject {
     public static final String KEY_CITY_NAME = "cityName";
     public static final String KEY_IMAGE = "image";
 
-
-    public String getCityName() {
+    public @Nullable
+    String getCityName() {
         return getString(KEY_CITY_NAME);
     }
 

@@ -26,7 +26,7 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment implements SearchViewModel.OnCityChangedListener {
 
     public static final String TAG = "SearchFragment";
     private FragmentSearchBinding binding;
@@ -62,32 +62,18 @@ public class SearchFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         trips = searchViewModel.getAllTrips();
+        setUpSearchResultsAdapter();
+        setUpWeekendTripsAdapter();
+        setUpCityRecsAdapter();
+        setUpSearchListener();
+    }
 
-        // RecyclerView for overall search results
-        searchAdapter = new TripSearchAdapter(getContext(), trips);
-        binding.rvSearchResults.setAdapter(searchAdapter);
-        LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        binding.rvSearchResults.setLayoutManager(llm);
-
-        // RecyclerView for weekend getaway recommendations
-        weekendTrips = new ArrayList<>();
-        tripRecAdapter = new TripSearchRecAdapter(getContext(), weekendTrips);
-        binding.rvWeekendGetaways.setAdapter(tripRecAdapter);
-        LinearLayoutManager llm2 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        binding.rvWeekendGetaways.setLayoutManager(llm2);
-        queryWeekendTrips();
-
-        // RecyclerView for city recommendations
-        cityRecs = new ArrayList<>();
-        cityRecAdapter = new CitySearchRecAdapter(getContext(), cityRecs);
-        binding.rvCitiesToExplore.setAdapter(cityRecAdapter);
-        LinearLayoutManager llm3 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        binding.rvCitiesToExplore.setLayoutManager(llm3);
-        queryCityRecs();
-
+    private void setUpSearchListener() {
+        binding.svSearch.setSubmitButtonEnabled(true);
         binding.svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                hideRecommendations();
                 searchAdapter.getFilter().filter(query);
                 return false;
             }
@@ -103,6 +89,35 @@ public class SearchFragment extends Fragment {
                 return false;
             }
         });
+        searchViewModel.setOnCityChangedListener(this);
+    }
+
+    private void setUpCityRecsAdapter() {
+        // RecyclerView for city recommendations
+        cityRecs = new ArrayList<>();
+        cityRecAdapter = new CitySearchRecAdapter(getContext(), cityRecs);
+        binding.rvCitiesToExplore.setAdapter(cityRecAdapter);
+        LinearLayoutManager llm3 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        binding.rvCitiesToExplore.setLayoutManager(llm3);
+        queryCityRecs();
+    }
+
+    private void setUpWeekendTripsAdapter() {
+        // RecyclerView for weekend getaway recommendations
+        weekendTrips = new ArrayList<>();
+        tripRecAdapter = new TripSearchRecAdapter(getContext(), weekendTrips);
+        binding.rvWeekendGetaways.setAdapter(tripRecAdapter);
+        LinearLayoutManager llm2 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        binding.rvWeekendGetaways.setLayoutManager(llm2);
+        queryWeekendTrips();
+    }
+
+    private void setUpSearchResultsAdapter() {
+        // RecyclerView for overall search results
+        searchAdapter = new TripSearchAdapter(getContext(), trips);
+        binding.rvSearchResults.setAdapter(searchAdapter);
+        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        binding.rvSearchResults.setLayoutManager(llm);
     }
 
     private void showRecommendations() {
@@ -143,6 +158,7 @@ public class SearchFragment extends Fragment {
         }
         for (Trip trip : trips) {
             Log.i(TAG, "Trip: " + trip.getTitle());
+            Log.i(TAG, "Duration: " + trip.getDuration());
         }
         weekendTrips.clear();
         weekendTrips.addAll(trips);
@@ -167,4 +183,12 @@ public class SearchFragment extends Fragment {
         cityRecAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onCityChanged(@NonNull City city) {
+        if (searchViewModel.getCity() != null) {
+            Log.i(TAG, "Here");
+            hideRecommendations();
+            binding.svSearch.setQuery(searchViewModel.getCity().getCityName(), true);
+        }
+    }
 }
