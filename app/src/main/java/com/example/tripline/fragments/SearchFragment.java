@@ -1,6 +1,11 @@
 package com.example.tripline.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,26 +13,17 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.SearchView;
-import android.widget.Toast;
-
-import com.example.tripline.MainActivity;
+import com.example.tripline.adapters.CitySearchRecAdapter;
 import com.example.tripline.adapters.TripSearchAdapter;
 import com.example.tripline.adapters.TripSearchRecAdapter;
 import com.example.tripline.databinding.FragmentSearchBinding;
+import com.example.tripline.models.City;
 import com.example.tripline.models.Trip;
 import com.example.tripline.viewmodels.SearchViewModel;
-import com.example.tripline.viewmodels.TripViewModel;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class SearchFragment extends Fragment {
@@ -36,8 +32,10 @@ public class SearchFragment extends Fragment {
     private FragmentSearchBinding binding;
     protected TripSearchAdapter searchAdapter;
     protected TripSearchRecAdapter tripRecAdapter;
+    protected CitySearchRecAdapter cityRecAdapter;
     protected List<Trip> trips;
     protected List<Trip> weekendTrips;
+    protected List<City> cityRecs;
 
     private SearchViewModel searchViewModel;
 
@@ -79,6 +77,14 @@ public class SearchFragment extends Fragment {
         binding.rvWeekendGetaways.setLayoutManager(llm2);
         queryWeekendTrips();
 
+        // RecyclerView for city recommendations
+        cityRecs = new ArrayList<>();
+        cityRecAdapter = new CitySearchRecAdapter(getContext(), cityRecs);
+        binding.rvCitiesToExplore.setAdapter(cityRecAdapter);
+        LinearLayoutManager llm3 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        binding.rvCitiesToExplore.setLayoutManager(llm3);
+        queryCityRecs();
+
         binding.svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -88,11 +94,23 @@ public class SearchFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                hideRecommendations();
+                if (newText.isEmpty()) {
+                    showRecommendations();
+                } else {
+                    hideRecommendations();
+                }
                 searchAdapter.getFilter().filter(newText);
                 return false;
             }
         });
+    }
+
+    private void showRecommendations() {
+        binding.rvSearchResults.setVisibility(View.GONE);
+        binding.tvCitiesToExplore.setVisibility(View.VISIBLE);
+        binding.rvCitiesToExplore.setVisibility(View.VISIBLE);
+        binding.tvWeekendGetaways.setVisibility(View.VISIBLE);
+        binding.rvWeekendGetaways.setVisibility(View.VISIBLE);
     }
 
     // hides recommendations when the user starts to type
@@ -115,17 +133,38 @@ public class SearchFragment extends Fragment {
         query.setLimit(20);
 
         query.whereLessThanOrEqualTo(Trip.KEY_DURATION, 3);
-        query.findInBackground((trips, e) -> {
-            if (e != null) {
-                Log.e(TAG, "Error finding weekend trips", e);
-                return;
-            }
-            for (Trip trip : trips) {
-                Log.i(TAG, "Trip: " + trip.getTitle());
-            }
-            weekendTrips.clear();
-            weekendTrips.addAll(trips);
-            tripRecAdapter.notifyDataSetChanged();
-        });
+        query.findInBackground((objects, e) -> onWeekendTripsFound(e));
     }
+
+    private void onWeekendTripsFound(ParseException e) {
+        if (e != null) {
+            Log.e(TAG, "Error finding weekend trips", e);
+            return;
+        }
+        for (Trip trip : trips) {
+            Log.i(TAG, "Trip: " + trip.getTitle());
+        }
+        weekendTrips.clear();
+        weekendTrips.addAll(trips);
+        tripRecAdapter.notifyDataSetChanged();
+    }
+
+    private void queryCityRecs() {
+        ParseQuery<City> query = new ParseQuery<>(City.class);
+        query.include(City.KEY_CITY_NAME);
+        query.include(City.KEY_IMAGE);
+        query.setLimit(20);
+        query.findInBackground((cities, e) -> onCitiesFound(cities, e));
+    }
+
+    private void onCitiesFound(List<City> cities, ParseException e) {
+        if (e != null) {
+            Log.e(TAG, "Error finding cities", e);
+            return;
+        }
+        cityRecs.clear();
+        cityRecs.addAll(cities);
+        cityRecAdapter.notifyDataSetChanged();
+    }
+
 }
