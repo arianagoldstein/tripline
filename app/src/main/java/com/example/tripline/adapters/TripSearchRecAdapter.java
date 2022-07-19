@@ -1,6 +1,5 @@
 package com.example.tripline.adapters;
 
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,71 +14,70 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tripline.R;
-import com.example.tripline.databinding.ItemTripProfileBinding;
+import com.example.tripline.databinding.ItemTripSearchRecBinding;
 import com.example.tripline.models.Trip;
 import com.example.tripline.viewmodels.TripViewModel;
 
 import java.util.List;
 
-public class TripProfileAdapter extends RecyclerView.Adapter<TripProfileAdapter.ViewHolder> {
+public class TripSearchRecAdapter extends RecyclerView.Adapter<TripSearchRecAdapter.ViewHolder> {
 
-    public static final String TAG = "TripProfileAdapter";
+    public static final String TAG = "TripSearchRecAdapter";
     private Context context;
-    private List<Trip> trips;
+    private List<Trip> allTrips;
     private TripViewModel tripViewModel;
 
-    public TripProfileAdapter(Context context, List<Trip> trips) {
+    public TripSearchRecAdapter(Context context, List<Trip> trips) {
         this.context = context;
-        this.trips = trips;
+        this.allTrips = trips;
         tripViewModel = ViewModelProviders.of((FragmentActivity) context).get(TripViewModel.class);
     }
 
     @NonNull
     @Override
-    public TripProfileAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemTripProfileBinding binding = ItemTripProfileBinding.inflate(LayoutInflater.from(context));
+    public TripSearchRecAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        ItemTripSearchRecBinding binding = ItemTripSearchRecBinding.inflate(LayoutInflater.from(context));
         return new ViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TripProfileAdapter.ViewHolder holder, int position) {
-        Trip trip = trips.get(position);
+    public void onBindViewHolder(@NonNull TripSearchRecAdapter.ViewHolder holder, int position) {
+        Trip trip = allTrips.get(position);
         holder.bind(trip);
     }
 
     @Override
     public int getItemCount() {
-        return trips.size();
+        if (allTrips != null) {
+            return allTrips.size();
+        } else {
+            return 0;
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private ItemTripProfileBinding binding;
+        private ItemTripSearchRecBinding binding;
 
-        public ViewHolder(ItemTripProfileBinding binding) {
+        public ViewHolder(ItemTripSearchRecBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
             binding.getRoot().setOnClickListener(this);
         }
 
         public void bind(Trip trip) {
-            // populating the XML elements with the details of this trip
-            binding.tvTripTitleProfile.setText(trip.getTitle());
-            binding.tvLocationProfile.setText(trip.getFormattedLocation());
-            binding.tvStartDateProfile.setText(trip.getFormattedDate(trip.getStartDate()) + " - ");
-            binding.tvEndDateProfile.setText(trip.getFormattedDate(trip.getEndDate()));
-            Glide.with(context).load(trip.getCoverPhoto().getUrl()).into(binding.ivCoverPhotoProfile);
+            binding.tvTripTitleSearchRec.setText(trip.getTitle());
+            Glide.with(context).load(trip.getCoverPhoto().getUrl()).into(binding.ivTripCoverPhotoSearchRec);
         }
 
-        // getting the trip that the user clicked on and passing it to the details page to display it
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
-                Trip trip = trips.get(position);
+                Trip trip = allTrips.get(position);
                 tripViewModel.setSelectedTrip(trip);
                 NavController navController = Navigation.findNavController(itemView);
-                navController.navigate(R.id.action_navigation_profile_to_navigation_tripdetails);
+                navController.navigate(R.id.action_navigation_search_to_navigation_tripdetails);
             }
         }
     }

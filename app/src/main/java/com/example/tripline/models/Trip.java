@@ -22,6 +22,8 @@ public class Trip extends ParseObject {
     public static final String KEY_AUTHOR = "author";
     public static final String KEY_CREATED_AT = "createdAt";
     public static final String KEY_FORMATTED_LOCATION = "formattedLocation";
+    public static final String KEY_IS_SAVED = "isSaved";
+    public static final String KEY_DURATION = "duration";
 
     public Trip() {
 
@@ -89,6 +91,22 @@ public class Trip extends ParseObject {
 
     public void setFormattedLocation(String location) {
         put(KEY_FORMATTED_LOCATION, location);
+    }
+
+    public boolean getIsSaved() {
+        return getBoolean(KEY_IS_SAVED);
+    }
+
+    public void setIsSaved(boolean saved) {
+        put(KEY_IS_SAVED, saved);
+    }
+
+    public int getDuration() {
+        return getInt(KEY_DURATION);
+    }
+
+    public void setDuration(int duration) {
+        put(KEY_DURATION, duration);
     }
 
     // takes in a Date and returns a string in mm/dd/yy format

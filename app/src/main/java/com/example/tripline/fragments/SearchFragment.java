@@ -17,21 +17,27 @@ import android.widget.Toast;
 
 import com.example.tripline.MainActivity;
 import com.example.tripline.adapters.TripSearchAdapter;
+import com.example.tripline.adapters.TripSearchRecAdapter;
 import com.example.tripline.databinding.FragmentSearchBinding;
 import com.example.tripline.models.Trip;
 import com.example.tripline.viewmodels.SearchViewModel;
 import com.example.tripline.viewmodels.TripViewModel;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SearchFragment extends Fragment {
 
     public static final String TAG = "SearchFragment";
     private FragmentSearchBinding binding;
-    protected TripSearchAdapter adapter;
+    protected TripSearchAdapter searchAdapter;
+    protected TripSearchRecAdapter tripRecAdapter;
     protected List<Trip> trips;
+    protected List<Trip> weekendTrips;
 
     private SearchViewModel searchViewModel;
 
@@ -58,24 +64,68 @@ public class SearchFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         trips = searchViewModel.getAllTrips();
-        adapter = new TripSearchAdapter(getContext(), trips);
-        binding.rvSearchResults.setAdapter(adapter);
 
+        // RecyclerView for overall search results
+        searchAdapter = new TripSearchAdapter(getContext(), trips);
+        binding.rvSearchResults.setAdapter(searchAdapter);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         binding.rvSearchResults.setLayoutManager(llm);
+
+        // RecyclerView for weekend getaway recommendations
+        weekendTrips = new ArrayList<>();
+        tripRecAdapter = new TripSearchRecAdapter(getContext(), weekendTrips);
+        binding.rvWeekendGetaways.setAdapter(tripRecAdapter);
+        LinearLayoutManager llm2 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        binding.rvWeekendGetaways.setLayoutManager(llm2);
+        queryWeekendTrips();
 
         binding.svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                adapter.getFilter().filter(query);
+                searchAdapter.getFilter().filter(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
+                hideRecommendations();
+                searchAdapter.getFilter().filter(newText);
                 return false;
             }
+        });
+    }
+
+    // hides recommendations when the user starts to type
+    private void hideRecommendations() {
+        binding.rvSearchResults.setVisibility(View.VISIBLE);
+        binding.tvCitiesToExplore.setVisibility(View.GONE);
+        binding.rvCitiesToExplore.setVisibility(View.GONE);
+        binding.tvWeekendGetaways.setVisibility(View.GONE);
+        binding.rvWeekendGetaways.setVisibility(View.GONE);
+    }
+
+    // queries Parse database for trips <= 3 days long
+    private void queryWeekendTrips() {
+        ParseQuery<Trip> query = new ParseQuery<>(Trip.class);
+        query.include(Trip.KEY_TITLE);
+        query.include(Trip.KEY_AUTHOR);
+        query.include(Trip.KEY_START_DATE);
+        query.include(Trip.KEY_END_DATE);
+        query.include(Trip.KEY_DURATION);
+        query.setLimit(20);
+
+        query.whereLessThanOrEqualTo(Trip.KEY_DURATION, 3);
+        query.findInBackground((trips, e) -> {
+            if (e != null) {
+                Log.e(TAG, "Error finding weekend trips", e);
+                return;
+            }
+            for (Trip trip : trips) {
+                Log.i(TAG, "Trip: " + trip.getTitle());
+            }
+            weekendTrips.clear();
+            weekendTrips.addAll(trips);
+            tripRecAdapter.notifyDataSetChanged();
         });
     }
 }

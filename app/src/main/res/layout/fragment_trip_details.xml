@@ -66,7 +66,7 @@
     <TextView
         android:id="@+id/tvDescriptionDetails"
         android:layout_width="330dp"
-        android:layout_height="37dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -79,22 +79,11 @@
         android:id="@+id/divDetails"
         android:layout_width="361dp"
         android:layout_height="1dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="3dp"
         android:background="#00c7d1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAuthorDetails" />
-
-    <Button
-        android:id="@+id/btnAddEvent"
-        android:layout_width="40dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:text="+"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivCoverPhotoDetails" />
+        app:layout_constraintTop_toBottomOf="@+id/tvCreatedAtDetails" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvEvents"
@@ -112,11 +101,38 @@
         app:layout_constraintTop_toBottomOf="@+id/tvDescriptionDetails"
         tools:text="Ariana Goldstein" />
 
-    <!--    <include-->
-<!--        android:id="@+id/eventItem"-->
-<!--        layout="@layout/item_event"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        app:layout_constraintTop_toTopOf="@id/divDetails" />-->
+    <TextView
+        android:id="@+id/tvCreatedAtDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:textColor="@color/gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAuthorDetails"
+        tools:text="1 hr ago" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:layout_marginEnd="24dp"
+        android:contentDescription="@string/add_event"
+        android:src="@drawable/add_event_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <View
+        android:id="@+id/circle"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="@drawable/circle"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/fabAddEvent"
+        app:layout_constraintEnd_toEndOf="@+id/fabAddEvent"
+        app:layout_constraintStart_toStartOf="@+id/fabAddEvent"
+        app:layout_constraintTop_toTopOf="@+id/fabAddEvent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -70,7 +70,7 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.View
         // displaying information about this following
         public void bind(User followingU) {
             binding.tvFollowingName.setText(followingU.getFirstName() + " " + followingU.getLastName());
-            Glide.with(context).load(followingU.getProfilePic().getUrl()).into(binding.ivProfilePicFollowing);
+            Glide.with(context).load(followingU.getProfilePic().getUrl()).circleCrop().into(binding.ivProfilePicFollowing);
 
             // if this is someone else's profile, we shouldn't be able to unfollow
             if (!(sharedViewModel.isCurrentUser())) {

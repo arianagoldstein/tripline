@@ -12,5 +12,6 @@
     <color name="turquoise">#00C7D1</color>
     <color name="dark_blue">#19467E</color>
     <color name="gray">#b6bbbf</color>
+    <color name="icon_color">#FF000000</color>
 
 </resources>
