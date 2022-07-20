@@ -10,12 +10,12 @@
 
     <SearchView
         android:id="@+id/svSearch"
-        android:layout_width="400dp"
+        android:layout_width="350dp"
         android:layout_height="30dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="28dp"
         android:queryHint="search..."
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.454"
+        app:layout_constraintHorizontal_bias="0.039"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -71,4 +71,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvWeekendGetaways" />
+
+    <ImageButton
+        android:id="@+id/ibFilter"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/filter_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/svSearch"
+        app:layout_constraintTop_toTopOf="@+id/svSearch" />
 </androidx.constraintlayout.widget.ConstraintLayout>

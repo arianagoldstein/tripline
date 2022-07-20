@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.tripline.R;
 import com.example.tripline.adapters.CitySearchRecAdapter;
 import com.example.tripline.adapters.TripSearchAdapter;
 import com.example.tripline.adapters.TripSearchRecAdapter;
@@ -20,10 +22,15 @@ import com.example.tripline.databinding.FragmentSearchBinding;
 import com.example.tripline.models.City;
 import com.example.tripline.models.Trip;
 import com.example.tripline.viewmodels.SearchViewModel;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.slider.RangeSlider;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SearchFragment extends Fragment implements SearchViewModel.OnCityChangedListener {
@@ -68,7 +75,37 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
         setUpSearchListener();
     }
 
+    private void showFilterDialog() {
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.fragment_filter, null);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext(), R.style.AlertDialogTheme);
+        builder.setView(view);
+        builder.setTitle("Search for trips")
+                .setNegativeButton("CLEAR", (dialog, which) -> {
+
+                }).setPositiveButton("SHOW RESULTS", (dialog, which) -> {
+                    getUserInputFromDialog(view);
+                }).show();
+    }
+
+    private void getUserInputFromDialog(View view) {
+        String zipcode = ((EditText) view.findViewById(R.id.etZipCode)).getText().toString();
+
+        ChipGroup filterChipGroup = ((ChipGroup) view.findViewById(R.id.chipGroupContaining));
+        List<Integer> ids = filterChipGroup.getCheckedChipIds();
+        List<String> containing = new ArrayList<>();
+        for (Integer id : ids) {
+            Chip chip = filterChipGroup.findViewById(id);
+            containing.add(chip.getText().toString());
+        }
+
+        RangeSlider lengthRangeSlider = ((RangeSlider) view.findViewById(R.id.rangeSliderLength));
+        int lowerBound = (int) lengthRangeSlider.getValueFrom();
+        int upperBound = (int) lengthRangeSlider.getValueTo();
+    }
+
     private void setUpSearchListener() {
+        binding.ibFilter.setOnClickListener(v -> showFilterDialog());
         binding.svSearch.setSubmitButtonEnabled(true);
         binding.svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -160,6 +197,7 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
             Log.i(TAG, "Trip: " + trip.getTitle());
             Log.i(TAG, "Duration: " + trip.getDuration());
         }
+        Collections.shuffle(trips);
         weekendTrips.clear();
         weekendTrips.addAll(trips);
         tripRecAdapter.notifyDataSetChanged();
@@ -178,6 +216,7 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
             Log.e(TAG, "Error finding cities", e);
             return;
         }
+        Collections.shuffle(cities);
         cityRecs.clear();
         cityRecs.addAll(cities);
         cityRecAdapter.notifyDataSetChanged();
