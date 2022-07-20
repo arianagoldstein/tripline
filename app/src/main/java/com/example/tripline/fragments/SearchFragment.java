@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.codepath.asynchttpclient.AsyncHttpClient;
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.tripline.R;
 import com.example.tripline.adapters.CitySearchRecAdapter;
 import com.example.tripline.adapters.TripSearchAdapter;
@@ -26,14 +28,21 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.slider.RangeSlider;
+import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class SearchFragment extends Fragment implements SearchViewModel.OnCityChangedListener {
+import okhttp3.Headers;
+
+public class SearchFragment extends Fragment implements SearchViewModel.OnCityChangedListener, SearchViewModel.OnAllTripsChangedListener {
 
     public static final String TAG = "SearchFragment";
     private FragmentSearchBinding binding;
@@ -45,6 +54,9 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
     protected List<City> cityRecs;
 
     private SearchViewModel searchViewModel;
+
+    // for zip code search
+    ParseGeoPoint latLongPair = new ParseGeoPoint(0.0, 0.0);
 
     public SearchFragment() {
         // Required empty public constructor
@@ -102,6 +114,77 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
         RangeSlider lengthRangeSlider = ((RangeSlider) view.findViewById(R.id.rangeSliderLength));
         int lowerBound = (int) lengthRangeSlider.getValueFrom();
         int upperBound = (int) lengthRangeSlider.getValueTo();
+
+        filterResults(zipcode, containing, lowerBound, upperBound);
+    }
+
+    private void filterResults(String zipcode, List<String> containing, int lowerBound, int upperBound) {
+        getLatLngFromZip(zipcode, lowerBound, upperBound);
+        String displayString = "Displaying trips near " + zipcode;
+        if (!containing.isEmpty()) {
+            displayString += " containing ";
+            for (int i = 0; i < containing.size(); i++) {
+                if ((i == containing.size()-1) && containing.size() > 1) {
+                    displayString += " or ";
+                }
+                displayString += containing.get(i);
+                if ((i != containing.size() - 1) && containing.size() > 2) {
+                    displayString += ", ";
+                }
+            }
+        }
+        binding.tvDisplayingResults.setVisibility(View.VISIBLE);
+        binding.tvDisplayingResults.setText(displayString);
+    }
+
+    private void getLatLngFromZip(String zipcode, int lowerBound, int upperBound) {
+        String api_key = getString(R.string.zipcode_api_key);
+        String url = "https://www.zipcodeapi.com/rest/"+ api_key + "/info.json/" + zipcode + "/degrees";
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(url, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.i(TAG, "Successfully got zip code information");
+                JSONObject object = json.jsonObject;
+                try {
+                    latLongPair = new ParseGeoPoint(object.getDouble("lat"), object.getDouble("lng"));
+                    queryFilteredTrips(lowerBound, upperBound);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                latLongPair = null;
+                Log.e(TAG, "Error getting zip code information");
+            }
+        });
+    }
+
+    private void queryFilteredTrips(int lowerBound, int upperBound) {
+        ParseQuery<Trip> query = ParseQuery.getQuery(Trip.class);
+        query.whereWithinMiles(Trip.KEY_LOCATION, latLongPair, 100.0);
+        query.include(Trip.KEY_TITLE);
+        query.include(Trip.KEY_DURATION);
+        query.include(Trip.KEY_CITY);
+        query.whereLessThanOrEqualTo(Trip.KEY_DURATION, upperBound);
+        query.whereGreaterThanOrEqualTo(Trip.KEY_DURATION, lowerBound);
+
+        query.findInBackground(new FindCallback<Trip>() {
+            @Override
+            public void done(List<Trip> trips, ParseException e) {
+                if ( e != null) {
+                    Log.e(TAG, "Error querying filtered trips", e);
+                    return;
+                }
+                Log.i(TAG, "successfully got trips");
+                for (Trip trip : trips) {
+                    Log.i(TAG, "Trip title: " + trip.getTitle() + ", duration: " + trip.getDuration() + ", city: " + trip.getCity().getCityName());
+                }
+                searchViewModel.setAllTrips(trips);
+            }
+        });
     }
 
     private void setUpSearchListener() {
@@ -127,6 +210,7 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
             }
         });
         searchViewModel.setOnCityChangedListener(this);
+        searchViewModel.setOnAllTripsChangedListener(this);
     }
 
     private void setUpCityRecsAdapter() {
@@ -225,9 +309,17 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
     @Override
     public void onCityChanged(@NonNull City city) {
         if (searchViewModel.getCity() != null) {
-            Log.i(TAG, "Here");
             hideRecommendations();
             binding.svSearch.setQuery(searchViewModel.getCity().getCityName(), true);
+        }
+    }
+
+    @Override
+    public void onAllTripsChanged(@NonNull List<Trip> allTrips) {
+        Log.i(TAG, "onAllTripsChanged");
+        if (searchViewModel.getAllTrips() != null) {
+            hideRecommendations();
+            searchAdapter.notifyDataSetChanged();
         }
     }
 }

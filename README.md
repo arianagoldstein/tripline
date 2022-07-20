@@ -3,9 +3,10 @@ Ariana Goldstein
 
 ## Table of Contents
 1. [Overview](#Overview)
-1. [Product Spec](#Product-Spec)
-1. [Wireframes](#Wireframes)
-2. [Schema](#Schema)
+2. [Product Spec](#Product-Spec)
+3. [Wireframes](#Wireframes)
+4. [Schema](#Schema)
+5. [Resources](#Resources)
 
 ## Overview
 ### Description
@@ -144,3 +145,10 @@ For a first-time user
     - (Read/GET) query Events associated with the Trip being displayed
 - Search
     - (Read/GET) query Trips that match the search term
+
+
+### Resources
+- [Google Maps API](https://developers.google.com/maps) for displaying interactive map of user's pins
+- [Google Places API](https://developers.google.com/maps/documentation/places/web-service/overview) for location search autocomplete and reverse geocoding
+- [Google Maps Static API](https://developers.google.com/maps/documentation/maps-static/overview) for displaying map of user pins on profile
+- [Zipcode API](https://www.zipcodeapi.com/API#zipToLoc) for converting user-inputted zip code to a latitude-longitude pair

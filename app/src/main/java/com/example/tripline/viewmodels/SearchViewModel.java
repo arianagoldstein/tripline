@@ -16,10 +16,15 @@ public class SearchViewModel extends ViewModel {
 
     private final List<Trip> allTrips = new ArrayList<>();
     private @Nullable City city;
-    private @Nullable OnCityChangedListener listener;
+    private @Nullable OnCityChangedListener cityListener;
+    private @Nullable OnAllTripsChangedListener tripsListener;
 
     public void setOnCityChangedListener(@Nullable OnCityChangedListener listener) {
-        this.listener = listener;
+        this.cityListener = listener;
+    }
+
+    public void setOnAllTripsChangedListener(@Nullable OnAllTripsChangedListener listener) {
+        this.tripsListener = listener;
     }
 
     public List<Trip> getAllTrips() {
@@ -29,6 +34,9 @@ public class SearchViewModel extends ViewModel {
     public void setAllTrips(List<Trip> allTrips) {
         this.allTrips.clear();
         this.allTrips.addAll(allTrips);
+        if (tripsListener != null) {
+            tripsListener.onAllTripsChanged(allTrips);
+        }
     }
 
     public City getCity() {
@@ -37,12 +45,16 @@ public class SearchViewModel extends ViewModel {
 
     public void setCity(@NonNull City city) {
         this.city = city;
-        if (listener != null) {
-            listener.onCityChanged(city);
+        if (cityListener != null) {
+            cityListener.onCityChanged(city);
         }
     }
 
     public interface OnCityChangedListener {
         void onCityChanged(@NonNull City city);
+    }
+
+    public interface OnAllTripsChangedListener {
+        void onAllTripsChanged(@NonNull List<Trip> allTrips);
     }
 }

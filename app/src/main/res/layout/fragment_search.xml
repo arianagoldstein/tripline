@@ -37,11 +37,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="10dp"
         android:text="Cities To Explore"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/svSearch" />
+        app:layout_constraintTop_toBottomOf="@+id/tvDisplayingResults" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCitiesToExplore"
@@ -80,4 +80,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/svSearch"
         app:layout_constraintTop_toTopOf="@+id/svSearch" />
+
+    <TextView
+        android:id="@+id/tvDisplayingResults"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:textAlignment="center"
+        android:textStyle="italic"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/svSearch"
+        tools:text="Displaying trips near 60035 containing hotels between 4 and 14 days long" />
 </androidx.constraintlayout.widget.ConstraintLayout>
