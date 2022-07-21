@@ -28,7 +28,6 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.slider.RangeSlider;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
@@ -49,7 +48,8 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
     protected TripSearchAdapter searchAdapter;
     protected TripSearchRecAdapter tripRecAdapter;
     protected CitySearchRecAdapter cityRecAdapter;
-    protected List<Trip> trips;
+
+    // TODO: look into putting this in ViewModel
     protected List<Trip> weekendTrips;
     protected List<City> cityRecs;
 
@@ -79,8 +79,6 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        trips = searchViewModel.getAllTrips();
         setUpSearchResultsAdapter();
         setUpWeekendTripsAdapter();
         setUpCityRecsAdapter();
@@ -168,23 +166,19 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
         query.include(Trip.KEY_TITLE);
         query.include(Trip.KEY_DURATION);
         query.include(Trip.KEY_CITY);
+        query.include(Trip.KEY_AUTHOR);
         query.whereLessThanOrEqualTo(Trip.KEY_DURATION, upperBound);
         query.whereGreaterThanOrEqualTo(Trip.KEY_DURATION, lowerBound);
+        query.findInBackground((trips, e) -> onFilteredTripsFound(trips, e));
+    }
 
-        query.findInBackground(new FindCallback<Trip>() {
-            @Override
-            public void done(List<Trip> trips, ParseException e) {
-                if ( e != null) {
-                    Log.e(TAG, "Error querying filtered trips", e);
-                    return;
-                }
-                Log.i(TAG, "successfully got trips");
-                for (Trip trip : trips) {
-                    Log.i(TAG, "Trip title: " + trip.getTitle() + ", duration: " + trip.getDuration() + ", city: " + trip.getCity().getCityName());
-                }
-                searchViewModel.setAllTrips(trips);
-            }
-        });
+    private void onFilteredTripsFound(List<Trip> trips, ParseException e) {
+        if ( e != null) {
+            Log.e(TAG, "Error querying filtered trips", e);
+            return;
+        }
+        Log.i(TAG, "successfully got trips");
+        searchViewModel.setAllTrips(trips);
     }
 
     private void setUpSearchListener() {
@@ -235,7 +229,7 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
 
     private void setUpSearchResultsAdapter() {
         // RecyclerView for overall search results
-        searchAdapter = new TripSearchAdapter(getContext(), trips);
+        searchAdapter = new TripSearchAdapter(getContext(), searchViewModel.getAllTrips());
         binding.rvSearchResults.setAdapter(searchAdapter);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         binding.rvSearchResults.setLayoutManager(llm);
@@ -269,21 +263,21 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
         query.setLimit(20);
 
         query.whereLessThanOrEqualTo(Trip.KEY_DURATION, 3);
-        query.findInBackground((objects, e) -> onWeekendTripsFound(e));
+        query.findInBackground((objects, e) -> onWeekendTripsFound(objects, e));
     }
 
-    private void onWeekendTripsFound(ParseException e) {
+    private void onWeekendTripsFound(List<Trip> objects, ParseException e) {
         if (e != null) {
             Log.e(TAG, "Error finding weekend trips", e);
             return;
         }
-        for (Trip trip : trips) {
+        for (Trip trip : objects) {
             Log.i(TAG, "Trip: " + trip.getTitle());
             Log.i(TAG, "Duration: " + trip.getDuration());
         }
-        Collections.shuffle(trips);
+        Collections.shuffle(objects);
         weekendTrips.clear();
-        weekendTrips.addAll(trips);
+        weekendTrips.addAll(objects);
         tripRecAdapter.notifyDataSetChanged();
     }
 
@@ -315,11 +309,11 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
     }
 
     @Override
-    public void onAllTripsChanged(@NonNull List<Trip> allTrips) {
+    public void onAllTripsChanged(@NonNull List<Trip> newTrips) {
         Log.i(TAG, "onAllTripsChanged");
         if (searchViewModel.getAllTrips() != null) {
             hideRecommendations();
-            searchAdapter.notifyDataSetChanged();
+            searchAdapter.setFilteredTrips(newTrips);
         }
     }
 }
