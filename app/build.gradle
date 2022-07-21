@@ -63,4 +63,10 @@ dependencies {
 
     // dependencies for ViewModel
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+
+    // dependencies for Material Dialogs
+    implementation 'com.afollestad.material-dialogs:input:3.3.0'
+
+    // dependencies for AsyncHttpClient
+    implementation 'com.codepath.libraries:asynchttpclient:2.2.0'
 }

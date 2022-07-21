@@ -21,6 +21,7 @@ import androidx.navigation.Navigation;
 import com.example.tripline.MainActivity;
 import com.example.tripline.R;
 import com.example.tripline.databinding.FragmentAddtripBinding;
+import com.example.tripline.models.City;
 import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
 import com.google.android.gms.common.api.Status;
@@ -58,6 +59,7 @@ public class AddTripFragment extends BasePhotoFragment {
     private double latitude;
     private double longitude;
     private String formattedLocation;
+    private String cityName;
 
     private final static int AUTOCOMPLETE_REQUEST_CODE = 1;
 
@@ -127,11 +129,14 @@ public class AddTripFragment extends BasePhotoFragment {
             return;
         }
         int duration = (int) ChronoUnit.DAYS.between(startDate.toInstant(), endDate.toInstant());
+        City city = new City();
+        city.setCityName(cityName);
+        city.setImage(coverPhoto);
 
         binding.pbLoadingTrip.setVisibility(View.VISIBLE);
         binding.vAddTripCover.setVisibility(View.VISIBLE);
 
-        postTrip(title, location, description, startDate, endDate, coverPhoto, formattedLocation, duration, (User) ParseUser.getCurrentUser());
+        postTrip(title, location, description, startDate, endDate, coverPhoto, formattedLocation, city, duration, (User) ParseUser.getCurrentUser());
     }
 
     private void onLocationAdd() {
@@ -160,7 +165,7 @@ public class AddTripFragment extends BasePhotoFragment {
         binding.tvEndDateDisplay.setText(simpleFormat.format(endDate));
     }
 
-    private void postTrip(String title, ParseGeoPoint location, String description, Date startDate, Date endDate, ParseFile coverPhoto, String formattedLocation, int duration, User currentUser) {
+    private void postTrip(String title, ParseGeoPoint location, String description, Date startDate, Date endDate, ParseFile coverPhoto, String formattedLocation, City city, int duration, User currentUser) {
         // constructing the new trip to post to Parse
         Trip trip = new Trip();
         trip.setTitle(title);
@@ -170,6 +175,7 @@ public class AddTripFragment extends BasePhotoFragment {
         trip.setEndDate(endDate);
         trip.setCoverPhoto(coverPhoto);
         trip.setFormattedLocation(formattedLocation);
+        trip.setCity(city);
         trip.setDuration(duration);
         trip.setAuthor(currentUser);
 
@@ -234,7 +240,11 @@ public class AddTripFragment extends BasePhotoFragment {
                     List<AddressComponent> compList = comp.asList();
                     formattedLocation = "";
                     for (AddressComponent component : compList) {
-                        if (component.getTypes().contains("locality") || component.getTypes().contains("administrative_area_level_1")) {
+                        if (component.getTypes().contains("locality")) {
+                            formattedLocation += component.getName() + ", ";
+                            cityName = component.getName();
+                        }
+                        if (component.getTypes().contains("administrative_area_level_1")) {
                             formattedLocation += component.getName() + ", ";
                         }
                         if (component.getTypes().contains("country")) {

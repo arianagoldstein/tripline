@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tripline.R;
-import com.example.tripline.viewmodels.TripViewModel;
 import com.example.tripline.databinding.ItemTripProfileBinding;
 import com.example.tripline.models.Trip;
+import com.example.tripline.viewmodels.TripViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,14 +27,21 @@ public class TripSearchAdapter extends RecyclerView.Adapter<TripSearchAdapter.Vi
 
     public static final String TAG = "TripSearchAdapter";
     private Context context;
-    private List<Trip> allTrips;
-    private List<Trip> filteredTrips;
+    private @NonNull List<Trip> tripsToSearchFrom;
+    private @NonNull List<Trip> filteredTrips;
     private TripViewModel tripViewModel;
 
-    public TripSearchAdapter(Context context, List<Trip> trips) {
+    public TripSearchAdapter(Context context, @NonNull List<Trip> trips) {
         this.context = context;
-        this.allTrips = trips;
+        this.tripsToSearchFrom = trips;
+        this.filteredTrips = new ArrayList<>();
         tripViewModel = ViewModelProviders.of((FragmentActivity) context).get(TripViewModel.class);
+    }
+
+    public void setFilteredTrips(@NonNull List<Trip> filteredTrips) {
+        this.filteredTrips.clear();
+        this.filteredTrips.addAll(filteredTrips);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -68,10 +75,10 @@ public class TripSearchAdapter extends RecyclerView.Adapter<TripSearchAdapter.Vi
             protected FilterResults performFiltering(CharSequence constraint) {
                 String queryString = constraint.toString();
                 if (queryString.isEmpty()) {
-                    filteredTrips = allTrips;
+                    filteredTrips = tripsToSearchFrom;
                 } else {
                     List<Trip> filteredList = new ArrayList<>();
-                    for (Trip trip : allTrips) {
+                    for (Trip trip : tripsToSearchFrom) {
                         if (trip.getTitle().toLowerCase().contains(queryString.toLowerCase()) || trip.getFormattedLocation().toLowerCase().contains(queryString.toLowerCase())) {
                             filteredList.add(trip);
                         }
