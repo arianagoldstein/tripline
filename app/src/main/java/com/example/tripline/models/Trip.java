@@ -4,6 +4,7 @@ import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -28,6 +29,7 @@ public class Trip extends ParseObject {
     public static final String KEY_DURATION = "duration";
     public static final String KEY_CITY = "city";
     public static final String KEY_EVENT_ATTRIBUTES = "eventAttributes";
+    public static final String KEY_SAVED_BY = "savedBy";
 
     public Trip() {
 
@@ -119,6 +121,46 @@ public class Trip extends ParseObject {
 
     public void setCity(City city) {
         put(KEY_CITY, city);
+    }
+
+    public List<User> getSavedBy() {
+        List<User> savedBy = getList(KEY_SAVED_BY);
+        if (savedBy == null) {
+            return new ArrayList<>();
+        }
+        return savedBy;
+    }
+
+    public void setSavedBy(List<User> savedBy) {
+        put(KEY_SAVED_BY, savedBy);
+    }
+
+    public boolean isSavedByCurrentUser() {
+        List<User> savedBy = getSavedBy();
+        for (int i = 0; i < savedBy.size(); i++) {
+            if (savedBy.get(i).hasSameId(ParseUser.getCurrentUser())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void saveTrip() {
+        List<User> savedBy = getSavedBy();
+        savedBy.add((User) ParseUser.getCurrentUser());
+        setSavedBy(savedBy);
+        saveInBackground();
+    }
+
+    public void unsaveTrip() {
+        List<User> savedBy = getSavedBy();
+        for (int i = 0; i < savedBy.size(); i++) {
+            if (savedBy.get(i).hasSameId(ParseUser.getCurrentUser())) {
+                savedBy.remove(i);
+            }
+        }
+        setSavedBy(savedBy);
+        saveInBackground();
     }
 
     public List<String> getEventAttributes() {
