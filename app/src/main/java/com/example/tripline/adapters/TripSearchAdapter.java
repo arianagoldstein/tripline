@@ -26,10 +26,10 @@ import java.util.List;
 public class TripSearchAdapter extends RecyclerView.Adapter<TripSearchAdapter.ViewHolder> implements Filterable {
 
     public static final String TAG = "TripSearchAdapter";
-    private Context context;
-    private @NonNull List<Trip> tripsToSearchFrom;
+    private final Context context;
+    private @NonNull final List<Trip> tripsToSearchFrom;
     private @NonNull List<Trip> filteredTrips;
-    private TripViewModel tripViewModel;
+    private final TripViewModel tripViewModel;
 
     public TripSearchAdapter(Context context, @NonNull List<Trip> trips) {
         this.context = context;

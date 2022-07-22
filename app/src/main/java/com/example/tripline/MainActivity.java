@@ -21,8 +21,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -89,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "Issue getting trips", e);
                 Toast.makeText(MainActivity.this, "Issue getting trips.", Toast.LENGTH_SHORT).show();
             }
-            searchViewModel.setAllTrips(trips);
+            searchViewModel.setFullTripList(trips);
         });
     }
 }

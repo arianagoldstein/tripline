@@ -41,7 +41,7 @@ import java.util.List;
 
 import okhttp3.Headers;
 
-public class SearchFragment extends Fragment implements SearchViewModel.OnCityChangedListener, SearchViewModel.OnAllTripsChangedListener {
+public class SearchFragment extends Fragment implements SearchViewModel.OnCityChangedListener, SearchViewModel.OnFilteredTripsChangedListener {
 
     public static final String TAG = "SearchFragment";
     private FragmentSearchBinding binding;
@@ -69,11 +69,10 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentSearchBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-        return root;
+        return binding.getRoot();
     }
 
     @Override
@@ -189,7 +188,7 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
             return;
         }
         Log.i(TAG, "successfully got trips");
-        searchViewModel.setAllTrips(trips);
+        searchViewModel.setFilteredTripsViewModel(trips);
     }
 
     private void setUpSearchListener() {
@@ -240,7 +239,7 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
 
     private void setUpSearchResultsAdapter() {
         // RecyclerView for overall search results
-        searchAdapter = new TripSearchAdapter(getContext(), searchViewModel.getAllTrips());
+        searchAdapter = new TripSearchAdapter(getContext(), searchViewModel.getFullTripList());
         binding.rvSearchResults.setAdapter(searchAdapter);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         binding.rvSearchResults.setLayoutManager(llm);
@@ -248,6 +247,7 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
 
     private void showRecommendations() {
         binding.rvSearchResults.setVisibility(View.GONE);
+        binding.tvDisplayingResults.setVisibility(View.GONE);
         binding.tvCitiesToExplore.setVisibility(View.VISIBLE);
         binding.rvCitiesToExplore.setVisibility(View.VISIBLE);
         binding.tvWeekendGetaways.setVisibility(View.VISIBLE);
@@ -320,9 +320,9 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
     }
 
     @Override
-    public void onAllTripsChanged(@NonNull List<Trip> newTrips) {
-        Log.i(TAG, "onAllTripsChanged");
-        if (searchViewModel.getAllTrips() != null) {
+    public void onFilteredTripsChanged(@NonNull List<Trip> newTrips) {
+        Log.i(TAG, "onFilteredTripsChanged");
+        if (searchViewModel.getFilteredTripsViewModel() != null) {
             hideRecommendations();
             searchAdapter.setFilteredTrips(newTrips);
         }

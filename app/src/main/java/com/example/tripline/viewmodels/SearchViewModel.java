@@ -14,29 +14,39 @@ public class SearchViewModel extends ViewModel {
 
     public static final String TAG = "SearchViewModel";
 
-    private final List<Trip> allTrips = new ArrayList<>();
+    private final List<Trip> fullTripList = new ArrayList<>();
+    private final List<Trip> filteredTripsViewModel = new ArrayList<>();
     private @Nullable City city;
     private @Nullable OnCityChangedListener cityListener;
-    private @Nullable OnAllTripsChangedListener tripsListener;
+    private @Nullable OnFilteredTripsChangedListener tripsListener;
 
     public void setOnCityChangedListener(@Nullable OnCityChangedListener listener) {
         this.cityListener = listener;
     }
 
-    public void setOnAllTripsChangedListener(@Nullable OnAllTripsChangedListener listener) {
+    public void setOnAllTripsChangedListener(@Nullable OnFilteredTripsChangedListener listener) {
         this.tripsListener = listener;
     }
 
-    public List<Trip> getAllTrips() {
-        return allTrips;
+    public List<Trip> getFilteredTripsViewModel() {
+        return filteredTripsViewModel;
     }
 
-    public void setAllTrips(List<Trip> allTrips) {
-        this.allTrips.clear();
-        this.allTrips.addAll(allTrips);
+    public void setFilteredTripsViewModel(List<Trip> filteredTripsViewModel) {
+        this.filteredTripsViewModel.clear();
+        this.filteredTripsViewModel.addAll(filteredTripsViewModel);
         if (tripsListener != null) {
-            tripsListener.onAllTripsChanged(allTrips);
+            tripsListener.onFilteredTripsChanged(filteredTripsViewModel);
         }
+    }
+
+    public List<Trip> getFullTripList() {
+        return fullTripList;
+    }
+
+    public void setFullTripList(List<Trip> fullTripList) {
+        this.fullTripList.clear();
+        this.fullTripList.addAll(fullTripList);
     }
 
     public City getCity() {
@@ -54,7 +64,7 @@ public class SearchViewModel extends ViewModel {
         void onCityChanged(@NonNull City city);
     }
 
-    public interface OnAllTripsChangedListener {
-        void onAllTripsChanged(@NonNull List<Trip> allTrips);
+    public interface OnFilteredTripsChangedListener {
+        void onFilteredTripsChanged(@NonNull List<Trip> allTrips);
     }
 }
