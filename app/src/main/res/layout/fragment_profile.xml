@@ -29,17 +29,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Name" />
 
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="80dp"
-        android:layout_height="35dp"
-        android:text="@string/log_out"
-        android:textSize="10sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.988"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/tvTrips"
         android:layout_width="0dp"

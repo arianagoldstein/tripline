@@ -118,10 +118,9 @@ public class ProfileFragment extends Fragment {
         binding = null;
     }
 
-    // if this is someone else's profile, we shouldn't be able to log out but we should be able to follow
+    // if this is someone else's profile, we should be able to follow
     private void displayButtons() {
         if (!isCurrentUser) {
-            binding.btnLogout.setVisibility(View.GONE);
             binding.btnFollowContainer.setVisibility(View.VISIBLE);
 
             // check if we are already following this user
@@ -138,8 +137,6 @@ public class ProfileFragment extends Fragment {
                 });
             }
         } else {
-            binding.btnLogout.setVisibility(View.VISIBLE);
-            binding.btnLogout.setOnClickListener(v -> onLogoutBtnClicked());
             binding.btnFollowContainer.setVisibility(View.GONE);
         }
     }
@@ -196,14 +193,6 @@ public class ProfileFragment extends Fragment {
     private void onMapImgClicked(View view) {
         NavController navController = Navigation.findNavController(view);
         navController.navigate(R.id.action_navigation_profile_to_navigation_map);
-    }
-
-    private void onLogoutBtnClicked() {
-        Log.i(TAG, "onClick logout button");
-        ParseUser.logOut();
-        Intent i = new Intent(getContext(), LoginActivity.class);
-        startActivity(i);
-        getActivity().finish();
     }
 
     private void onFollowerCountClicked(View view) {
