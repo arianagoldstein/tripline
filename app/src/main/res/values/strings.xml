@@ -36,9 +36,11 @@
     <string name="unfollow">UNFOLLOW</string>
     <string name="unfollowed">UNFOLLOWED</string>
     <string name="search">Search</string>
+    <string name="event_type">event type</string>
+    <string name="no_results_found">No results found:(</string>
 
-    <string-array name="activityTypes">
-        <item>select an activity type</item>
+    <string-array name="eventTypes">
+        <item>select an event type</item>
         <item>restaurant</item>
         <item>hotel</item>
         <item>activity</item>

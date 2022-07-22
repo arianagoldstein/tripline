@@ -7,7 +7,9 @@ import com.parse.ParseObject;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 // a Trip object represents a trip created by a user that will be displayed on their profile and in the stream
 @ParseClassName("Trip")
@@ -25,6 +27,7 @@ public class Trip extends ParseObject {
     public static final String KEY_IS_SAVED = "isSaved";
     public static final String KEY_DURATION = "duration";
     public static final String KEY_CITY = "city";
+    public static final String KEY_EVENT_ATTRIBUTES = "eventAttributes";
 
     public Trip() {
 
@@ -116,6 +119,26 @@ public class Trip extends ParseObject {
 
     public void setCity(City city) {
         put(KEY_CITY, city);
+    }
+
+    public List<String> getEventAttributes() {
+        List<String> eventAttributeList = getList(KEY_EVENT_ATTRIBUTES);
+        if (eventAttributeList == null) {
+            return new ArrayList<>();
+        }
+        return eventAttributeList;
+    }
+
+    public void setEventAttributes(List<String> eventAttributes) {
+        put(KEY_EVENT_ATTRIBUTES, eventAttributes);
+    }
+
+    public void updateEventAttributes(String eventType) {
+        List<String> currentEventAttributes = getEventAttributes();
+        if (!(currentEventAttributes.contains(eventType))) {
+            currentEventAttributes.add(eventType);
+        }
+        put(KEY_EVENT_ATTRIBUTES, currentEventAttributes);
     }
 
     // takes in a Date and returns a string in mm/dd/yy format

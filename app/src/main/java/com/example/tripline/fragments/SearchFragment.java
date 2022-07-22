@@ -103,39 +103,44 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
 
         ChipGroup filterChipGroup = ((ChipGroup) view.findViewById(R.id.chipGroupContaining));
         List<Integer> ids = filterChipGroup.getCheckedChipIds();
-        List<String> containing = new ArrayList<>();
+        List<String> eventAttributeList = new ArrayList<>();
         for (Integer id : ids) {
             Chip chip = filterChipGroup.findViewById(id);
-            containing.add(chip.getText().toString());
+            eventAttributeList.add(chip.getText().toString());
         }
 
         RangeSlider lengthRangeSlider = ((RangeSlider) view.findViewById(R.id.rangeSliderLength));
-        int lowerBound = (int) lengthRangeSlider.getValueFrom();
-        int upperBound = (int) lengthRangeSlider.getValueTo();
+        List<Float> bounds = lengthRangeSlider.getValues();
+        int lowerBound = (int) (float)bounds.get(0);
+        int upperBound = (int) (float)bounds.get(1);
 
-        filterResults(zipcode, containing, lowerBound, upperBound);
+        displaySearchResultString(zipcode, eventAttributeList, lowerBound, upperBound);
+        getLatLngFromZip(zipcode, eventAttributeList, lowerBound, upperBound);
     }
 
-    private void filterResults(String zipcode, List<String> containing, int lowerBound, int upperBound) {
-        getLatLngFromZip(zipcode, lowerBound, upperBound);
-        String displayString = "Displaying trips near " + zipcode;
-        if (!containing.isEmpty()) {
-            displayString += " containing ";
-            for (int i = 0; i < containing.size(); i++) {
-                if ((i == containing.size()-1) && containing.size() > 1) {
-                    displayString += " or ";
+    private void displaySearchResultString(String zipcode, List<String> eventAttributeList, int lowerBound, int upperBound) {
+        String displayString = "Displaying trips ";
+        if (!(zipcode.isEmpty())) {
+            displayString += "near " + zipcode + " ";
+        }
+        if (!eventAttributeList.isEmpty()) {
+            displayString += "containing ";
+            for (int i = 0; i < eventAttributeList.size(); i++) {
+                if ((i == eventAttributeList.size()-1) && eventAttributeList.size() > 1) {
+                    displayString += " and ";
                 }
-                displayString += containing.get(i);
-                if ((i != containing.size() - 1) && containing.size() > 2) {
+                displayString += eventAttributeList.get(i);
+                if ((i != eventAttributeList.size() - 1) && eventAttributeList.size() > 2) {
                     displayString += ", ";
                 }
             }
         }
+        displayString += " between " + lowerBound + " and " + upperBound + " days long";
         binding.tvDisplayingResults.setVisibility(View.VISIBLE);
         binding.tvDisplayingResults.setText(displayString);
     }
 
-    private void getLatLngFromZip(String zipcode, int lowerBound, int upperBound) {
+    private void getLatLngFromZip(String zipcode, List<String> eventAttributeList, int lowerBound, int upperBound) {
         String api_key = getString(R.string.zipcode_api_key);
         String url = "https://www.zipcodeapi.com/rest/"+ api_key + "/info.json/" + zipcode + "/degrees";
         AsyncHttpClient client = new AsyncHttpClient();
@@ -146,7 +151,7 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
                 JSONObject object = json.jsonObject;
                 try {
                     latLongPair = new ParseGeoPoint(object.getDouble("lat"), object.getDouble("lng"));
-                    queryFilteredTrips(lowerBound, upperBound);
+                    queryFilteredTrips(eventAttributeList, lowerBound, upperBound);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -156,13 +161,19 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                 latLongPair = null;
                 Log.e(TAG, "Error getting zip code information");
+                queryFilteredTrips(eventAttributeList, lowerBound, upperBound);
             }
         });
     }
 
-    private void queryFilteredTrips(int lowerBound, int upperBound) {
+    private void queryFilteredTrips(List<String> eventAttributeList, int lowerBound, int upperBound) {
         ParseQuery<Trip> query = ParseQuery.getQuery(Trip.class);
-        query.whereWithinMiles(Trip.KEY_LOCATION, latLongPair, 100.0);
+        if (latLongPair != null) {
+            query.whereWithinMiles(Trip.KEY_LOCATION, latLongPair, 100.0);
+        }
+        if (!(eventAttributeList.isEmpty())) {
+            query.whereContainsAll(Trip.KEY_EVENT_ATTRIBUTES, eventAttributeList);
+        }
         query.include(Trip.KEY_TITLE);
         query.include(Trip.KEY_DURATION);
         query.include(Trip.KEY_CITY);

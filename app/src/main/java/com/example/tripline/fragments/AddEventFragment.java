@@ -4,9 +4,7 @@ import android.content.ClipData;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.ImageDecoder;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -19,7 +17,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -32,14 +29,12 @@ import com.example.tripline.models.Trip;
 import com.example.tripline.viewmodels.TripViewModel;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseUser;
+import com.parse.ParseQuery;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +42,7 @@ public class AddEventFragment extends BasePhotoFragment implements AdapterView.O
 
     public static final String TAG = "AddEventFragment";
     private FragmentAddEventBinding binding;
-    private String activityType;
+    private String eventType;
     private Trip trip;
     private Boolean nothingSelected;
 
@@ -82,12 +77,12 @@ public class AddEventFragment extends BasePhotoFragment implements AdapterView.O
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // creating dropdown menu for Activity Type
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.activityTypes, android.R.layout.simple_spinner_item);
+        // creating dropdown menu for event Type
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.eventTypes, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        binding.spActivityType.setAdapter(adapter);
-        binding.spActivityType.setSelection(0);
-        binding.spActivityType.setOnItemSelectedListener(this);
+        binding.spEventType.setAdapter(adapter);
+        binding.spEventType.setSelection(0);
+        binding.spEventType.setOnItemSelectedListener(this);
 
         // keeping track of which trip this event is associated with
         trip = tripViewModel.getSelectedTrip();
@@ -109,7 +104,7 @@ public class AddEventFragment extends BasePhotoFragment implements AdapterView.O
         if (photoArray == null) return;
 
         // calling function to post this new event to the database
-        postEvent(title, description, activityType, trip, photoArray);
+        postEvent(title, description, eventType, trip, photoArray);
     }
 
     private boolean checkUserInput(String title, String description) {
@@ -125,9 +120,9 @@ public class AddEventFragment extends BasePhotoFragment implements AdapterView.O
             return true;
         }
 
-        // user must select an activity type
-        if (nothingSelected || activityType.equals("select an activity type")) {
-            Toast.makeText(getContext(), "Activity type cannot be empty!", Toast.LENGTH_SHORT).show();
+        // user must select an event type
+        if (nothingSelected || eventType.equals("select an event type")) {
+            Toast.makeText(getContext(), "Event type cannot be empty!", Toast.LENGTH_SHORT).show();
             return true;
         }
         return false;
@@ -179,15 +174,32 @@ public class AddEventFragment extends BasePhotoFragment implements AdapterView.O
     }
 
     // saves this new event to the Parse database
-    private void postEvent(String title, String description, String activityType, Trip trip, JSONArray photoArray) {
+    private void postEvent(String title, String description, String eventType, Trip trip, JSONArray photoArray) {
         Event event = new Event();
         event.setTitle(title);
         event.setDescription(description);
-        event.setActivityType(activityType);
+        event.setActivityType(eventType);
         event.setTrip(trip);
         event.setPhotos(photoArray);
-
         event.saveInBackground(e -> onEventSaved(e, title));
+        updateTripEventAttributes(trip, eventType);
+    }
+
+    private void updateTripEventAttributes(Trip trip, String eventType) {
+        ParseQuery<Trip> query = ParseQuery.getQuery(Trip.class);
+        query.whereEqualTo("objectId", trip.getObjectId());
+        query.findInBackground((trips, e) -> onTripFound(trips, e, eventType));
+    }
+
+    private void onTripFound(List<Trip> trips, ParseException e, String eventType) {
+        if (e != null) {
+            Log.e(TAG, "Issue finding trip");
+            return;
+        }
+        for (Trip trip : trips) {
+            trip.updateEventAttributes(eventType);
+            trip.saveInBackground();
+        }
     }
 
     private void onEventSaved(ParseException e, String title) {
@@ -209,8 +221,8 @@ public class AddEventFragment extends BasePhotoFragment implements AdapterView.O
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         nothingSelected = false;
-        activityType = parent.getItemAtPosition(position).toString();
-        Log.i(TAG, activityType + " selected");
+        eventType = parent.getItemAtPosition(position).toString();
+        Log.i(TAG, eventType + " selected");
     }
 
     @Override
