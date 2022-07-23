@@ -40,6 +40,7 @@ import com.parse.ParseUser;
 
 import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -178,6 +179,7 @@ public class AddTripFragment extends BasePhotoFragment {
         trip.setCity(city);
         trip.setDuration(duration);
         trip.setAuthor(currentUser);
+        trip.setEventAttributes(new ArrayList<>());
 
         trip.saveInBackground(e -> onTripAdded(e, title));
     }

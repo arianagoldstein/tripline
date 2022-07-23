@@ -29,17 +29,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Name" />
 
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="80dp"
-        android:layout_height="35dp"
-        android:text="@string/log_out"
-        android:textSize="10sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.988"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/tvTrips"
         android:layout_width="0dp"
@@ -106,7 +95,7 @@
         android:id="@+id/tvFollowersCount"
         android:layout_width="0dp"
         android:layout_height="22dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="45dp"
         android:textAlignment="center"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -172,5 +161,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/btnSavedTrips"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:text="saved"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

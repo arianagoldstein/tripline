@@ -62,12 +62,13 @@
         app:layout_constraintTop_toBottomOf="@+id/etTitleEvent" />
 
     <TextView
-        android:id="@+id/tvActivityType"
+        android:id="@+id/tvEventType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginTop="16dp"
-        android:text="@string/activity_type"
+        android:text="@string/event_type"
+        android:textAllCaps="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etDescriptionEvent" />
 
@@ -91,10 +92,10 @@
         android:layout_marginTop="16dp"
         android:text="@string/photo_s"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spActivityType" />
+        app:layout_constraintTop_toBottomOf="@+id/spEventType" />
 
     <Spinner
-        android:id="@+id/spActivityType"
+        android:id="@+id/spEventType"
         android:layout_width="355dp"
         android:layout_height="35dp"
         android:layout_marginStart="48dp"
@@ -103,7 +104,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.347"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvActivityType" />
+        app:layout_constraintTop_toBottomOf="@+id/tvEventType" />
 
     <Button
         android:id="@+id/btnAddPhotos"
@@ -113,14 +114,12 @@
         android:layout_marginTop="4dp"
         android:text="+"
         app:layout_constraintStart_toEndOf="@+id/tvPhotosEvent"
-        app:layout_constraintTop_toBottomOf="@+id/spActivityType" />
+        app:layout_constraintTop_toBottomOf="@+id/spEventType" />
 
     <GridView
         android:id="@+id/gvGallery"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
         android:layout_weight="1"
         android:numColumns="3"
         app:layout_constraintEnd_toEndOf="parent"
@@ -151,7 +150,7 @@
         android:layout_height="33dp"
         android:layout_marginStart="5dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvActivityType"
+        app:layout_constraintTop_toTopOf="@+id/tvEventType"
         app:srcCompat="@drawable/activitytype_icon" />
 
     <ImageView
@@ -179,10 +178,11 @@
         android:id="@+id/vAddEventCover"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="731dp"
         android:background="#4100C7D1"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

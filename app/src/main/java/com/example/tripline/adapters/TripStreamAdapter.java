@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tripline.R;
-import com.example.tripline.utility.Utility;
 import com.example.tripline.databinding.ItemTripStreamBinding;
 import com.example.tripline.models.Trip;
+import com.example.tripline.utility.Utility;
 import com.example.tripline.viewmodels.TripViewModel;
 import com.example.tripline.viewmodels.UserViewModel;
 
@@ -81,21 +81,21 @@ public class TripStreamAdapter extends RecyclerView.Adapter<TripStreamAdapter.Vi
             Glide.with(context).load(trip.getAuthor().getProfilePic().getUrl()).circleCrop().into(binding.ivProfilePicStream);
             binding.ibSaveTrip.setOnClickListener(v -> setSaveStatus(trip));
 
-            if (!(trip.getIsSaved())) {
-                binding.ibSaveTrip.setBackgroundResource(R.drawable.bookmark_empty_icon);
-            } else {
+            if (trip.isSavedByCurrentUser()) {
                 binding.ibSaveTrip.setBackgroundResource(R.drawable.bookmark_filled_icon);
+            } else {
+                binding.ibSaveTrip.setBackgroundResource(R.drawable.bookmark_empty_icon);
             }
         }
 
         // toggle the trip between being saved/not depending on its status in Parse
         private void setSaveStatus(Trip trip) {
-            if (!(trip.getIsSaved())) {
+            if (!trip.isSavedByCurrentUser()) {
                 binding.ibSaveTrip.setBackgroundResource(R.drawable.bookmark_filled_icon);
-                trip.setIsSaved(true);
+                trip.saveTrip();
             } else {
                 binding.ibSaveTrip.setBackgroundResource(R.drawable.bookmark_empty_icon);
-                trip.setIsSaved(false);
+                trip.unsaveTrip();
             }
             trip.saveInBackground();
         }

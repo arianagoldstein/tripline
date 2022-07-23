@@ -71,6 +71,9 @@
         <action
             android:id="@+id/action_navigation_profile_to_navigation_following"
             app:destination="@id/navigation_following" />
+        <action
+            android:id="@+id/action_navigation_profile_to_navigation_saved"
+            app:destination="@id/navigation_saved" />
     </fragment>
 
     <fragment
@@ -111,6 +114,13 @@
         <action
             android:id="@+id/action_navigation_search_to_navigation_tripdetails"
             app:destination="@id/navigation_tripdetails" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_saved"
+        android:name="com.example.tripline.fragments.SavedFragment"
+        android:label="Saved"
+        tools:layout="@layout/fragment_saved" >
     </fragment>
 
 </navigation>

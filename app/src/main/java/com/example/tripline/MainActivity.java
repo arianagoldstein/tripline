@@ -1,7 +1,10 @@
 package com.example.tripline;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,8 +24,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -61,6 +62,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // for top action bar (logout button)
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.top_app_bar, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_logout) {
+            logOutUser();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void logOutUser() {
+        ParseUser.logOut();
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
+        finish();
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         return navController.navigateUp();
@@ -89,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "Issue getting trips", e);
                 Toast.makeText(MainActivity.this, "Issue getting trips.", Toast.LENGTH_SHORT).show();
             }
-            searchViewModel.setAllTrips(trips);
+            searchViewModel.setFullTripList(trips);
         });
     }
 }

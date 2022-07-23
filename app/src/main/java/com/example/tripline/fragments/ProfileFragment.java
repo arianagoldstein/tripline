@@ -1,6 +1,5 @@
 package com.example.tripline.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,15 +16,14 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
-import com.example.tripline.LoginActivity;
 import com.example.tripline.R;
-import com.example.tripline.viewmodels.UserViewModel;
 import com.example.tripline.adapters.TripProfileAdapter;
 import com.example.tripline.databinding.FragmentProfileBinding;
 import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
 import com.example.tripline.models.UserFollower;
 import com.example.tripline.viewmodels.ProfileViewModel;
+import com.example.tripline.viewmodels.UserViewModel;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
@@ -118,10 +116,10 @@ public class ProfileFragment extends Fragment {
         binding = null;
     }
 
-    // if this is someone else's profile, we shouldn't be able to log out but we should be able to follow
+    // if this is someone else's profile, we should be able to follow but not view their saved trips
     private void displayButtons() {
         if (!isCurrentUser) {
-            binding.btnLogout.setVisibility(View.GONE);
+            binding.btnSavedTrips.setVisibility(View.GONE);
             binding.btnFollowContainer.setVisibility(View.VISIBLE);
 
             // check if we are already following this user
@@ -130,18 +128,18 @@ public class ProfileFragment extends Fragment {
                 binding.btnFollow.setBackgroundColor(getContext().getColor(R.color.gray));
                 binding.btnFollow.setText(R.string.following);
             } else {
-                binding.btnFollow.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        followUser(user);
-                    }
-                });
+                binding.btnFollow.setOnClickListener(v -> followUser(user));
             }
         } else {
-            binding.btnLogout.setVisibility(View.VISIBLE);
-            binding.btnLogout.setOnClickListener(v -> onLogoutBtnClicked());
+            binding.btnSavedTrips.setVisibility(View.VISIBLE);
+            binding.btnSavedTrips.setOnClickListener(v -> goToSaved(v));
             binding.btnFollowContainer.setVisibility(View.GONE);
         }
+    }
+
+    private void goToSaved(View v) {
+        NavController navController = Navigation.findNavController(v);
+        navController.navigate(R.id.action_navigation_profile_to_navigation_saved);
     }
 
     // checking if the logged-in user is following the user we're displaying
@@ -196,14 +194,6 @@ public class ProfileFragment extends Fragment {
     private void onMapImgClicked(View view) {
         NavController navController = Navigation.findNavController(view);
         navController.navigate(R.id.action_navigation_profile_to_navigation_map);
-    }
-
-    private void onLogoutBtnClicked() {
-        Log.i(TAG, "onClick logout button");
-        ParseUser.logOut();
-        Intent i = new Intent(getContext(), LoginActivity.class);
-        startActivity(i);
-        getActivity().finish();
     }
 
     private void onFollowerCountClicked(View view) {
