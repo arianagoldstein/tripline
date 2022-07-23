@@ -45,21 +45,16 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
 
     public static final String TAG = "SearchFragment";
     private FragmentSearchBinding binding;
-    protected TripSearchAdapter searchAdapter;
-    protected TripSearchRecAdapter tripRecAdapter;
-    protected CitySearchRecAdapter cityRecAdapter;
-
-    // TODO: look into putting this in ViewModel
-    protected List<Trip> weekendTrips;
-    protected List<City> cityRecs;
-
+    private TripSearchAdapter searchAdapter;
+    private TripSearchRecAdapter tripRecAdapter;
+    private CitySearchRecAdapter cityRecAdapter;
+    private List<Trip> weekendTrips;
+    private List<City> cityRecs;
     private SearchViewModel searchViewModel;
-
-    // for zip code search
-    ParseGeoPoint latLongPair = new ParseGeoPoint(0.0, 0.0);
+    private ParseGeoPoint latLongPair = new ParseGeoPoint(0.0, 0.0);
 
     public SearchFragment() {
-        // Required empty public constructor
+
     }
 
     @Override
@@ -155,7 +150,6 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
                     e.printStackTrace();
                 }
             }
-
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                 latLongPair = null;
