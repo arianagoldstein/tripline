@@ -21,16 +21,17 @@ import com.example.tripline.models.Trip;
 import com.example.tripline.utility.Utility;
 import com.example.tripline.viewmodels.TripViewModel;
 import com.example.tripline.viewmodels.UserViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
 public class TripStreamAdapter extends RecyclerView.Adapter<TripStreamAdapter.ViewHolder> {
 
     public static final String TAG = "TripStreamAdapter";
-    private Context context;
-    private List<Trip> trips;
-    private UserViewModel sharedViewModel;
-    private TripViewModel tripViewModel;
+    private final Context context;
+    private final List<Trip> trips;
+    private final UserViewModel sharedViewModel;
+    private final TripViewModel tripViewModel;
 
     public TripStreamAdapter(Context context, List<Trip> trips) {
         this.context = context;
@@ -93,11 +94,19 @@ public class TripStreamAdapter extends RecyclerView.Adapter<TripStreamAdapter.Vi
             if (!trip.isSavedByCurrentUser()) {
                 binding.ibSaveTrip.setBackgroundResource(R.drawable.bookmark_filled_icon);
                 trip.saveTrip();
+                Snackbar.make(binding.getRoot(), "Trip saved!", Snackbar.LENGTH_LONG)
+                        .setAction("VIEW SAVED TRIPS", v -> goToSaved())
+                        .setAnchorView(R.id.nav_view).show();
             } else {
                 binding.ibSaveTrip.setBackgroundResource(R.drawable.bookmark_empty_icon);
                 trip.unsaveTrip();
             }
             trip.saveInBackground();
+        }
+
+        private void goToSaved() {
+            NavController navController = Navigation.findNavController(itemView);
+            navController.navigate(R.id.action_navigation_stream_to_navigation_saved);
         }
 
         // clicking on the author's name brings you to their profile
