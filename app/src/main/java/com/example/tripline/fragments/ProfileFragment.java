@@ -198,16 +198,16 @@ public class ProfileFragment extends Fragment {
 
     private void onFollowerCountClicked(View view) {
         Bundle bundle = new Bundle();
-        bundle.putBoolean("isCurrentUser", isCurrentUser);
+        bundle.putInt("tabIndex", 0);
         NavController navController = Navigation.findNavController(view);
-        navController.navigate(R.id.action_navigation_profile_to_navigation_follower, bundle);
+        navController.navigate(R.id.action_navigation_profile_to_navigation_followtabs, bundle);
     }
 
     private void onFollowingCountClicked(View view) {
         Bundle bundle = new Bundle();
-        bundle.putBoolean("isCurrentUser", isCurrentUser);
+        bundle.putInt("tabIndex", 1);
         NavController navController = Navigation.findNavController(view);
-        navController.navigate(R.id.action_navigation_profile_to_navigation_following, bundle);
+        navController.navigate(R.id.action_navigation_profile_to_navigation_followtabs, bundle);
     }
 
     // loads the 20 most recently created trips from the Parse database
