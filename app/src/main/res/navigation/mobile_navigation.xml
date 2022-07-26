@@ -137,6 +137,9 @@
         android:name="com.example.tripline.fragments.FollowTabsFragment"
         android:label="Follows"
         tools:layout="@layout/fragment_follow_tabs" >
+        <action
+            android:id="@+id/action_navigation_followtabs_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
     </fragment>
 
 </navigation>

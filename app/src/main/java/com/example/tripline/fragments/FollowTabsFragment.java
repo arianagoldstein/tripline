@@ -39,7 +39,7 @@ public class FollowTabsFragment extends Fragment {
         binding.tabLayoutFollows.selectTab(tabToSelect);
         if (tabToSelect.getPosition() == 0) {
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.clFollowTabs, new FollowerFragment()).commit();
-        } else {
+        } else if (tabToSelect.getPosition() == 1) {
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.clFollowTabs, new FollowingFragment()).commit();
         }
 
@@ -49,7 +49,7 @@ public class FollowTabsFragment extends Fragment {
                 Fragment fragment = null;
                 if (tab.getPosition() == 0) {  //  display followers fragment
                     fragment = new FollowerFragment();
-                } else {  // display following fragment
+                } else if (tab.getPosition() == 1) {  // display following fragment
                     fragment = new FollowingFragment();
                 }
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.clFollowTabs, fragment).commit();
@@ -63,6 +63,5 @@ public class FollowTabsFragment extends Fragment {
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-
     }
 }
