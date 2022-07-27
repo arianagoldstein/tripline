@@ -1,22 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.AddTripFragment" >
-
-    <View
-        android:id="@+id/date_hit_area"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@android:color/transparent"
-        app:layout_constraintBottom_toTopOf="@id/tvPhotosEvent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etDescription" />
+    tools:context=".fragments.AddTripFragment">
 
     <Button
         android:id="@+id/btnAddTrip"
@@ -40,175 +29,153 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tfTitle"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="12dp"
-        android:text="@string/title"
+        android:layout_marginTop="30dp"
+        android:hint="@string/title"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAddTrip" />
+        app:layout_constraintTop_toBottomOf="@+id/tvAddTrip"
+        app:startIconDrawable="@drawable/title_icon"
+        app:startIconTint="@color/turquoise">
 
-    <EditText
-        android:id="@+id/etTitle"
-        android:layout_width="355dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/tvLocation"
-        android:layout_width="wrap_content"
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tfLocation"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/location"
+        android:layout_marginTop="30dp"
+        android:hint="@string/location"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/tfTitle"
+        app:startIconDrawable="@drawable/location_icon"
+        app:startIconTint="@color/turquoise">
 
-    <TextView
-        android:id="@+id/tvLocationAdd"
-        android:layout_width="355dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:text="tap here to add location"
-        android:gravity="center_vertical"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvLocation" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:editable="false" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 
-    <TextView
-        android:id="@+id/tvDescription"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tfDescription"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/description"
+        android:layout_marginTop="30dp"
+        android:hint="@string/description"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvLocationAdd" />
+        app:layout_constraintTop_toBottomOf="@+id/tfLocation"
+        app:startIconDrawable="@drawable/description_icon"
+        app:startIconTint="@color/turquoise">
 
-    <EditText
-        android:id="@+id/etDescription"
-        android:layout_width="355dp"
-        android:layout_height="78dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/tvStartDate"
-        android:layout_width="wrap_content"
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tfStartDate"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/start_date"
+        android:layout_marginTop="30dp"
+        android:hint="@string/start_date"
+        app:layout_constraintEnd_toStartOf="@+id/tfEndDate"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etDescription" />
+        app:layout_constraintTop_toBottomOf="@+id/tfDescription"
+        app:startIconDrawable="@drawable/calendar_icon"
+        app:startIconTint="@color/turquoise">
 
-    <TextView
-        android:id="@+id/tvEndDate"
-        android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etStartDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:editable="false" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tfEndDate"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="108dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/end_date"
-        app:layout_constraintStart_toEndOf="@+id/tvStartDate"
-        app:layout_constraintTop_toBottomOf="@+id/etDescription" />
+        android:layout_marginTop="30dp"
+        android:hint="@string/end_date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tfStartDate"
+        app:layout_constraintTop_toBottomOf="@+id/tfDescription"
+        app:startIconDrawable="@drawable/calendar_icon"
+        app:startIconTint="@color/turquoise">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etEndDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:editable="false" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <View
+        android:id="@+id/date_hit_area"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toTopOf="@id/tvPhotosEvent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tfDescription" />
 
     <TextView
         android:id="@+id/tvPhotosEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
+        android:layout_marginStart="38dp"
         android:layout_marginTop="22dp"
         android:text="@string/cover_photo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvStartDateDisplay" />
+        app:layout_constraintTop_toBottomOf="@+id/tfStartDate" />
 
     <ImageView
         android:id="@+id/ivCoverPhotoAddTrip"
-        android:layout_width="366dp"
-        android:layout_height="166dp"
-        android:layout_marginTop="24dp"
+        android:layout_width="350dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="20dp"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvPhotosEvent"
-        app:srcCompat="@drawable/coverphoto_placeholder" />
-
-    <ImageButton
-        android:id="@+id/ibChooseDates"
-        android:layout_width="33dp"
-        android:layout_height="33dp"
-        android:layout_marginLeft="5dp"
-        android:background="@drawable/calendar_icon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvStartDate" />
-
-    <TextView
-        android:id="@+id/tvStartDateDisplay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="select..."
-        app:layout_constraintStart_toStartOf="@+id/tvStartDate"
-        app:layout_constraintTop_toBottomOf="@+id/tvStartDate" />
-
-    <ImageView
-        android:id="@+id/ivDescriptionIconTrip"
-        android:layout_width="33dp"
-        android:layout_height="33dp"
-        android:layout_marginLeft="5dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvDescription"
-        app:srcCompat="@drawable/description_icon" />
-
-    <ImageView
-        android:id="@+id/ivLocationIcon"
-        android:layout_width="33dp"
-        android:layout_height="33dp"
-        android:layout_marginLeft="5dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvLocation"
-        app:srcCompat="@drawable/location_icon" />
-
-    <ImageView
-        android:id="@+id/ivTitleIconTrip"
-        android:layout_width="33dp"
-        android:layout_height="33dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvTitle"
-        app:srcCompat="@drawable/title_icon"
-        android:layout_marginLeft="5dp" />
-
-    <TextView
-        android:id="@+id/tvEndDateDisplay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="select..."
-        app:layout_constraintStart_toStartOf="@+id/tvEndDate"
-        app:layout_constraintTop_toBottomOf="@+id/tvEndDate" />
+        app:srcCompat="@drawable/cover_photo_placeholder" />
 
     <ImageView
         android:id="@+id/ivCoverPhotoIcon"
         android:layout_width="33dp"
         android:layout_height="33dp"
-        android:layout_marginLeft="5dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="56dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tvPhotosEvent"
         app:srcCompat="@drawable/photo_icon" />
@@ -218,15 +185,15 @@
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:visibility="invisible"
-        app:lottie_url="https://assets2.lottiefiles.com/packages/lf20_amoi2t87.json"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.333"/>
+        app:layout_constraintVertical_bias="0.333"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_url="https://assets2.lottiefiles.com/packages/lf20_amoi2t87.json" />
 
     <View
         android:id="@+id/vAddTripCover"

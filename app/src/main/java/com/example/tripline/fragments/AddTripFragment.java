@@ -77,8 +77,8 @@ public class AddTripFragment extends BasePhotoFragment {
         super.onViewCreated(view, savedInstanceState);
 
         // adding a location with Google Places API
-        binding.ivLocationIcon.setOnClickListener(v -> onLocationAdd());
-        binding.tvLocationAdd.setOnClickListener(v -> onLocationAdd());
+        binding.etLocation.setOnClickListener(v -> onLocationAdd());
+        binding.tfLocation.setOnClickListener(v -> onLocationAdd());
 
         // initializing dates as null before they're selected
         startDate = null;
@@ -162,8 +162,8 @@ public class AddTripFragment extends BasePhotoFragment {
         // format the dates in your desired display mode
         SimpleDateFormat simpleFormat = new SimpleDateFormat("MMM dd, yyyy");
         // display it with setText
-        binding.tvStartDateDisplay.setText(simpleFormat.format(startDate));
-        binding.tvEndDateDisplay.setText(simpleFormat.format(endDate));
+        binding.etStartDate.setText(simpleFormat.format(startDate));
+        binding.etEndDate.setText(simpleFormat.format(endDate));
     }
 
     private void postTrip(String title, ParseGeoPoint location, String description, Date startDate, Date endDate, ParseFile coverPhoto, String formattedLocation, City city, int duration, User currentUser) {
@@ -259,7 +259,7 @@ public class AddTripFragment extends BasePhotoFragment {
                     latitude = latLngPair.latitude;
                     longitude = latLngPair.longitude;
 
-                    binding.tvLocationAdd.setText(inputPlace.getName());
+                    binding.etLocation.setText(inputPlace.getName());
 
                 } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                     Status status = Autocomplete.getStatusFromIntent(data);
