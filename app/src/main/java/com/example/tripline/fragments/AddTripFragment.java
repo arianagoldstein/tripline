@@ -134,7 +134,7 @@ public class AddTripFragment extends BasePhotoFragment {
         city.setCityName(cityName);
         city.setImage(coverPhoto);
 
-        binding.pbLoadingTrip.setVisibility(View.VISIBLE);
+        binding.animationLoadingTrip.setVisibility(View.VISIBLE);
         binding.vAddTripCover.setVisibility(View.VISIBLE);
 
         postTrip(title, location, description, startDate, endDate, coverPhoto, formattedLocation, city, duration, (User) ParseUser.getCurrentUser());
@@ -185,7 +185,7 @@ public class AddTripFragment extends BasePhotoFragment {
     }
 
     private void onTripAdded(ParseException e, String title) {
-        binding.pbLoadingTrip.setVisibility(View.INVISIBLE);
+        binding.animationLoadingTrip.setVisibility(View.INVISIBLE);
         binding.vAddTripCover.setVisibility(View.INVISIBLE);
         if (e != null) {
             Log.e(TAG, "Error while saving trip with title " + title, e);

@@ -162,27 +162,29 @@
         app:layout_constraintTop_toTopOf="@+id/tvPhotosEvent"
         app:srcCompat="@drawable/photos_icon" />
 
-    <ProgressBar
-        android:id="@+id/pbLoadingEvent"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationLoadingEvent"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:visibility="invisible"
+        app:lottie_url="https://assets2.lottiefiles.com/packages/lf20_amoi2t87.json"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.333" />
+        app:layout_constraintVertical_bias="0.333"/>
 
     <View
         android:id="@+id/vAddEventCover"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="731dp"
         android:background="#4100C7D1"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

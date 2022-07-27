@@ -97,7 +97,7 @@ public class AddEventFragment extends BasePhotoFragment implements AdapterView.O
         String description = binding.etDescriptionEvent.getText().toString();
 
         if (checkUserInput(title, description)) return;
-        binding.pbLoadingEvent.setVisibility(View.VISIBLE);
+        binding.animationLoadingEvent.setVisibility(View.VISIBLE);
         binding.vAddEventCover.setVisibility(View.VISIBLE);
 
         JSONArray photoArray = getPhotoArray();
@@ -203,7 +203,7 @@ public class AddEventFragment extends BasePhotoFragment implements AdapterView.O
     }
 
     private void onEventSaved(ParseException e, String title) {
-        binding.pbLoadingEvent.setVisibility(View.INVISIBLE);
+        binding.animationLoadingEvent.setVisibility(View.INVISIBLE);
         binding.vAddEventCover.setVisibility(View.INVISIBLE);
 
         if (e != null) {
