@@ -24,7 +24,7 @@
     <string name="add_an_event">ADD AN EVENT</string>
     <string name="description">description</string>
     <string name="activity_type">ACTIVITY TYPE</string>
-    <string name="photo_s">PHOTO(S)</string>
+    <string name="photo_s">photos</string>
     <string name="location">location</string>
     <string name="cover_photo">cover photo</string>
     <string name="end_date">end date</string>
@@ -42,9 +42,9 @@
     <string name="last_name">last name</string>
     <string name="first_name">first name</string>
     <string name="profile_photo">profile photo</string>
+    <string name="add_photos">add photos</string>
 
     <string-array name="eventTypes">
-        <item>select an event type</item>
         <item>restaurant</item>
         <item>hotel</item>
         <item>activity</item>

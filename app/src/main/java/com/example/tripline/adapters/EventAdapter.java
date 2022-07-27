@@ -89,7 +89,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                     binding.ivIconEvent.setImageResource(R.drawable.event_icon);
                     break;
                 default:
-                    binding.ivIconEvent.setImageResource(R.drawable.pin_icon);
+                    binding.ivIconEvent.setImageResource(R.drawable.push_pin_icon);
                     break;
             }
 

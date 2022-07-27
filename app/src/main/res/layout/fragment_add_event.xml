@@ -1,22 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <Button
-        android:id="@+id/btnAddEvent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="@string/add_event"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.897"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gvGallery" />
 
     <TextView
         android:id="@+id/tvAddEvent"
@@ -29,92 +16,92 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tfTitleEvent"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="12dp"
-        android:text="@string/title"
+        android:layout_marginTop="22dp"
+        android:hint="@string/title"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAddEvent" />
+        app:layout_constraintTop_toBottomOf="@+id/tvAddEvent"
+        app:startIconDrawable="@drawable/title_icon"
+        app:startIconTint="@color/turquoise">
 
-    <EditText
-        android:id="@+id/etTitleEvent"
-        android:layout_width="355dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etTitleEvent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/tvDescriptionEventAdd"
-        android:layout_width="wrap_content"
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tfDescriptionEventAdd"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/description"
+        android:layout_marginTop="30dp"
+        android:hint="@string/description"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etTitleEvent" />
+        app:layout_constraintTop_toBottomOf="@+id/tfTitleEvent"
+        app:startIconDrawable="@drawable/description_icon"
+        app:startIconTint="@color/turquoise">
 
-    <TextView
-        android:id="@+id/tvEventType"
-        android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etDescriptionEvent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/dropdownEventType"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_marginTop="30dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/event_type"
-        android:textAllCaps="true"
+        android:hint="@string/event_type"
+        app:startIconDrawable="@drawable/push_pin_icon"
+        app:startIconTint="@color/turquoise"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etDescriptionEvent" />
+        app:layout_constraintTop_toBottomOf="@+id/tfDescriptionEventAdd">
 
-    <EditText
-        android:id="@+id/etDescriptionEvent"
-        android:layout_width="355dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDescriptionEventAdd" />
+        <AutoCompleteTextView
+            android:id="@+id/tvEventType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
 
     <TextView
         android:id="@+id/tvPhotosEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="38dp"
+        android:layout_marginTop="30dp"
         android:text="@string/photo_s"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spEventType" />
+        app:layout_constraintTop_toBottomOf="@+id/dropdownEventType" />
 
-    <Spinner
-        android:id="@+id/spEventType"
-        android:layout_width="355dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="8dp"
-        android:spinnerMode="dropdown"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.347"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvEventType" />
-
-    <Button
-        android:id="@+id/btnAddPhotos"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddPhotos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="4dp"
-        android:text="+"
+        android:layout_marginTop="15dp"
+        android:contentDescription="@string/add_photos"
+        android:src="@drawable/add_photos_icon"
+        app:fabSize="mini"
         app:layout_constraintStart_toEndOf="@+id/tvPhotosEvent"
-        app:layout_constraintTop_toBottomOf="@+id/spEventType" />
+        app:layout_constraintTop_toBottomOf="@+id/dropdownEventType" />
 
     <GridView
         android:id="@+id/gvGallery"
@@ -124,43 +111,19 @@
         android:numColumns="3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivPhotosIcon" />
+        app:layout_constraintTop_toBottomOf="@+id/tvPhotosEvent" />
 
-    <ImageView
-        android:id="@+id/ivTitleIconEvent"
-        android:layout_width="33dp"
-        android:layout_height="33dp"
-        android:layout_marginStart="5dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvTitle"
-        app:srcCompat="@drawable/title_icon" />
 
-    <ImageView
-        android:id="@+id/ivDescriptionIconEvent"
-        android:layout_width="33dp"
-        android:layout_height="33dp"
-        android:layout_marginStart="5dp"
+    <Button
+        android:id="@+id/btnAddEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/add_event"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.945"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvDescriptionEventAdd"
-        app:srcCompat="@drawable/description_icon" />
-
-    <ImageView
-        android:id="@+id/ivActivityTypeIcon"
-        android:layout_width="33dp"
-        android:layout_height="33dp"
-        android:layout_marginStart="5dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvEventType"
-        app:srcCompat="@drawable/activitytype_icon" />
-
-    <ImageView
-        android:id="@+id/ivPhotosIcon"
-        android:layout_width="33dp"
-        android:layout_height="33dp"
-        android:layout_marginStart="5dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvPhotosEvent"
-        app:srcCompat="@drawable/photos_icon" />
+        app:layout_constraintTop_toBottomOf="@+id/gvGallery" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animationLoadingEvent"

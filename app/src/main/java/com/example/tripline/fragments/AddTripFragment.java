@@ -20,7 +20,7 @@ import androidx.navigation.Navigation;
 
 import com.example.tripline.MainActivity;
 import com.example.tripline.R;
-import com.example.tripline.databinding.FragmentAddtripBinding;
+import com.example.tripline.databinding.FragmentAddTripBinding;
 import com.example.tripline.models.City;
 import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
@@ -49,7 +49,7 @@ import java.util.List;
 public class AddTripFragment extends BasePhotoFragment {
 
     public static final String TAG = "AddTripFragment";
-    private FragmentAddtripBinding binding;
+    private FragmentAddTripBinding binding;
 
     // variables for photo upload
     private final static int PICK_PHOTO_CODE = 1046;
@@ -66,7 +66,7 @@ public class AddTripFragment extends BasePhotoFragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentAddtripBinding.inflate(inflater, container, false);
+        binding = FragmentAddTripBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         return root;
