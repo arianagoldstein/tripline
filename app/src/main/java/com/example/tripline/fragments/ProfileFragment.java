@@ -72,6 +72,27 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        displayUser();
+        setUpTrips();
+        displayButtons();
+        displayStaticMap();
+        getFollowers();
+        getFollowing();
+
+        binding.ivMapPlaceholder.setOnClickListener(v -> onMapImgClicked(view));
+        binding.tvFollowersCount.setOnClickListener(v -> onFollowerCountClicked(v));
+        binding.tvFollowingCount.setOnClickListener(v -> onFollowingCountClicked(v));
+    }
+
+    private void setUpTrips() {
+        // connecting RecyclerView of Trips with the adapter
+        adapter = new TripProfileAdapter(getContext(), profileViewModel.getUserTrips());
+        binding.rvTripsProfile.setAdapter(adapter);
+        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        binding.rvTripsProfile.setLayoutManager(llm);
+    }
+
+    private void displayUser() {
         // based on where we came from, display logged-in user or other user
         if ("bottomNav".equals(source)) {
             user = (User) ParseUser.getCurrentUser();
@@ -84,21 +105,6 @@ public class ProfileFragment extends Fragment {
         Log.i(TAG, "Displaying profile for user " + user.getFirstName() + " " + user.getLastName());
         binding.tvNameProfile.setText(user.getFirstName() + " " + user.getLastName());
         Glide.with(this).load(user.getProfilePic().getUrl()).circleCrop().into(binding.ivProfilePic);
-
-        // connecting RecyclerView of Trips with the adapter
-        adapter = new TripProfileAdapter(getContext(), profileViewModel.getUserTrips());
-        binding.rvTripsProfile.setAdapter(adapter);
-        LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        binding.rvTripsProfile.setLayoutManager(llm);
-
-        displayButtons();
-        displayStaticMap();
-        getFollowers();
-        getFollowing();
-
-        binding.ivMapPlaceholder.setOnClickListener(v -> onMapImgClicked(view));
-        binding.tvFollowersCount.setOnClickListener(v -> onFollowerCountClicked(v));
-        binding.tvFollowingCount.setOnClickListener(v -> onFollowingCountClicked(v));
     }
 
     // gets triggered every time we come back to the profile fragment
@@ -160,7 +166,6 @@ public class ProfileFragment extends Fragment {
         UserFollower userFollower = new UserFollower();
         userFollower.setFollower((User) ParseUser.getCurrentUser());
         userFollower.setUserF(userToDisplay);
-
         userFollower.saveInBackground(e -> onFollowedUser(e));
     }
 
@@ -198,16 +203,16 @@ public class ProfileFragment extends Fragment {
 
     private void onFollowerCountClicked(View view) {
         Bundle bundle = new Bundle();
-        bundle.putBoolean("isCurrentUser", isCurrentUser);
+        bundle.putInt("tabIndex", 0);
         NavController navController = Navigation.findNavController(view);
-        navController.navigate(R.id.action_navigation_profile_to_navigation_follower, bundle);
+        navController.navigate(R.id.action_navigation_profile_to_navigation_followtabs, bundle);
     }
 
     private void onFollowingCountClicked(View view) {
         Bundle bundle = new Bundle();
-        bundle.putBoolean("isCurrentUser", isCurrentUser);
+        bundle.putInt("tabIndex", 1);
         NavController navController = Navigation.findNavController(view);
-        navController.navigate(R.id.action_navigation_profile_to_navigation_following, bundle);
+        navController.navigate(R.id.action_navigation_profile_to_navigation_followtabs, bundle);
     }
 
     // loads the 20 most recently created trips from the Parse database

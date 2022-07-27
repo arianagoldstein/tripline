@@ -9,14 +9,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
 
-import com.example.tripline.adapters.TripProfileAdapter;
+import com.example.tripline.adapters.TripSavedAdapter;
 import com.example.tripline.databinding.FragmentSavedBinding;
 import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -28,7 +26,7 @@ public class SavedFragment extends Fragment {
 
     public static final String TAG = "SavedFragment";
     private FragmentSavedBinding binding;
-    private TripProfileAdapter adapter;
+    private TripSavedAdapter adapter;
     private List<Trip> savedTrips;
 
     @Override
@@ -48,15 +46,16 @@ public class SavedFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         savedTrips = new ArrayList<>();
         getSavedTrips();
-        adapter = new TripProfileAdapter(getContext(), savedTrips);
+        adapter = new TripSavedAdapter(getContext(), savedTrips);
         binding.rvSavedTrips.setAdapter(adapter);
-        LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        binding.rvSavedTrips.setLayoutManager(llm);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
+        binding.rvSavedTrips.setLayoutManager(gridLayoutManager);
         binding.swipeContainerSaved.setOnRefreshListener(() -> getSavedTrips());
     }
 
     private void getSavedTrips() {
         ParseQuery<Trip> query = ParseQuery.getQuery(Trip.class);
+        query.include(Trip.KEY_AUTHOR);
         List<User> id = new ArrayList<>();
         id.add((User) ParseUser.getCurrentUser());
         query.whereContainsAll(Trip.KEY_SAVED_BY, id);

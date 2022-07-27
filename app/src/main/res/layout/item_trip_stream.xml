@@ -63,7 +63,7 @@
         app:layout_constraintTop_toBottomOf="@+id/ivLocationIconStream"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <TextView
+        <TextView
         android:id="@+id/tvDescriptionStream"
         android:layout_width="366dp"
         android:layout_height="wrap_content"

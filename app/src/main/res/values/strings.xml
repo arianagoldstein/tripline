@@ -3,15 +3,15 @@
     <string name="title_stream">Stream</string>
     <string name="title_addtrip">Add Trip</string>
     <string name="title_profile">Profile</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_trip">ADD TRIP</string>
-    <string name="email_address">EMAIL ADDRESS</string>
-    <string name="password">PASSWORD</string>
+    <string name="email_address">email address</string>
+    <string name="password">password</string>
     <string name="login">LOG IN</string>
     <string name="register_prompt">No account yet?</string>
     <string name="register">REGISTER</string>
-    <string name="confirm_password">CONFIRM PASSWORD</string>
+    <string name="confirm_password">confirm password</string>
     <string name="profile_picture">PROFILE PICTURE</string>
     <string name="name">NAME</string>
     <string name="add_a_trip">ADD A TRIP</string>
@@ -39,6 +39,9 @@
     <string name="event_type">event type</string>
     <string name="no_results_found">No results found:(</string>
     <string name="saved_trips">saved trips</string>
+    <string name="last_name">last name</string>
+    <string name="first_name">first name</string>
+    <string name="profile_photo">profile photo</string>
 
     <string-array name="eventTypes">
         <item>select an event type</item>

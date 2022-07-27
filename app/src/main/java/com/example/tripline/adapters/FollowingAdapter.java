@@ -16,10 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tripline.R;
-import com.example.tripline.viewmodels.UserViewModel;
 import com.example.tripline.databinding.ItemFollowingBinding;
 import com.example.tripline.models.User;
 import com.example.tripline.models.UserFollower;
+import com.example.tripline.viewmodels.UserViewModel;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -29,9 +29,9 @@ import java.util.List;
 public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.ViewHolder> {
 
     public static final String TAG = "FollowingAdapter";
-    private Context context;
-    private List<User> following;
-    private UserViewModel sharedViewModel;
+    private final Context context;
+    private final List<User> following;
+    private final UserViewModel sharedViewModel;
 
     public FollowingAdapter(Context context, List<User> following) {
         this.context = context;
@@ -54,12 +54,16 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.View
 
     @Override
     public int getItemCount() {
-        return following.size();
+        if (following != null) {
+            return following.size();
+        } else {
+            return 0;
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private ItemFollowingBinding binding;
+        private final ItemFollowingBinding binding;
 
         public ViewHolder(ItemFollowingBinding binding) {
             super(binding.getRoot());
@@ -120,7 +124,7 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.View
                 bundle.putString("source", "followingAdapter");
                 sharedViewModel.setUserToDisplay(follow);
                 NavController navController = Navigation.findNavController(itemView);
-                navController.navigate(R.id.action_navigation_following_to_navigation_profile, bundle);
+                navController.navigate(R.id.action_navigation_followtabs_to_navigation_profile, bundle);
 
             }
         }

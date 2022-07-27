@@ -30,7 +30,6 @@ public class StreamFragment extends Fragment {
 
     public static final String TAG = "StreamFragment";
     private FragmentStreamBinding binding;
-    private RecyclerView rvTrips;
     protected TripStreamAdapter adapter;
     protected List<Trip> allTrips;
     private List<User> following;
@@ -61,13 +60,12 @@ public class StreamFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // connecting RecyclerView of Trips with the adapter
-        rvTrips = binding.rvTrips;
         allTrips = new ArrayList<>();
         adapter = new TripStreamAdapter(getContext(), allTrips);
         binding.rvTrips.setAdapter(adapter);
 
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        rvTrips.setLayoutManager(llm);
+        binding.rvTrips.setLayoutManager(llm);
 
         following = new ArrayList<>();
         queryUserFollows();
