@@ -1,6 +1,7 @@
 package com.example.tripline;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -19,8 +20,8 @@ public class SplashActivity extends AppCompatActivity {
         binding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.ivLogoSplash.setAlpha(0f);
-        binding.ivLogoSplash.animate().alpha(1f).setDuration(1500);
+        binding.videoViewLogo.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.splash_logo_video));
+        binding.videoViewLogo.start();
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -28,6 +29,6 @@ public class SplashActivity extends AppCompatActivity {
                 Intent i = new Intent(SplashActivity.this, LoginActivity.class);
                 startActivity(i);
             }
-        }, 1500);
+        }, 2700);
     }
 }
