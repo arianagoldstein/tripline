@@ -51,17 +51,28 @@
         app:layout_constraintTop_toBottomOf="@+id/tvStartDateStream"
         tools:text="6/22/22" />
 
-    <ImageView
-        android:id="@+id/ivCoverPhotoStream"
-        android:layout_width="366dp"
-        android:layout_height="166dp"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvCoverPhotoStream"
+        android:focusable="true"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
         android:layout_marginTop="16dp"
-        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivLocationIconStream"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:cardElevation="3dp"
+        app:cardCornerRadius="10dp"
+        app:rippleColor="@color/turquoise">
+
+        <ImageView
+            android:id="@+id/ivCoverPhotoStream"
+            android:layout_width="366dp"
+            android:layout_height="166dp"
+            android:scaleType="centerCrop"
+            tools:srcCompat="@tools:sample/avatars" />
+
+    </com.google.android.material.card.MaterialCardView>
 
         <TextView
         android:id="@+id/tvDescriptionStream"
@@ -72,7 +83,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.13"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivCoverPhotoStream"
+        app:layout_constraintTop_toBottomOf="@+id/cvCoverPhotoStream"
         tools:text="a week-long exploration of 3 of the beautiful islands of Hawaii complete with adventures and relaxation" />
 
     <TextView

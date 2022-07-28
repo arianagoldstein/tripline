@@ -36,7 +36,7 @@
                 android:id="@+id/tvTripTitleSearchRec"
                 android:layout_width="89dp"
                 android:layout_height="wrap_content"
-                android:text="Chicago Day Trip"
+                tools:text="Chicago Day Trip"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textStyle="bold"
