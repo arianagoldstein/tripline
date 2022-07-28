@@ -23,9 +23,9 @@ import java.util.List;
 public class TripSearchRecAdapter extends RecyclerView.Adapter<TripSearchRecAdapter.ViewHolder> {
 
     public static final String TAG = "TripSearchRecAdapter";
-    private Context context;
-    private List<Trip> allTrips;
-    private TripViewModel tripViewModel;
+    private final Context context;
+    private final List<Trip> allTrips;
+    private final TripViewModel tripViewModel;
 
     public TripSearchRecAdapter(Context context, List<Trip> trips) {
         this.context = context;
@@ -57,7 +57,7 @@ public class TripSearchRecAdapter extends RecyclerView.Adapter<TripSearchRecAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private ItemTripSearchRecBinding binding;
+        private final ItemTripSearchRecBinding binding;
 
         public ViewHolder(ItemTripSearchRecBinding binding) {
             super(binding.getRoot());
