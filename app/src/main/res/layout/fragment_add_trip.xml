@@ -18,28 +18,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivCoverPhotoAddTrip" />
 
-    <TextView
-        android:id="@+id/tvAddTrip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/add_a_trip"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tfTitle"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="22dp"
         android:hint="@string/title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAddTrip"
+        app:layout_constraintTop_toTopOf="parent"
         app:startIconDrawable="@drawable/title_icon"
         app:startIconTint="@color/turquoise">
 
@@ -53,7 +40,6 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tfLocation"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -75,7 +61,6 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tfDescription"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -95,7 +80,6 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tfStartDate"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -118,7 +102,6 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tfEndDate"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -154,31 +137,33 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="38dp"
         android:layout_marginTop="22dp"
+        android:textSize="16sp"
         android:text="@string/cover_photo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tfStartDate" />
 
     <ImageView
+        android:id="@+id/ivCoverPhotoIcon"
+        android:layout_width="33dp"
+        android:layout_height="33dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivCoverPhotoAddTrip"
+        app:layout_constraintEnd_toEndOf="@+id/ivCoverPhotoAddTrip"
+        app:layout_constraintStart_toStartOf="@+id/ivCoverPhotoAddTrip"
+        app:layout_constraintTop_toTopOf="@+id/ivCoverPhotoAddTrip"
+        app:srcCompat="@drawable/add_photo_outlined_icon" />
+
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivCoverPhotoAddTrip"
         android:layout_width="350dp"
         android:layout_height="160dp"
         android:layout_marginTop="10dp"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvPhotosEvent"
+        app:shapeAppearanceOverlay="@style/roundedImageView"
         app:srcCompat="@drawable/cover_photo_placeholder" />
-
-    <ImageView
-        android:id="@+id/ivCoverPhotoIcon"
-        android:layout_width="33dp"
-        android:layout_height="33dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="56dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvPhotosEvent"
-        app:srcCompat="@drawable/photo_icon" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animationLoadingTrip"

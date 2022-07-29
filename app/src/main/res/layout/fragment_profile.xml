@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
+    android:paddingTop="10dp"
     tools:context=".fragments.ProfileFragment">
 
     <ImageView
@@ -148,11 +148,12 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTripsProfile"
         android:layout_width="382dp"
-        android:layout_height="381dp"
+        android:layout_height="0dp"
         android:layout_marginTop="12dp"
         android:paddingLeft= "10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cvMapPlaceholder" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -180,7 +181,7 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="12dp"
         android:background="@drawable/outline_bookmarks_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

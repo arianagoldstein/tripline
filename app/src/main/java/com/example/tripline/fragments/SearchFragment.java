@@ -90,7 +90,6 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
 
                 }).setPositiveButton("SHOW RESULTS", (dialog, which) -> {
                     getUserInputFromDialog(view);
-                    hideKeyboard();
                 }).show();
     }
 
@@ -185,6 +184,7 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
         }
         Log.i(TAG, "successfully got trips");
         searchViewModel.setFilteredTripsViewModel(trips);
+        hideKeyboard();
     }
 
     private void setUpSearchListener() {

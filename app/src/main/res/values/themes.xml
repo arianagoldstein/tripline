@@ -10,7 +10,8 @@
         <item name="colorSecondaryVariant">@color/turquoise</item>
         <item name="colorOnSecondary">@color/white</item>
 
-        <item name="android:fontFamily">@font/inter_regular</item>
+        <item name="android:fontFamily">@font/inter_font</item>
+        <item name="textInputStyle">@style/RoundTextInputAppearance</item>
     </style>
 
     <style name="Theme.SplashTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -42,5 +43,24 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">16dp</item>
     </style>
+
+    <style name="roundedImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="RoundTextInputAppearance" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="shapeAppearanceOverlay">@style/Tripline.RoundedAppearanceOverlay</item>
+    </style>
+
+    <style name="RoundDropDownAppearance" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="shapeAppearanceOverlay">@style/Tripline.RoundedAppearanceOverlay</item>
+    </style>
+
+    <style name="Tripline.RoundedAppearanceOverlay" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">10dp</item>
+    </style>
+
 
 </resources>
