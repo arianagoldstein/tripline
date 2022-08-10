@@ -13,7 +13,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/pin_icon" />
+        app:srcCompat="@drawable/activitytype_icon" />
 
     <TextView
         android:id="@+id/tvTripTitleEvent"

@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.SearchView;
 
@@ -183,16 +184,18 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
         }
         Log.i(TAG, "successfully got trips");
         searchViewModel.setFilteredTripsViewModel(trips);
+        hideKeyboard();
     }
 
     private void setUpSearchListener() {
         binding.ibFilter.setOnClickListener(v -> showFilterDialog());
-        binding.svSearch.setSubmitButtonEnabled(true);
         binding.svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 hideRecommendations();
+                binding.svSearch.clearFocus();
                 searchAdapter.getFilter().filter(query);
+                hideKeyboard();
                 return false;
             }
 
@@ -209,6 +212,12 @@ public class SearchFragment extends Fragment implements SearchViewModel.OnCityCh
         });
         searchViewModel.setOnCityChangedListener(this);
         searchViewModel.setOnAllTripsChangedListener(this);
+    }
+
+    private void hideKeyboard() {
+        getActivity().getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
     }
 
     private void setUpCityRecsAdapter() {

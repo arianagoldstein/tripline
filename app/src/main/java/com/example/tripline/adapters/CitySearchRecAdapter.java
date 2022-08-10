@@ -60,7 +60,7 @@ public class CitySearchRecAdapter extends RecyclerView.Adapter<CitySearchRecAdap
         public ViewHolder(ItemCitySearchRecBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-            binding.getRoot().setOnClickListener(this);
+            binding.cvCityRec.setOnClickListener(this);
         }
 
         public void bind(City city) {

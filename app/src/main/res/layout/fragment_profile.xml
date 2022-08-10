@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
+    android:paddingTop="10dp"
     tools:context=".fragments.ProfileFragment">
 
     <ImageView
@@ -13,7 +13,7 @@
         android:layout_height="87dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/profile"
+        app:srcCompat="@drawable/profile_icon"
         tools:src="@tools:sample/avatars" />
 
     <TextView
@@ -120,27 +120,41 @@
         app:layout_constraintTop_toTopOf="@+id/tvFollowersCount"
         tools:text="100000" />
 
-    <ImageView
-        android:id="@+id/ivMapPlaceholder"
-        android:layout_width="382dp"
-        android:layout_height="155dp"
-        android:layout_marginTop="15dp"
-        android:scaleType="centerCrop"
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvMapPlaceholder"
+        android:focusable="true"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnFollowContainer"
-        app:srcCompat="@drawable/map_placeholder_img"
-        tools:src="@tools:sample/avatars" />
+        app:cardElevation="3dp"
+        app:cardCornerRadius="10dp"
+        app:rippleColor="@color/turquoise">
+
+        <ImageView
+            android:id="@+id/ivMapPlaceholder"
+            android:layout_width="382dp"
+            android:layout_height="155dp"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/map_placeholder_img"
+            tools:src="@tools:sample/avatars" />
+
+    </com.google.android.material.card.MaterialCardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTripsProfile"
         android:layout_width="382dp"
-        android:layout_height="381dp"
+        android:layout_height="0dp"
         android:layout_marginTop="12dp"
+        android:paddingLeft= "10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivMapPlaceholder" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cvMapPlaceholder" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/btnFollowContainer"
@@ -162,12 +176,13 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
-        android:id="@+id/btnSavedTrips"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:text="saved"
-        android:textSize="12sp"
+    <ImageButton
+        android:id="@+id/ibSavedTrips"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/outline_bookmarks_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

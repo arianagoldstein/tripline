@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -38,11 +37,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddEventFragment extends BasePhotoFragment implements AdapterView.OnItemSelectedListener {
+public class AddEventFragment extends BasePhotoFragment {
 
     public static final String TAG = "AddEventFragment";
     private FragmentAddEventBinding binding;
-    private String eventType;
     private Trip trip;
     private Boolean nothingSelected;
 
@@ -78,26 +76,24 @@ public class AddEventFragment extends BasePhotoFragment implements AdapterView.O
         super.onViewCreated(view, savedInstanceState);
 
         // creating dropdown menu for event Type
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.eventTypes, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        binding.spEventType.setAdapter(adapter);
-        binding.spEventType.setSelection(0);
-        binding.spEventType.setOnItemSelectedListener(this);
+        ArrayAdapter<CharSequence> eventTypeAdapter = ArrayAdapter.createFromResource(getContext(), R.array.eventTypes, android.R.layout.simple_spinner_item);
+        binding.tvEventType.setAdapter(eventTypeAdapter);
 
         // keeping track of which trip this event is associated with
         trip = tripViewModel.getSelectedTrip();
 
         imageUriList = new ArrayList<>();
-        binding.btnAddPhotos.setOnClickListener(v -> onAddPhotosClicked());
+        binding.fabAddPhotos.setOnClickListener(v -> onAddPhotosClicked());
         binding.btnAddEvent.setOnClickListener(v -> onAddEventClicked());
     }
 
     private void onAddEventClicked() {
         String title = binding.etTitleEvent.getText().toString();
         String description = binding.etDescriptionEvent.getText().toString();
+        String eventType = binding.tvEventType.getText().toString();
 
-        if (checkUserInput(title, description)) return;
-        binding.pbLoadingEvent.setVisibility(View.VISIBLE);
+        if (checkUserInput(title, description, eventType)) return;
+        binding.animationLoadingEvent.setVisibility(View.VISIBLE);
         binding.vAddEventCover.setVisibility(View.VISIBLE);
 
         JSONArray photoArray = getPhotoArray();
@@ -107,7 +103,7 @@ public class AddEventFragment extends BasePhotoFragment implements AdapterView.O
         postEvent(title, description, eventType, trip, photoArray);
     }
 
-    private boolean checkUserInput(String title, String description) {
+    private boolean checkUserInput(String title, String description, String eventType) {
         // user must include a title
         if (title.isEmpty()) {
             Toast.makeText(getContext(), "Title cannot be empty!", Toast.LENGTH_SHORT).show();
@@ -121,7 +117,7 @@ public class AddEventFragment extends BasePhotoFragment implements AdapterView.O
         }
 
         // user must select an event type
-        if (nothingSelected || eventType.equals("select an event type")) {
+        if (eventType.isEmpty()) {
             Toast.makeText(getContext(), "Event type cannot be empty!", Toast.LENGTH_SHORT).show();
             return true;
         }
@@ -203,7 +199,7 @@ public class AddEventFragment extends BasePhotoFragment implements AdapterView.O
     }
 
     private void onEventSaved(ParseException e, String title) {
-        binding.pbLoadingEvent.setVisibility(View.INVISIBLE);
+        binding.animationLoadingEvent.setVisibility(View.INVISIBLE);
         binding.vAddEventCover.setVisibility(View.INVISIBLE);
 
         if (e != null) {
@@ -215,19 +211,6 @@ public class AddEventFragment extends BasePhotoFragment implements AdapterView.O
         // navigate to profile after adding event
         NavController navController = Navigation.findNavController(getView());
         navController.navigate(R.id.action_navigation_addevent_to_navigation_profile);
-    }
-
-    // methods to get the value the user selects from the dropdown menu
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        nothingSelected = false;
-        eventType = parent.getItemAtPosition(position).toString();
-        Log.i(TAG, eventType + " selected");
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        nothingSelected = true;
     }
 
     @Override

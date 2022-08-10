@@ -15,20 +15,20 @@
     <string name="profile_picture">PROFILE PICTURE</string>
     <string name="name">NAME</string>
     <string name="add_a_trip">ADD A TRIP</string>
-    <string name="title">TITLE</string>
+    <string name="title">title</string>
     <string name="log_out">LOG OUT</string>
     <string name="trips">trips</string>
     <string name="followers">followers</string>
     <string name="following">following</string>
     <string name="add_event">ADD EVENT</string>
     <string name="add_an_event">ADD AN EVENT</string>
-    <string name="description">DESCRIPTION</string>
+    <string name="description">description</string>
     <string name="activity_type">ACTIVITY TYPE</string>
-    <string name="photo_s">PHOTO(S)</string>
-    <string name="location">LOCATION</string>
-    <string name="cover_photo">COVER PHOTO</string>
-    <string name="end_date">END DATE</string>
-    <string name="start_date">START DATE</string>
+    <string name="photo_s">photos</string>
+    <string name="location">location</string>
+    <string name="cover_photo">cover photo</string>
+    <string name="end_date">end date</string>
+    <string name="start_date">start date</string>
     <string name="trip_details">Trip Details</string>
     <string name="map">Map</string>
     <string name="remove">REMOVE</string>
@@ -42,9 +42,9 @@
     <string name="last_name">last name</string>
     <string name="first_name">first name</string>
     <string name="profile_photo">profile photo</string>
+    <string name="add_photos">add photos</string>
 
     <string-array name="eventTypes">
-        <item>select an event type</item>
         <item>restaurant</item>
         <item>hotel</item>
         <item>activity</item>

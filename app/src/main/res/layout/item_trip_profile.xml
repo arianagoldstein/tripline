@@ -51,16 +51,28 @@
         app:layout_constraintTop_toBottomOf="@+id/tvStartDateProfile"
         tools:text="6/22/22" />
 
-    <ImageView
-        android:id="@+id/ivCoverPhotoProfile"
-        android:layout_width="366dp"
-        android:layout_height="166dp"
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvCoverPhotoProfile"
+        android:focusable="true"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
         android:layout_marginTop="16dp"
-        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivLocationIconProfile"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:cardElevation="3dp"
+        app:cardCornerRadius="10dp"
+        app:rippleColor="@color/turquoise">
+
+        <ImageView
+            android:id="@+id/ivCoverPhotoProfile"
+            android:layout_width="366dp"
+            android:layout_height="166dp"
+            android:scaleType="centerCrop"
+            tools:srcCompat="@tools:sample/avatars" />
+
+    </com.google.android.material.card.MaterialCardView>
 
     <View
         android:id="@+id/divProfile"
@@ -70,5 +82,6 @@
         android:background="#00c7d1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivCoverPhotoProfile" />
+        app:layout_constraintTop_toBottomOf="@+id/cvCoverPhotoProfile" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

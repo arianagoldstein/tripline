@@ -25,7 +25,7 @@
         android:id="@+id/navigation_addtrip"
         android:name="com.example.tripline.fragments.AddTripFragment"
         android:label="@string/title_addtrip"
-        tools:layout="@layout/fragment_addtrip" >
+        tools:layout="@layout/fragment_add_trip" >
         <action
             android:id="@+id/action_navigation_addtrip_to_navigation_profile"
             app:destination="@id/navigation_profile" />

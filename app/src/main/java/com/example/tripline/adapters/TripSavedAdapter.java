@@ -62,7 +62,7 @@ public class TripSavedAdapter extends RecyclerView.Adapter<TripSavedAdapter.View
         public ViewHolder(ItemTripSearchRecBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-            binding.getRoot().setOnClickListener(this);
+            binding.cvTripRec.setOnClickListener(this);
         }
 
         public void bind(Trip trip) {

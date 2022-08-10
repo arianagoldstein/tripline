@@ -125,7 +125,7 @@ public class ProfileFragment extends Fragment {
     // if this is someone else's profile, we should be able to follow but not view their saved trips
     private void displayButtons() {
         if (!isCurrentUser) {
-            binding.btnSavedTrips.setVisibility(View.GONE);
+            binding.ibSavedTrips.setVisibility(View.GONE);
             binding.btnFollowContainer.setVisibility(View.VISIBLE);
 
             // check if we are already following this user
@@ -137,8 +137,8 @@ public class ProfileFragment extends Fragment {
                 binding.btnFollow.setOnClickListener(v -> followUser(user));
             }
         } else {
-            binding.btnSavedTrips.setVisibility(View.VISIBLE);
-            binding.btnSavedTrips.setOnClickListener(v -> goToSaved(v));
+            binding.ibSavedTrips.setVisibility(View.VISIBLE);
+            binding.ibSavedTrips.setOnClickListener(v -> goToSaved(v));
             binding.btnFollowContainer.setVisibility(View.GONE);
         }
     }

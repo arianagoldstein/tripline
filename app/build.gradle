@@ -69,4 +69,7 @@ dependencies {
 
     // dependencies for AsyncHttpClient
     implementation 'com.codepath.libraries:asynchttpclient:2.2.0'
+
+    // dependencies for Lottie animation
+    implementation "com.airbnb.android:lottie:5.2.0"
 }

@@ -20,7 +20,7 @@ import androidx.navigation.Navigation;
 
 import com.example.tripline.MainActivity;
 import com.example.tripline.R;
-import com.example.tripline.databinding.FragmentAddtripBinding;
+import com.example.tripline.databinding.FragmentAddTripBinding;
 import com.example.tripline.models.City;
 import com.example.tripline.models.Trip;
 import com.example.tripline.models.User;
@@ -49,7 +49,7 @@ import java.util.List;
 public class AddTripFragment extends BasePhotoFragment {
 
     public static final String TAG = "AddTripFragment";
-    private FragmentAddtripBinding binding;
+    private FragmentAddTripBinding binding;
 
     // variables for photo upload
     private final static int PICK_PHOTO_CODE = 1046;
@@ -66,7 +66,7 @@ public class AddTripFragment extends BasePhotoFragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentAddtripBinding.inflate(inflater, container, false);
+        binding = FragmentAddTripBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         return root;
@@ -77,8 +77,8 @@ public class AddTripFragment extends BasePhotoFragment {
         super.onViewCreated(view, savedInstanceState);
 
         // adding a location with Google Places API
-        binding.ivLocationIcon.setOnClickListener(v -> onLocationAdd());
-        binding.tvLocationAdd.setOnClickListener(v -> onLocationAdd());
+        binding.etLocation.setOnClickListener(v -> onLocationAdd());
+        binding.tfLocation.setOnClickListener(v -> onLocationAdd());
 
         // initializing dates as null before they're selected
         startDate = null;
@@ -134,7 +134,7 @@ public class AddTripFragment extends BasePhotoFragment {
         city.setCityName(cityName);
         city.setImage(coverPhoto);
 
-        binding.pbLoadingTrip.setVisibility(View.VISIBLE);
+        binding.animationLoadingTrip.setVisibility(View.VISIBLE);
         binding.vAddTripCover.setVisibility(View.VISIBLE);
 
         postTrip(title, location, description, startDate, endDate, coverPhoto, formattedLocation, city, duration, (User) ParseUser.getCurrentUser());
@@ -162,8 +162,8 @@ public class AddTripFragment extends BasePhotoFragment {
         // format the dates in your desired display mode
         SimpleDateFormat simpleFormat = new SimpleDateFormat("MMM dd, yyyy");
         // display it with setText
-        binding.tvStartDateDisplay.setText(simpleFormat.format(startDate));
-        binding.tvEndDateDisplay.setText(simpleFormat.format(endDate));
+        binding.etStartDate.setText(simpleFormat.format(startDate));
+        binding.etEndDate.setText(simpleFormat.format(endDate));
     }
 
     private void postTrip(String title, ParseGeoPoint location, String description, Date startDate, Date endDate, ParseFile coverPhoto, String formattedLocation, City city, int duration, User currentUser) {
@@ -185,7 +185,7 @@ public class AddTripFragment extends BasePhotoFragment {
     }
 
     private void onTripAdded(ParseException e, String title) {
-        binding.pbLoadingTrip.setVisibility(View.INVISIBLE);
+        binding.animationLoadingTrip.setVisibility(View.INVISIBLE);
         binding.vAddTripCover.setVisibility(View.INVISIBLE);
         if (e != null) {
             Log.e(TAG, "Error while saving trip with title " + title, e);
@@ -211,12 +211,7 @@ public class AddTripFragment extends BasePhotoFragment {
         Intent intent = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-            // bring up gallery to select a photo
-            startActivityForResult(intent, PICK_PHOTO_CODE);
-        } else {
-            Toast.makeText(getContext(), "Could not find photos on this device.", Toast.LENGTH_SHORT).show();
-        }
+        startActivityForResult(intent, PICK_PHOTO_CODE);
     }
 
     @Override
@@ -259,7 +254,7 @@ public class AddTripFragment extends BasePhotoFragment {
                     latitude = latLngPair.latitude;
                     longitude = latLngPair.longitude;
 
-                    binding.tvLocationAdd.setText(inputPlace.getName());
+                    binding.etLocation.setText(inputPlace.getName());
 
                 } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                     Status status = Autocomplete.getStatusFromIntent(data);
